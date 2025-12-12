@@ -16,7 +16,6 @@ const SocialAuthForm = () => {
     try {
       await signIn(provider, {
         callbackUrl: ROUTES.HOME,
-        redirect: false,
       });
       toast.success("Login successful");
     } catch (error) {
