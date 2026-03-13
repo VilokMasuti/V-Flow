@@ -6,6 +6,8 @@ import { UserSchema } from "@/lib/validations";
 import { NextResponse } from "next/server";
 import z from "zod";
 
+
+//  get teh users
 export async function GET(){
   try {
     await dbConnect()
@@ -16,6 +18,9 @@ export async function GET(){
     return handleError(error,"api") as APIErrorResponse
   }
 }
+
+
+//created a user 
 
 export async function POST(request:Request){
   try {
