@@ -48,6 +48,7 @@ const questions = [
     createdAt: new Date("2021-09-01"),
   },
 ];
+
 export default async function Home({ searchParams }: SearchParams) {
   const { query = "", filter = "" } = await searchParams;
 
