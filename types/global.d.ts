@@ -23,7 +23,7 @@ interface Question {
 
 
 type ActionResponse <T =null> = {
-succsess:boolean;
+success:boolean;
 data?:T;
 error?:{
   message:string;
