@@ -9,6 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+
+
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
@@ -17,14 +22,37 @@ interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
 }
 const AuthForm = <T extends FieldValues>({ schema, defaultValues, formType, onSubmit }: AuthFormProps<T>) => {
+  const router = useRouter();
+  
+  
   const form = useForm<z.infer<typeof schema>>({
     resolver: standardSchemaResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
-  const handleSubmit: SubmitHandler<T> = async () => {
+  
+  
+  
+  const handleSubmit: SubmitHandler<T> = async (data) => {
     // TODO: Authenticate User
+    const result = (await onSubmit(data) as ActionResponse)
+    if (result.success) {
+      toast.success("successfully signed in", {
+        description: formType === "SIGN_IN" ? "Welcome back!" : "Welcome to V-Flow! Signed in successfully",
+      });
+      router.push(ROUTES.HOME);
+    } else {
+      toast.error(`Error ${result?.status}`, {
+        description: result?.error?.message,
+
+      })
+    }
   };
+  
+  
+  
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
+  
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
