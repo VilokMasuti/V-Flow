@@ -9,6 +9,7 @@ export interface IUser {
   location?: string;
   portfolio?: string;
   reputation?: number;
+  id?:string;
 }
 
 const UserSchema = new Schema(
