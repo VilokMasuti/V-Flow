@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SheetClose } from "../ui/sheet";
 import React from "react";
+import { SheetClose } from "../ui/sheet";
 
-const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
+const NavLinks = ({ isMobileNav = false, userId }: { isMobileNav?: boolean, userId: string }) => {
   const pathname = usePathname();
-  const userId = 1;
+
 
   return (
     <>
@@ -26,7 +26,7 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
             key={item.label}
             className={cn(
               isActive ? "primary-gradient text-light-900 rounded-lg" : "text-dark300_light900",
-              "flex items-center justify-start gap-4 bg-transparent p-4"
+              "flex items-center justify-start gap-4 bg-transparent p-4 font-satoshi "
             )}
           >
             <Image

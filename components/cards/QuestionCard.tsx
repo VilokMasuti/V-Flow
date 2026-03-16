@@ -1,8 +1,8 @@
 import ROUTES from "@/constants/routes";
 import { getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
-import TagCard from "./TagCard";
 import Metric from "../Metric";
+import TagCard from "./TagCard";
 
 interface Props {
   question: Question;
@@ -16,7 +16,7 @@ const QuestionCard = ({ question: { _id, title, tags, author, createdAt, upvotes
             {getTimeStamp(createdAt)}
           </span>
           <Link href={ROUTES.QUESTION(_id)}>
-            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">{title}</h3>
+            <h3 className="sm:h3-semibold   text-zinc-300 line-clamp-1 flex-1">{title}</h3>
           </Link>
         </div>
       </div>
