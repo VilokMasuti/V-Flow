@@ -3,23 +3,30 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import dynamic from "next/dynamic";
-import React, { ReactNode, useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
+import ROUTES from "@/constants/routes";
+import { createQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
+import TagCard from "../cards/TagCard";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import TagCard from "../cards/TagCard";
 
 const Editor = dynamic(() => import("@/components/editar/index"), {
   ssr: false,
 });
 
+
 const QuestionForm = () => {
   const editorRef = useRef<MDXEditorMethods>(null);
-
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -63,10 +70,30 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
-    form.reset();
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>
+  ) => {
+    startTransition(async () => {
+      const result = await createQuestion(data)
+      if (result.success) {
+        toast.success("Question created successfully", {
+          description: "You can now view your question on the home page",
+        })
+        if (result.data) router.push(ROUTES.QUESTION((result.data as { _id: string })._id));
+      } else {
+        toast.error("Failed to create question", {
+          description: result.error?.message || "Something went wrong",
+        });
+      }
+    })
   };
+
+
+
+
+
+
+
 
   return (
     <Form {...form}>
@@ -149,8 +176,16 @@ const QuestionForm = () => {
         />
 
         <div className="mt-16 flex justify-end">
-          <Button type="submit" className="primary-gradient !text-light-900 w-fit">
-            Ask A Question
+          <Button disabled={isPending} type="submit" className="primary-gradient text-light-900! w-fit">
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask A Question</>
+            )}
+
           </Button>
         </div>
       </form>
