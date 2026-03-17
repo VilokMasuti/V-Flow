@@ -14,6 +14,7 @@ interface Question {
   title: string;
   description?: string;
   tags: Tag[];
+  content: string;
   author: Author;
   upvotes: number;
   answers: number;
