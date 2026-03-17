@@ -8,3 +8,9 @@ interface SignInWithOAuthParams {
     username: string;
   };
 }
+
+interface CreateQuestionParams {
+  title:string;
+  content:string;
+  tags:string[]
+}
