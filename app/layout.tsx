@@ -33,6 +33,7 @@ const cabinet = localFont({
   weight: "300 400 500 600 700 800 900",
 });
 
+
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
@@ -56,7 +57,8 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         inter.variable,        // --font-inter
         spaceGrotesk.variable, // --font-space-grotesk
         satoshi.variable,      // --font-satoshi → utility: font-satoshi
-        cabinet.variable,        // --font-clash   → utility: font-clash
+        cabinet.variable,
+
         "antialiased",
       ].join(" ")}
     >
@@ -67,7 +69,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
         />
       </head>
-      <body className="font-satoshi bg-background text-foreground">
+      <body className="   bg-background text-foreground">
         {/*    ↑ Critical — sets Satoshi as the default for the entire app.
                Without this, body text falls back to the system font.
                font-clash only needs to be applied per-element on headings. */}

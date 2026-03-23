@@ -1,9 +1,9 @@
 import ROUTES from "@/constants/routes";
+import { getDeviconClassName } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Badge } from "../ui/badge";
-import { getDeviconClassName } from "@/lib/utils";
-import Image from "next/image";
 
 interface Props {
   _id: string;
@@ -24,8 +24,8 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
 
   const Content = (
     <>
-      <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
-        <div className="flex-center space-x-2">
+      <Badge className="subtle-medium  flex flex-row gap-2 rounded-md  border-none px-4 py-2 uppercase dark:bg-zinc-800 bg-zinc-400">
+        <div className="flex-center space-x-2  rounded-md invert-0">
           <i className={`${iconClass} text-sm`}></i>
           <span>{name}</span>
         </div>
