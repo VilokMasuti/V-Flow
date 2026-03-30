@@ -1,20 +1,21 @@
+import Question from "@/database/question.model";
 import Tag, { ITag } from "@/database/tag.model";
 import type { SortOrder } from "mongoose";
+import { FilterQuery } from "mongoose";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { PaginatedSearchParamsSchema } from "../validations";
-
-export const getTags = async(params:PaginatedSearchParams):Promise<ActionResponse<{tags:ITag[];isNext:boolean}>> =>{
+import { GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
+export const getTags = async (params: PaginatedSearchParams): Promise<ActionResponse<{ tags: ITag[]; isNext: boolean }>> => {
   const validationResult = await action({
-params,
-schema:PaginatedSearchParamsSchema,
-  }) 
+    params,
+    schema: PaginatedSearchParamsSchema,
+  })
 
-  if(validationResult instanceof Error){
+  if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse
   }
 
-   const { page = 1, pageSize = 10, query, filter } = params;
+  const { page = 1, pageSize = 10, query, filter } = params;
 
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
@@ -49,7 +50,7 @@ schema:PaginatedSearchParamsSchema,
   try {
     const totalTags = await Tag.countDocuments(filterQuery)
     const tags = await Tag.find(filterQuery)
-       .sort(sortCriteria)
+      .sort(sortCriteria)
       .skip(skip)
       .limit(limit);
 
@@ -64,4 +65,60 @@ schema:PaginatedSearchParamsSchema,
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
+}
+
+
+export const getTagQuestions = async (
+  params: GetTagQuestionsParams
+): Promise<
+  ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>
+> => {
+  const validationResult = await action({
+    params,
+    schema: GetTagQuestionsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { tagId, page = 1, pageSize = 10, query } = params;
+
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+  try {
+    const tag = await Tag.findById(tagId);
+    if (!tag) throw new Error("Tag not found");
+    const filterQuery: FilterQuery<typeof Question> = {
+      tags: { $in: [tagId] },
+    };
+
+    if (query) {
+      filterQuery.title = { $regex: query, $options: "i" };
+    }
+    const totalQuestions = await Question.countDocuments(filterQuery);
+    const questions = await Question.find(filterQuery)
+      .select("_id title views answers upvotes downvotes author createdAt")
+      .populate([
+        { path: "author", select: "name image" },
+        { path: "tags", select: "name" },
+      ])
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalQuestions > skip + questions.length;
+
+    return {
+      success: true,
+      data: {
+        tag: JSON.parse(JSON.stringify(tag)),
+        questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
+      },
+    };
+
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+
 }
