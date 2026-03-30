@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
@@ -58,7 +58,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, iconPosition, otherClasses }:
     <div
       className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
     >
-      {iconPosition === "left" && <Image src={imgSrc} alt="search" width={24} height={24} className="cursor-pointer" />}
+      {iconPosition === "left" && <Image src={imgSrc} alt="search" width={20} height={20} className="cursor-pointer animate-accordion-down duration-1000" />}
 
       <Input
         type="text"

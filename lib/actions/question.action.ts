@@ -4,7 +4,7 @@ import Question, { IQuestion } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITag } from "@/database/tag.model";
 import "@/database/user.model";
-import type { FilterQuery } from 'mongoose';
+import type { QueryFilter, SortOrder } from "mongoose";
 import mongoose from "mongoose";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
@@ -93,7 +93,7 @@ await session.commitTransaction();
 
 export async function editQuestion(
   params: EditQuestionParams
-): Promise<ActionResponse<IQuestion>> {
+): Promise<ActionResponse<IQuestion & { _id: string }>> {
   const validationResult = await action({
     params,
     schema: EditQuestionSchema,
@@ -249,7 +249,7 @@ export async function getQuestions(
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
 
-  const filterQuery: FilterQuery<typeof Question> = {};
+  const filterQuery: QueryFilter<IQuestion> = {};
 
   if (filter === "recommended") {
     return { success: true, data: { questions: [], isNext: false } };
@@ -262,7 +262,7 @@ export async function getQuestions(
     ];
   }
 
-  let sortCriteria = {};
+  let sortCriteria: Record<string, SortOrder> = {};
 
   switch (filter) {
     case "newest":
