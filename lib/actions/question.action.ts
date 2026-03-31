@@ -9,7 +9,6 @@ import mongoose from "mongoose";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, PaginatedSearchParamsSchema } from "../validations";
-;
 
 export async function createQuestion(params:CreateQuestionParams):Promise<ActionResponse>{
 // Validate incoming data and confirm the user is logged in.
@@ -220,7 +219,9 @@ export async function getQuestion(
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author", "name image");
 
     if (!question) {
       throw new Error("Question not found");

@@ -6,8 +6,6 @@ import UserAvatar from "@/components/UserAvatar";
 import MobileNavigation from "./MobileNav";
 import Theme from "./Theme";
 
-;
-
 const Navbar = async () => {
   const session = await auth();
 
@@ -34,7 +32,7 @@ const Navbar = async () => {
         {session?.user?.id && (
           <UserAvatar
             id={session.user.id}
-            name={session.user.name!}
+            name={session.user.name}
             imageUrl={session.user?.image}
           />
         )}
