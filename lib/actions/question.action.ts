@@ -8,22 +8,22 @@ import type { QueryFilter, SortOrder } from "mongoose";
 import mongoose from "mongoose";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, PaginatedSearchParamsSchema } from "../validations";
+import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, IncrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
 
-export async function createQuestion(params:CreateQuestionParams):Promise<ActionResponse>{
-// Validate incoming data and confirm the user is logged in.
-const validationResult = await action({
+export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse> {
+  // Validate incoming data and confirm the user is logged in.
+  const validationResult = await action({
     params,
     schema: AskQuestionSchema,
     authorize: true,
   });
 
   if (validationResult instanceof Error) {
-return handleError(validationResult) as ErrorResponse
+    return handleError(validationResult) as ErrorResponse
   }
 
   // Pull the cleaned values out after validation passes.
-  const {title,content,tags} = validationResult?.params!;
+  const { title, content, tags } = validationResult?.params!;
 
   // The logged-in user becomes the author of the question.
   const userId = validationResult?.session?.user?.id
@@ -33,46 +33,46 @@ return handleError(validationResult) as ErrorResponse
   session.startTransaction()
   try {
     // Create the main question document first.
-    const [question] = await Question.create([{title,content,author:userId}],{session})
+    const [question] = await Question.create([{ title, content, author: userId }], { session })
 
-    if(!question){
-       throw new Error("Failed to create question");
+    if (!question) {
+      throw new Error("Failed to create question");
     }
 
     // Collect tag ids and question-tag links for later inserts/updates.
-    const tagIds:mongoose.Types.ObjectId[] = []
+    const tagIds: mongoose.Types.ObjectId[] = []
     const tagQuestionDocuments = [];
 
-    for(const tag of tags){
+    for (const tag of tags) {
       // Reuse an existing tag if it already exists, otherwise create it.
-      const  existingTag  = await Tag.findOneAndUpdate(
-        {name:{$regex:new RegExp(`^${tag}$`, "i")}},
-        {$setOnInsert: {name: tag}, $inc: {questions: 1}},
-        {upsert: true,new:true, session}
+      const existingTag = await Tag.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+        { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
+        { upsert: true, new: true, session }
       )
 
-       // Save the tag id so we can attach all tags to the question.
-       tagIds.push(existingTag._id);
+      // Save the tag id so we can attach all tags to the question.
+      tagIds.push(existingTag._id);
 
-       // Prepare the join-table record for the question-tag relationship.
-       tagQuestionDocuments.push({
-         tag: existingTag._id,
+      // Prepare the join-table record for the question-tag relationship.
+      tagQuestionDocuments.push({
+        tag: existingTag._id,
         question: question._id,
-       })
+      })
     }
-   
-    // Insert all question-tag relationship records in one go.
-    await TagQuestion.insertMany(tagQuestionDocuments,{session})
 
-   // Update the question document with the list of related tag ids.
-   await Question.findByIdAndUpdate(
-    question._id,
+    // Insert all question-tag relationship records in one go.
+    await TagQuestion.insertMany(tagQuestionDocuments, { session })
+
+    // Update the question document with the list of related tag ids.
+    await Question.findByIdAndUpdate(
+      question._id,
       { $push: { tags: { $each: tagIds } } },
       { session }
-   )
+    )
 
-// Finalize the transaction and keep all changes.
-await session.commitTransaction();
+    // Finalize the transaction and keep all changes.
+    await session.commitTransaction();
 
     // Convert the Mongoose document into a plain object before returning it.
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
@@ -213,7 +213,7 @@ export async function getQuestion(
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
   }
- if (!validationResult) {
+  if (!validationResult) {
     return handleError(new Error("Validation failed")) as ErrorResponse;
   }
   const { questionId } = validationResult.params!;
@@ -303,8 +303,47 @@ export async function getQuestions(
   }
 }
 
+export async function incrementViews(
+  params: IncrementViewsParams
+): Promise<ActionResponse<{ views: number }>> {
+  const validationResult = await action({
+    params,
+    schema: IncrementViewsSchema,
+  });
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  if (!validationResult) {
+    return handleError(new Error("Validation failed")) as ErrorResponse;
+  }
+
+  const { questionId } = validationResult.params;
+  try {
+
+    const question = await Question.findById(questionId);
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    question.views += 1;
+
+    await question.save();
 
 
- 
+
+    return {
+      success: true,
+      data: { views: question.views },
+    };
+  } catch (error) {
+
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+
+
 
 

@@ -3,15 +3,18 @@ import Preview from "@/components/editar/Preview";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
-
+  after(async () => {
+    await incrementViews({ questionId: id })
+  })
   if (!success || !question) return redirect("/404");
 
   const { author, createdAt, answers, views, tags, content, title } = question;
