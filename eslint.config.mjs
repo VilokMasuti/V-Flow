@@ -13,15 +13,15 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
-  plugins: {
-    import: importPlugin,
-  },
 });
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   globalIgnores(["components/ui/**"]),
   {
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
       "no-undef": "off",
       "import/order": [

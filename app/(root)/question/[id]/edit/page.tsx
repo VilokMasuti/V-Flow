@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import QuestionForm from "@/components/question-from/QuestionForm"
+import QuestionForm from "@/components/froms/QuestionForm"
 import ROUTES from "@/constants/routes"
 import { getQuestion } from "@/lib/actions/question.action"
 import { notFound, redirect } from "next/navigation"
@@ -10,11 +10,11 @@ const Editquestion = async ({ params }: RouteParams) => {
   if (!id) return notFound()
   const session = await auth();
   if (!session) return redirect("/sign-in");
-    const { data: question, success } = await getQuestion({ questionId: id });
+  const { data: question, success } = await getQuestion({ questionId: id });
   if (!success) return notFound();
-    if (question?.author.toString() !== session?.user?.id)
+  if (question?.author.toString() !== session?.user?.id)
     redirect(ROUTES.QUESTION(id));
-    return (
+  return (
     <main>
       <QuestionForm question={question} isEdit />
     </main>

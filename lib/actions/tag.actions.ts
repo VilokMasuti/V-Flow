@@ -1,7 +1,6 @@
-import Question from "@/database/question.model";
+import Question, { IQuestion } from "@/database/question.model";
 import Tag, { ITag } from "@/database/tag.model";
-import type { SortOrder } from "mongoose";
-import { FilterQuery } from "mongoose";
+import type { QueryFilter, SortOrder } from "mongoose";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
@@ -89,7 +88,7 @@ export const getTagQuestions = async (
   try {
     const tag = await Tag.findById(tagId);
     if (!tag) throw new Error("Tag not found");
-    const filterQuery: FilterQuery<typeof Question> = {
+    const filterQuery: QueryFilter<IQuestion> = {
       tags: { $in: [tagId] },
     };
 
