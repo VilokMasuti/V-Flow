@@ -23,15 +23,15 @@ interface Question {
 }
 
 
-type ActionResponse <T =null> = {
-success:boolean;
-data?:T;
-error?:{
-  message:string;
-  details?: Record<string, string[]>;
-  
-};
-status?:number;
+type ActionResponse<T = null> = {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    details?: Record<string, string[]>;
+
+  };
+  status?: number;
 }
 
 type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
@@ -51,4 +51,10 @@ interface PaginatedSearchParams {
   query?: string;
   filter?: string;
   sort?: string;
+}
+interface Answer {
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
 }

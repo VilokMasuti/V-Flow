@@ -5,7 +5,7 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,7 +17,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { createAnswer } from "@/lib/actions/question.action";
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validations";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ interface Props {
 }
 
 const AnswerForm = ({ questionId }: Props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting] = useState(false);
   const router = useRouter();
 
@@ -45,32 +45,24 @@ const AnswerForm = ({ questionId }: Props) => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    setIsSubmitting(true);
-
-    try {
+    startAnsweringTransition(async () => {
       const result = await createAnswer({
         questionId,
-        ...values,
+        content: values.content,
       });
 
       if (result.success) {
-        toast.success("Answer posted successfully");
-        form.reset({ content: "" });
-        editorRef.current?.setMarkdown("");
+        form.reset();
         router.refresh();
+        toast.success("Success", {
+          description: "Your answer has been posted successfully",
+        });
       } else {
-        toast.error("Failed to post answer", {
-          description: result.error?.message || "Something went wrong",
+        toast.error("Error", {
+          description: result.error?.message ?? "Failed to post your answer",
         });
       }
-    } catch (error) {
-      toast.error("Failed to post answer", {
-        description:
-          error instanceof Error ? error.message : "Something went wrong",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   return (
@@ -129,9 +121,9 @@ const AnswerForm = ({ questionId }: Props) => {
             <Button
               type="submit"
               className="primary-gradient w-fit"
-              disabled={isSubmitting}
+              disabled={isAnswering}
             >
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...

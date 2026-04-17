@@ -1,16 +1,14 @@
 "use server"
 
-import Answer from "@/database/answer.model";
 import Question, { IQuestion } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITag } from "@/database/tag.model";
 import "@/database/user.model";
 import type { QueryFilter, SortOrder } from "mongoose";
 import mongoose from "mongoose";
-import { revalidatePath } from "next/cache";
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { AskQuestionSchema, CreateAnswerSchema, EditQuestionSchema, GetQuestionSchema, IncrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
+import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, IncrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse> {
   // Validate incoming data and confirm the user is logged in.
@@ -333,7 +331,7 @@ export async function incrementViews(
 
     await question.save();
 
- 
+
 
     return {
       success: true,
@@ -345,63 +343,6 @@ export async function incrementViews(
   }
 }
 
-export async function createAnswer(
-  params: CreateAnswerParams
-): Promise<ActionResponse<{ _id: string }>> {
-  const validationResult = await action({
-    params,
-    schema: CreateAnswerSchema,
-    authorize: true,
-  });
-
-  if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
-  }
-
-  if (!validationResult) {
-    return handleError(new Error("Validation failed")) as ErrorResponse;
-  }
-
-  const { questionId, content } = validationResult.params!;
-  const userId = validationResult.session?.user?.id;
-
-  if (!userId) {
-    return handleError(new Error("Unauthorized")) as ErrorResponse;
-  }
-
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const question = await Question.findById(questionId).session(session);
-
-    if (!question) {
-      throw new Error("Question not found");
-    }
-
-    const [answer] = await Answer.create(
-      [{ content, question: questionId, author: userId }],
-      { session }
-    );
-
-    if (!answer) {
-      throw new Error("Failed to create answer");
-    }
-
-    question.answers += 1;
-    await question.save({ session });
-
-    await session.commitTransaction();
-    revalidatePath(`/question/${questionId}`);
-
-    return { success: true, data: { _id: answer._id.toString() } };
-  } catch (error) {
-    await session.abortTransaction();
-    return handleError(error) as ErrorResponse;
-  } finally {
-    await session.endSession();
-  }
-}
 
 
 
