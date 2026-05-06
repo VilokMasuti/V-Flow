@@ -38,6 +38,11 @@ export const EMPTY_TAGS = {
   },
 };
 
+export const EMPTY_ANSWERS = {
+  title: "No ANSWER Found",
+  message: "The ANSWER cloud is empty. Add some ANSWER to make it rain.",
+
+};
 export const EMPTY_COLLECTIONS = {
   title: "Collections Are Empty",
   message:

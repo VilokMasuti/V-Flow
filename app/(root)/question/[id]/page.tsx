@@ -1,9 +1,11 @@
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
-import Preview from "@/components/editar/Preview";
+import { Preview } from "@/components/editar/Preview";
 import AnswerForm from "@/components/froms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
@@ -17,7 +19,14 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     await incrementViews({ questionId: id })
   })
   if (!success || !question) return redirect("/404");
-
+  const { success: areAnswersLoaded, data: answersResult,
+    error: answersError, } = await getAnswers({
+      questionId: id,
+      page: 1,
+      pageSize: 10,
+      filter: "latest",
+    })
+  console.log("ANSWERS", answersResult);
   const { author, createdAt, answers, views, tags, content, title } = question;
 
   return (
@@ -85,6 +94,14 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+      <section className=" my-5">
+        <AllAnswers
+          data={answersResult?.answers}
+          success={areAnswersLoaded}
+          error={answersError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
+      </section>
       <section className="my-5">
         <AnswerForm questionId={id} />
       </section>

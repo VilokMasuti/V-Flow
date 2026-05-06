@@ -114,7 +114,7 @@ const DataRenderer = <T,>({
       />
     );
 
-  return <div>{render(data)}</div>;
+  return <div className="w-full min-w-0">{render(data)}</div>;
 };
 
 export default DataRenderer;

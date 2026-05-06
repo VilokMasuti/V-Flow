@@ -7,24 +7,28 @@ Code.theme = {
   lightSelector: "html.light",
 };
 
-const Preview = ({ content }: { content: string }) => {
-  const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
+export const Preview = ({ content }: { content: string }) => {
+  const formattedContent = content.replace(/&#x20;/g, "");
+
   return (
-    <section className="markdown prose grid break-words mt-5">
+    <section className="markdown prose grid w-full min-w-0 max-w-full break-words">
       <MDXRemote
         source={formattedContent}
+        options={{
+          mdxOptions: {
+            format: "md",
+          },
+        }}
         components={{
           pre: (props) => (
             <Code
               {...props}
               lineNumbers
-              className="shadow-light-200 font-satoshi dark:shadow-dark-200"
+              className="shadow-light-200 dark:shadow-dark-200"
             />
           ),
         }}
       />
     </section>
-  )
-}
-
-export default Preview
+  );
+};
