@@ -26,7 +26,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
       pageSize: 10,
       filter: "latest",
     })
-  console.log("ANSWERS", answersResult);
   const { author, createdAt, answers, views, tags, content, title } = question;
 
   return (
@@ -103,11 +102,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         />
       </section>
       <section className="my-5">
-        <AnswerForm questionId={id} />
+        <AnswerForm
+          questionId={id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
       </section>
     </>
 
   )
 }
 
-export default QuestionDetails 
+export default QuestionDetails

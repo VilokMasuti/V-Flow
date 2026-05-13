@@ -18,7 +18,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createAnswer } from "@/lib/actions/answer.action";
+import { api } from '@/lib/api';
 import { AnswerSchema } from "@/lib/validations";
+import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -28,13 +30,15 @@ const Editor = dynamic(() => import("@/components/editar"), {
 
 interface Props {
   questionId: string;
+  questionTitle: string;
+  questionContent: string;
 }
 
-const AnswerForm = ({ questionId }: Props) => {
+const AnswerForm = ({ questionId , questionTitle, questionContent}: Props) => {
   const [isAnswering, startAnsweringTransition] = useTransition();
-  const [isAISubmitting] = useState(false);
+  const [isAISubmitting,setIsAISubmitting] = useState(false);
   const router = useRouter();
-
+  const session = useSession();
   const editorRef = useRef<MDXEditorMethods>(null);
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -57,6 +61,9 @@ const AnswerForm = ({ questionId }: Props) => {
         toast.success("Success", {
           description: "Your answer has been posted successfully",
         });
+         if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast.error("Error", {
           description: result.error?.message ?? "Failed to post your answer",
@@ -64,6 +71,44 @@ const AnswerForm = ({ questionId }: Props) => {
       }
     });
   };
+  const generateAIAnswer = async () => {
+    if (!session.data) {
+      return toast.error("Unauthorized", {
+        description: "You need to be logged in to generate an AI answer",
+      });
+
+    }
+        setIsAISubmitting(true);
+        const userAnswer = editorRef.current?.getMarkdown();
+
+        try {
+           const { success, data, error } = await api.ai.getAnswer(
+        questionTitle,
+        questionContent,
+        userAnswer
+      );
+             if (!success) {
+              return toast.error("Error", {
+                description: error?.message ?? "Failed to generate AI answer",
+              });
+             }
+
+      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+        } catch (error) {
+          toast.error("Error", {
+            description: "Failed to generate AI answer",
+          });
+        } finally {
+          setIsAISubmitting(false);
+        }
+  }
+
 
   return (
     <div>
@@ -73,8 +118,9 @@ const AnswerForm = ({ questionId }: Props) => {
         </h4>
         <Button
           type="button"
-          className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
+          className="btn light-border-2 cursor-pointer gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
           disabled={isAISubmitting}
+          onClick={generateAIAnswer}
         >
           {isAISubmitting ? (
             <>
