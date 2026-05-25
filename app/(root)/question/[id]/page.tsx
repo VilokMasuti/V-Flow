@@ -4,6 +4,7 @@ import { Preview } from "@/components/editar/Preview";
 import AnswerForm from "@/components/froms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
@@ -16,17 +17,20 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
   after(async () => {
-    await incrementViews({ questionId: id })
-  })
+    await incrementViews({ questionId: id });
+  });
   if (!success || !question) return redirect("/404");
-  const { success: areAnswersLoaded, data: answersResult,
-    error: answersError, } = await getAnswers({
-      questionId: id,
-      page: 1,
-      pageSize: 10,
-      filter: "latest",
-    })
-  const { author, createdAt, answers, views, tags, content, title } = question;
+  const {
+    success: areAnswersLoaded,
+    data: answersResult,
+    error: answersError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+  const { author, createdAt, answers, views, tags, content, title, upvotes, downvotes } = question;
 
   return (
     <>
@@ -41,23 +45,19 @@ const QuestionDetails = async ({ params }: RouteParams) => {
               fallbackClassName="text-xs"
             />
             <Link href={ROUTES.PROFILE(author._id)}>
-              <p className="paragraph-semibold text-dark300_light700">
-                {author.name}
-              </p>
+              <p className="paragraph-semibold text-dark300_light700">{author.name}</p>
             </Link>
           </div>
 
           <div className="flex justify-end">
-            <p>Votes</p>
+            <Votes upvotes={upvotes} downvotes={downvotes} />
           </div>
         </div>
 
-        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
-          {title}
-        </h2>
+        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">{title}</h2>
       </div>
 
-      <div className="mb-8 mt-5 flex flex-wrap gap-4">
+      <div className="mt-5 mb-8 flex flex-wrap gap-4">
         <Metric
           imgUrl="/icons/clock.svg"
           alt="clock icon"
@@ -85,15 +85,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
       <div className="mt-8 flex flex-wrap gap-2">
         {tags.map((tag: Tag) => (
-          <TagCard
-            key={tag._id}
-            _id={tag._id as string}
-            name={tag.name}
-            compact
-          />
+          <TagCard key={tag._id} _id={tag._id as string} name={tag.name} compact />
         ))}
       </div>
-      <section className=" my-5">
+      <section className="my-5">
         <AllAnswers
           data={answersResult?.answers}
           success={areAnswersLoaded}
@@ -102,15 +97,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         />
       </section>
       <section className="my-5">
-        <AnswerForm
-          questionId={id}
-          questionTitle={question.title}
-          questionContent={question.content}
-        />
+        <AnswerForm questionId={id} questionTitle={question.title} questionContent={question.content} />
       </section>
     </>
+  );
+};
 
-  )
-}
-
-export default QuestionDetails
+export default QuestionDetails;

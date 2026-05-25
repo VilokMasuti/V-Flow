@@ -2,8 +2,8 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
-import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from "react-hook-form";
-import { z, ZodType } from "zod";
+import { DefaultValues, FieldValues, Path, Resolver, SubmitHandler, useForm } from "react-hook-form";
+import { ZodType } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -17,12 +17,13 @@ interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
 }
 const AuthForm = <T extends FieldValues>({ schema, defaultValues, formType, onSubmit }: AuthFormProps<T>) => {
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: standardSchemaResolver(schema),
+  const form = useForm<T>({
+    resolver: standardSchemaResolver(schema as unknown as Parameters<typeof standardSchemaResolver>[0]) as Resolver<T>,
     defaultValues: defaultValues as DefaultValues<T>,
   });
-  const handleSubmit: SubmitHandler<T> = async () => {
-    // TODO: Authenticate User
+
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    await onSubmit(data);
   };
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
   return (
