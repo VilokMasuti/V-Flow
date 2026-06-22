@@ -1,7 +1,8 @@
-import TagCard from "@/components/cards/TagCard";
-import ROUTES from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
+
+import TagCard from "@/components/cards/TagCard";
+import ROUTES from "@/constants/routes";
 
 const hotQuestions = [
   { _id: "1", title: "How to create a custom hook in React?" },

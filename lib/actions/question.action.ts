@@ -1,14 +1,22 @@
-"use server"
+"use server";
+
+import type { QueryFilter, SortOrder } from "mongoose";
+import mongoose from "mongoose";
 
 import Question, { IQuestion } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITag } from "@/database/tag.model";
 import "@/database/user.model";
-import type { QueryFilter, SortOrder } from "mongoose";
-import mongoose from "mongoose";
+
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, IncrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
+import {
+  AskQuestionSchema,
+  EditQuestionSchema,
+  GetQuestionSchema,
+  IncrementViewsSchema,
+  PaginatedSearchParamsSchema,
+} from "../validations";
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse> {
   // Validate incoming data and confirm the user is logged in.
@@ -19,28 +27,32 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
   });
 
   if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  if (!validationResult?.params || !validationResult.session?.user?.id) {
+    return handleError(new Error("Unauthorized")) as ErrorResponse;
   }
 
   // Pull the cleaned values out after validation passes.
-  const { title, content, tags } = validationResult?.params!;
+  const { title, content, tags } = validationResult.params;
 
   // The logged-in user becomes the author of the question.
-  const userId = validationResult?.session?.user?.id
+  const userId = validationResult.session.user.id;
 
   // Start a transaction so all related writes succeed or fail together.
-  const session = await mongoose.startSession()
-  session.startTransaction()
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     // Create the main question document first.
-    const [question] = await Question.create([{ title, content, author: userId }], { session })
+    const [question] = await Question.create([{ title, content, author: userId }], { session });
 
     if (!question) {
       throw new Error("Failed to create question");
     }
 
     // Collect tag ids and question-tag links for later inserts/updates.
-    const tagIds: mongoose.Types.ObjectId[] = []
+    const tagIds: mongoose.Types.ObjectId[] = [];
     const tagQuestionDocuments = [];
 
     for (const tag of tags) {
@@ -49,7 +61,7 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
         { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
         { upsert: true, new: true, session }
-      )
+      );
 
       // Save the tag id so we can attach all tags to the question.
       tagIds.push(existingTag._id);
@@ -58,18 +70,14 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
       tagQuestionDocuments.push({
         tag: existingTag._id,
         question: question._id,
-      })
+      });
     }
 
     // Insert all question-tag relationship records in one go.
-    await TagQuestion.insertMany(tagQuestionDocuments, { session })
+    await TagQuestion.insertMany(tagQuestionDocuments, { session });
 
     // Update the question document with the list of related tag ids.
-    await Question.findByIdAndUpdate(
-      question._id,
-      { $push: { tags: { $each: tagIds } } },
-      { session }
-    )
+    await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
 
     // Finalize the transaction and keep all changes.
     await session.commitTransaction();
@@ -82,17 +90,11 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
     return handleError(error) as ErrorResponse;
   } finally {
     // Always close the session, whether we succeeded or failed.
-    session.endSession()
+    session.endSession();
   }
-
-
-
 }
 
-
-export async function editQuestion(
-  params: EditQuestionParams
-): Promise<ActionResponse<IQuestion & { _id: string }>> {
+export async function editQuestion(params: EditQuestionParams): Promise<ActionResponse<IQuestion & { _id: string }>> {
   const validationResult = await action({
     params,
     schema: EditQuestionSchema,
@@ -131,15 +133,11 @@ export async function editQuestion(
     }
 
     const tagsToAdd = tags.filter(
-      (tag) =>
-        !question.tags.some((t: ITag) =>
-          t.name.toLowerCase().includes(tag.toLowerCase())
-        )
+      (tag) => !question.tags.some((t: ITag) => t.name.toLowerCase().includes(tag.toLowerCase()))
     );
 
     const tagsToRemove = question.tags.filter(
-      (tag: ITag) =>
-        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
+      (tag: ITag) => !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
     );
 
     const newTagDocuments = [];
@@ -166,22 +164,12 @@ export async function editQuestion(
     if (tagsToRemove.length > 0) {
       const tagIdsToRemove = tagsToRemove.map((tag: ITag) => tag._id);
 
-      await Tag.updateMany(
-        { _id: { $in: tagIdsToRemove } },
-        { $inc: { questions: -1 } },
-        { session }
-      );
+      await Tag.updateMany({ _id: { $in: tagIdsToRemove } }, { $inc: { questions: -1 } }, { session });
 
-      await TagQuestion.deleteMany(
-        { tag: { $in: tagIdsToRemove }, question: questionId },
-        { session }
-      );
+      await TagQuestion.deleteMany({ tag: { $in: tagIdsToRemove }, question: questionId }, { session });
 
       question.tags = question.tags.filter(
-        (tag: mongoose.Types.ObjectId) =>
-          !tagIdsToRemove.some((id: mongoose.Types.ObjectId) =>
-            id.equals(tag._id)
-          )
+        (tag: mongoose.Types.ObjectId) => !tagIdsToRemove.some((id: mongoose.Types.ObjectId) => id.equals(tag._id))
       );
     }
 
@@ -201,9 +189,7 @@ export async function editQuestion(
   }
 }
 
-export async function getQuestion(
-  params: GetQuestionParams
-): Promise<ActionResponse<Question>> {
+export async function getQuestion(params: GetQuestionParams): Promise<ActionResponse<Question>> {
   const validationResult = await action({
     params,
     schema: GetQuestionSchema,
@@ -219,9 +205,7 @@ export async function getQuestion(
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId)
-      .populate("tags")
-      .populate("author", "name image");
+    const question = await Question.findById(questionId).populate("tags").populate("author", "name image");
 
     if (!question) {
       throw new Error("Question not found");
@@ -232,7 +216,6 @@ export async function getQuestion(
     return handleError(error) as ErrorResponse;
   }
 }
-
 
 export async function getQuestions(
   params: PaginatedSearchParams
@@ -257,10 +240,7 @@ export async function getQuestions(
   }
 
   if (query) {
-    filterQuery.$or = [
-      { title: { $regex: new RegExp(query, "i") } },
-      { content: { $regex: new RegExp(query, "i") } },
-    ];
+    filterQuery.$or = [{ title: { $regex: new RegExp(query, "i") } }, { content: { $regex: new RegExp(query, "i") } }];
   }
 
   let sortCriteria: Record<string, SortOrder> = {};
@@ -303,9 +283,7 @@ export async function getQuestions(
   }
 }
 
-export async function incrementViews(
-  params: IncrementViewsParams
-): Promise<ActionResponse<{ views: number }>> {
+export async function incrementViews(params: IncrementViewsParams): Promise<ActionResponse<{ views: number }>> {
   const validationResult = await action({
     params,
     schema: IncrementViewsSchema,
@@ -320,7 +298,6 @@ export async function incrementViews(
 
   const { questionId } = validationResult.params;
   try {
-
     const question = await Question.findById(questionId);
 
     if (!question) {
@@ -331,20 +308,11 @@ export async function incrementViews(
 
     await question.save();
 
-
-
     return {
       success: true,
       data: { views: question.views },
     };
   } catch (error) {
-
     return handleError(error) as ErrorResponse;
   }
 }
-
-
-
-
-
-

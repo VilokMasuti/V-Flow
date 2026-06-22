@@ -1,3 +1,4 @@
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ import {
   SheetTrigger
 } from "@/components/ui/sheet";
 import ROUTES from "@/constants/routes";
-import { LogOut } from "lucide-react";
+
 import NavLinks from "./NavLinks";
 
 const MobileNavigation = async () => {

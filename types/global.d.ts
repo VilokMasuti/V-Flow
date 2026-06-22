@@ -55,4 +55,18 @@ interface Answer {
   author: Author;
   content: string;
   createdAt: Date;
+  upvotes: number;
+  downvotes: number;
+}
+
+interface AuthCredentials {
+  name?: string;
+  username?: string;
+  email: string;
+  password: string;
+}
+
+
+interface User {
+  
 }

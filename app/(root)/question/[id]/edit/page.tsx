@@ -1,8 +1,9 @@
+import { notFound, redirect } from "next/navigation"
+
 import { auth } from "@/auth"
 import QuestionForm from "@/components/froms/QuestionForm"
 import ROUTES from "@/constants/routes"
 import { getQuestion } from "@/lib/actions/question.action"
-import { notFound, redirect } from "next/navigation"
 
 const Editquestion = async ({ params }: RouteParams) => {
 

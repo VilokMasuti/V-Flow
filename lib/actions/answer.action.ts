@@ -1,17 +1,17 @@
 "use server";
 
+import mongoose from "mongoose";
+import { revalidatePath } from "next/cache";
+
 import ROUTES from "@/constants/routes";
 import Answer, { IAnswer } from "@/database/answer.model";
 import Question from "@/database/question.model";
-import mongoose from "mongoose";
-import { revalidatePath } from "next/cache";
+
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { CreateAnswerSchema, GetAnswersSchema } from "../validations";
 
-export async function createAnswer(
-  params: CreateAnswerParams
-): Promise<ActionResponse<IAnswer>> {
+export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswer>> {
   const validationResult = await action({
     params,
     schema: CreateAnswerSchema,
@@ -22,8 +22,12 @@ export async function createAnswer(
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { content, questionId } = validationResult?.params!;
-  const userId = validationResult?.session?.user?.id;
+  if (!validationResult?.params || !validationResult.session?.user?.id) {
+    return handleError(new Error("Unauthorized")) as ErrorResponse;
+  }
+
+  const { content, questionId } = validationResult.params;
+  const userId = validationResult.session.user.id;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -61,24 +65,26 @@ export async function createAnswer(
   }
 }
 
-
-export async function getAnswers(params: GetAnswersParams): Promise<ActionResponse<{
-  answers: Answer[];
-  isNext: boolean;
-  totalAnswers: number;
-}>> {
+export async function getAnswers(params: GetAnswersParams): Promise<
+  ActionResponse<{
+    answers: Answer[];
+    isNext: boolean;
+    totalAnswers: number;
+  }>
+> {
   const validationResult = await action({
-    params, schema: GetAnswersSchema,
-  })
+    params,
+    schema: GetAnswersSchema,
+  });
 
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { questionId, page = 1, pageSize = 10, filter } = params
-  const skip = (Number(page) - 1) * pageSize
+  const { questionId, page = 1, pageSize = 10, filter } = params;
+  const skip = (Number(page) - 1) * pageSize;
   const limit = pageSize;
-  let sortCriteria = {}
+  let sortCriteria = {};
   switch (filter) {
     case "latest":
       sortCriteria = { createdAt: -1 };
@@ -94,12 +100,12 @@ export async function getAnswers(params: GetAnswersParams): Promise<ActionRespon
       break;
   }
   try {
-    const totalAnswers = await Answer.countDocuments({ question: questionId })
+    const totalAnswers = await Answer.countDocuments({ question: questionId });
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id name image")
       .sort(sortCriteria)
       .skip(skip)
-      .limit(limit)
+      .limit(limit);
     const isNext = totalAnswers > skip + answers.length;
     return {
       success: true,
@@ -107,8 +113,8 @@ export async function getAnswers(params: GetAnswersParams): Promise<ActionRespon
         answers: JSON.parse(JSON.stringify(answers)),
         isNext,
         totalAnswers,
-      }
-    }
+      },
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }

@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const SignInSchema = z.object({
@@ -59,29 +58,19 @@ export const AskQuestionSchema = z.object({
 
   content: z.string().min(1, { message: "Body is required." }),
   tags: z
-    .array(
-      z
-        .string()
-        .min(1, { message: "Tag is required." })
-        .max(30, { message: "Tag cannot exceed 30 characters." })
-    )
+    .array(z.string().min(1, { message: "Tag is required." }).max(30, { message: "Tag cannot exceed 30 characters." }))
     .min(1, { message: "At least one tag is required." })
     .max(3, { message: "Cannot add more than 3 tags." }),
 });
 
 export const UserSchema = z.object({
   name: z.string().min(1, { message: "Name is required." }),
-  username: z
-    .string()
-    .min(3, { message: "Username must be at least 3 characters long." }),
+  username: z.string().min(3, { message: "Username must be at least 3 characters long." }),
   email: z.string().email({ message: "Please provide a valid email address." }),
   bio: z.string().optional(),
   image: z.string().url({ message: "Please provide a valid URL." }).optional(),
   location: z.string().optional(),
-  portfolio: z
-    .string()
-    .url({ message: "Please provide a valid URL." })
-    .optional(),
+  portfolio: z.string().url({ message: "Please provide a valid URL." }).optional(),
   reputation: z.number().optional(),
 });
 
@@ -105,24 +94,16 @@ export const AccountSchema = z.object({
     })
     .optional(),
   provider: z.string().min(1, { message: "Provider is required." }),
-  providerAccountId: z
-    .string()
-    .min(1, { message: "Provider Account ID is required." }),
+  providerAccountId: z.string().min(1, { message: "Provider Account ID is required." }),
 });
 
 export const SignInWithOAuthSchema = z.object({
   provider: z.enum(["google", "github"]),
-  providerAccountId: z
-    .string()
-    .min(1, { message: "Provider Account ID is required." }),
+  providerAccountId: z.string().min(1, { message: "Provider Account ID is required." }),
   user: z.object({
     name: z.string().min(1, { message: "Name is required." }),
-    username: z
-      .string()
-      .min(3, { message: "Username must be at least 3 characters long." }),
-    email: z
-      .string()
-      .email({ message: "Please provide a valid email address." }),
+    username: z.string().min(3, { message: "Username must be at least 3 characters long." }),
+    email: z.string().email({ message: "Please provide a valid email address." }),
     image: z.string().url("Invalid image URL").optional(),
   }),
 });
@@ -143,20 +124,16 @@ export const PaginatedSearchParamsSchema = z.object({
   sort: z.string().optional(),
 });
 
-
 export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
   tagId: z.string().min(1, { message: "Tag ID is required." }),
 });
-
 
 export const IncrementViewsSchema = z.object({
   questionId: z.string().min(1, { message: "Question ID is required." }),
 });
 
 export const AnswerSchema = z.object({
-  content: z
-    .string()
-    .min(100, { message: "Answer has to have more than 100 characters." }),
+  content: z.string().min(100, { message: "Answer has to have more than 100 characters." }),
 });
 
 export const CreateAnswerSchema = AnswerSchema.extend({
@@ -171,14 +148,13 @@ export const GetAnswersSchema = PaginatedSearchParamsSchema.extend({
   questionId: z.string().min(1, { message: "Question ID is required." }),
 });
 
-
 export const AIAnswerSchema = z.object({
-  question:z.string()
-  .min(5,{message:"Question is required."})
-  .max(130,{message:"Question cannot exceed 130 characters."}),
-  content: z.string().min(100, { message: "Answer has to have more than 100 characters." })
-})
-
+  question: z
+    .string()
+    .min(5, { message: "Question is required." })
+    .max(130, { message: "Question cannot exceed 130 characters." }),
+  content: z.string().min(100, { message: "Answer has to have more than 100 characters." }),
+});
 
 export const CreateVoteSchema = z.object({
   targetId: z.string().min(1, { message: "Target ID is required." }),
@@ -190,4 +166,9 @@ export const CreateVoteSchema = z.object({
 
 export const UpdateVoteCountSchema = CreateVoteSchema.extend({
   change: z.number().int().min(-1).max(1),
+});
+
+export const HasVotedSchema = CreateVoteSchema.pick({
+  targetId: true,
+  targetType: true,
 });

@@ -1,17 +1,21 @@
+import type { QueryFilter, SortOrder } from "mongoose";
+
 import Question, { IQuestion } from "@/database/question.model";
 import Tag, { ITag } from "@/database/tag.model";
-import type { QueryFilter, SortOrder } from "mongoose";
+
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
-export const getTags = async (params: PaginatedSearchParams): Promise<ActionResponse<{ tags: ITag[]; isNext: boolean }>> => {
+export const getTags = async (
+  params: PaginatedSearchParams
+): Promise<ActionResponse<{ tags: ITag[]; isNext: boolean }>> => {
   const validationResult = await action({
     params,
     schema: PaginatedSearchParamsSchema,
-  })
+  });
 
   if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse
+    return handleError(validationResult) as ErrorResponse;
   }
 
   const { page = 1, pageSize = 10, query, filter } = params;
@@ -19,7 +23,7 @@ export const getTags = async (params: PaginatedSearchParams): Promise<ActionResp
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
 
-  const filterQuery: Record<string, any> = {};
+  const filterQuery: Record<string, unknown> = {};
 
   if (query) {
     filterQuery.$or = [{ name: { $regex: query, $options: "i" } }];
@@ -45,13 +49,9 @@ export const getTags = async (params: PaginatedSearchParams): Promise<ActionResp
       break;
   }
 
-
   try {
-    const totalTags = await Tag.countDocuments(filterQuery)
-    const tags = await Tag.find(filterQuery)
-      .sort(sortCriteria)
-      .skip(skip)
-      .limit(limit);
+    const totalTags = await Tag.countDocuments(filterQuery);
+    const tags = await Tag.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
 
     const isNext = totalTags > skip + tags.length;
     return {
@@ -60,18 +60,15 @@ export const getTags = async (params: PaginatedSearchParams): Promise<ActionResp
         tags: JSON.parse(JSON.stringify(tags)),
         isNext,
       },
-    }
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
-
+};
 
 export const getTagQuestions = async (
   params: GetTagQuestionsParams
-): Promise<
-  ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>
-> => {
+): Promise<ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>> => {
   const validationResult = await action({
     params,
     schema: GetTagQuestionsSchema,
@@ -115,9 +112,7 @@ export const getTagQuestions = async (
         isNext,
       },
     };
-
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-
-}
+};

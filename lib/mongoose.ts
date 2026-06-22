@@ -1,4 +1,5 @@
 import dns from "node:dns";
+
 import mongoose, { Mongoose } from "mongoose";
 
 import logger from "./logger";
@@ -24,7 +25,6 @@ interface MongooseCache {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: MongooseCache;
 }
 

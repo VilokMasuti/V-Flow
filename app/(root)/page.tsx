@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilters";
@@ -7,7 +9,6 @@ import DataRenderer from "@/components/ui/DataRenderer";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
-import Link from "next/link";
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }

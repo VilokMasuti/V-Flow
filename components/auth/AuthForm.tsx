@@ -1,14 +1,31 @@
 "use client";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import ROUTES from '@/constants/routes';
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
-import { DefaultValues, FieldValues, Path, Resolver, SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
+import {
+  DefaultValues,
+  FieldValues,
+  Path,
+  Resolver,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import { toast } from "sonner";
 import { ZodType } from "zod";
-
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import ROUTES from "@/constants/routes";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
@@ -17,15 +34,53 @@ interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
 }
 const AuthForm = <T extends FieldValues>({ schema, defaultValues, formType, onSubmit }: AuthFormProps<T>) => {
+
+
+
+
+
+
+
+  const router = useRouter()
+
+
+
+
   const form = useForm<T>({
     resolver: standardSchemaResolver(schema as unknown as Parameters<typeof standardSchemaResolver>[0]) as Resolver<T>,
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
+
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    await onSubmit(data);
+    const res = (await onSubmit(data)) as ActionResponse;
+
+    if (res?.success) {
+      toast.success("Kehoo You `ARE IN`", {
+        description: "WelCome Mannnnn",
+      })
+      router.push(ROUTES.HOME)
+    } else {
+      toast.error(`Error ${res?.status}`, {
+        description: res?.error?.message
+      })
+    }
+
   };
+
+
+
+
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
+
+
+
+
+
+
+
+
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
@@ -55,14 +110,14 @@ const AuthForm = <T extends FieldValues>({ schema, defaultValues, formType, onSu
 
         <Button
           disabled={form.formState.isSubmitting}
-          className="primary-gradient paragraph-medium rounded-2 font-inter !text-light-900 min-h-12 w-full px-4 py-3"
+          className="primary-gradient paragraph-medium rounded-2 font-inter !text-light-900 min-h-12 w-full px-4 py-3 cursor-pointer"
         >
           {form.formState.isSubmitting ? (buttonText === "Sign In" ? "Signin In..." : "Signing Up...") : buttonText}
         </Button>
 
         {formType === "SIGN_IN" ? (
           <p>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href={ROUTES.SIGN_UP} className="paragraph-semibold primary-text-gradient">
               Sign up
             </Link>

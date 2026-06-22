@@ -1,4 +1,5 @@
 import pino from "pino";
+
 import packageJson from "../package.json";
 
 const isEdge = process.env.NEXT_RUNTIME === "edge";

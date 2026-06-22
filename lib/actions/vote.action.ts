@@ -1,12 +1,14 @@
 "use server";
 
+import mongoose, { ClientSession } from "mongoose";
+
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Vote from "@/database/vote.model";
-import mongoose, { ClientSession } from "mongoose";
+
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { CreateVoteSchema, UpdateVoteCountSchema } from "../validations";
+import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "../validations";
 
 export async function updateVoteCount(params: UpdateVoteCountParams, session?: ClientSession): Promise<ActionResponse> {
   const validationResult = await action({
@@ -103,5 +105,41 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();
+  }
+}
+export async function hasVoted(params: HasVotedParams): Promise<ActionResponse<HasVotedResponse>> {
+  const validationResult = await action({
+    params,
+    schema: HasVotedSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  if (!validationResult?.params || !validationResult.session?.user?.id) {
+    return handleError(new Error("Unauthorized")) as ErrorResponse;
+  }
+
+  const { targetId, targetType } = validationResult.params;
+  const userId = validationResult.session.user.id;
+
+  try {
+    const vote = await Vote.findOne({
+      author: userId,
+      id: targetId,
+      type: targetType,
+    });
+
+    return {
+      success: true,
+      data: {
+        hasUpvoted: vote?.voteType === "upvote",
+        hasDownvoted: vote?.voteType === "downvote",
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 }

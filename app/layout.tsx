@@ -1,10 +1,11 @@
-import { auth } from "@/auth";
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
+
+import { auth } from "@/auth";
 import "./globals.css";
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────

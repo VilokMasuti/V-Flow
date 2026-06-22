@@ -1,4 +1,5 @@
 import { EMPTY_ANSWERS } from "@/constants/states"
+
 import AnswerCard from "../cards/AnswerCard"
 import DataRenderer from "../ui/DataRenderer"
 
