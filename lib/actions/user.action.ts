@@ -1,4 +1,4 @@
-"use Server"
+"use server";
 import { FilterQuery } from 'mongoose';
 
 import { PaginatedSearchParamsSchema } from "../validations";
