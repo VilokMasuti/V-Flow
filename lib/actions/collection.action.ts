@@ -1,3 +1,6 @@
+"use server";
+
+
 import ROUTES from '@/constants/routes';
 import Collection from '@/database/collection.model';
 import Question from '@/database/question.model';
@@ -5,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 import action from '../handlers/actions';
 import handleError from '../handlers/error';
 import { CollectionBaseSchema } from '../validations';
-"use server";
+
 
 
 
