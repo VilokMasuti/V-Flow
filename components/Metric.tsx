@@ -19,7 +19,7 @@ const Metric = ({ imgUrl, alt, value, title, href, textStyles, imgStyles, isAuth
   const metricContent = (
     <>
       <Image
-        src={imgUrl}
+        src={imgUrl || "/images/placeholder.png"    }
         width={16}
         height={16}
         alt={alt}

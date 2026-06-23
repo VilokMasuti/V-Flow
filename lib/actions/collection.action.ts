@@ -1,14 +1,16 @@
 
 "use server"
+import { FilterQuery } from 'mongoose';
+
 
 import ROUTES from '@/constants/routes';
 import Collection from '@/database/collection.model';
-import Question from '@/database/question.model';
 
+import Question from '@/database/question.model';
 import { revalidatePath } from 'next/cache';
 import action from '../handlers/actions';
 import handleError from '../handlers/error';
-import { CollectionBaseSchema } from '../validations';
+import { CollectionBaseSchema, PaginatedSearchParamsSchema } from '../validations';
 
 
 
@@ -21,9 +23,9 @@ export async function ToggleQuestion(params: CollectionBaseParams): Promise<Acti
     authorize: true,
   });
 
- if (!validationResult || validationResult instanceof Error) {
-  return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
-}
+  if (!validationResult || validationResult instanceof Error) {
+    return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
+  }
 
   const { questionId } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
@@ -34,7 +36,7 @@ export async function ToggleQuestion(params: CollectionBaseParams): Promise<Acti
 
 
     const collection = await Collection.findOne({ question: questionId, author: userId })
-  revalidatePath(ROUTES.QUESTION(questionId));
+    revalidatePath(ROUTES.QUESTION(questionId));
     if (collection) {
       await Collection.findByIdAndDelete(collection.id)
       return {
@@ -80,9 +82,9 @@ export async function hasSavedQuestion(
     return handleError(validationResult) as ErrorResponse;
   }
 
- if (!validationResult || validationResult instanceof Error) {
-  return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
-}
+  if (!validationResult || validationResult instanceof Error) {
+    return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
+  }
 
   const { questionId } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
@@ -101,5 +103,74 @@ export async function hasSavedQuestion(
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+}
+
+
+
+
+export async function getSavedQuestions(params: PaginatedSearchParams): Promise<ActionResponse<{ collection: Collection[]; isNext: boolean }>> {
+
+  const validationResult = await action({
+    params,
+    schema: PaginatedSearchParamsSchema,
+    authorize: true,
+  });
+
+  if (!validationResult || validationResult instanceof Error) {
+    return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
+  }
+  const userID = validationResult.session?.user?.id;
+  const { page = 1, pageSize = 10, query, filter, sort } = validationResult.params!;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+const filterQuery: FilterQuery<typeof Collection> = { author: userID };
+  if (query) {
+    filterQuery.$or = [{ title: { $regex: new RegExp(query, 'i') } }, { content: { $regex: new RegExp(query, 'i') } },
+
+    ]
+  }
+
+  let sortCriteria: any = {};
+  switch (filter) {
+    case "mostrecent":
+      sortCriteria = { createdAt: -1 };
+      break;
+    case "oldest":
+      sortCriteria = { createdAt: -1 };
+      break;
+    case "mostvoted":
+      break;
+    case "mostanswered":
+      sortCriteria = { answers: -1 };
+      break;
+    default:
+      sortCriteria = { createdAt: -1 };
+      break;
+  }
+
+  try {
+
+    const Totalquestions = await Question.countDocuments(filterQuery);
+    const questions = await Collection.find(filterQuery)
+      .populate({
+        path: "question",
+        populate: [
+          { path: "tags", select: "_id name" },
+          { path: "author", select: "_id name image" },
+        ]
+      })
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit);
+    const isNext = Totalquestions > skip + questions.length;
+    return {
+      success: true,
+      data: { collection: JSON.parse(JSON.stringify(questions)), isNext },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+
   }
 }
