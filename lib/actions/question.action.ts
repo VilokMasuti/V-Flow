@@ -10,6 +10,7 @@ import "@/database/user.model";
 
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
+import dbConnect from '../mongoose';
 import {
   AskQuestionSchema,
   EditQuestionSchema,
@@ -314,5 +315,20 @@ export async function incrementViews(params: IncrementViewsParams): Promise<Acti
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+}
+
+
+export async function getHotQuestions(): Promise<ActionResponse<Question[]>> {
+  try {
+    await dbConnect()
+    const questions = await Question.find().sort({views:-1,upvotes:-1}).limit(5)
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(questions)),
+    }
+  } catch (error) {
+return handleError(error) as ErrorResponse;
   }
 }
