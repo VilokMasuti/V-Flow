@@ -30,7 +30,7 @@ export default async function Home({ searchParams }: SearchParams) {
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions,isNext } = data || {};
   return (
     <main className='container relative mx-auto  flex w-full flex-col  px-4 sm:px-4 lg:px-6'>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -74,7 +74,7 @@ export default async function Home({ searchParams }: SearchParams) {
           </div>
         )}
       />
-      <Pagination/>
+      <Pagination isNext={isNext || false} page={page} />
     </main>
   );
 }

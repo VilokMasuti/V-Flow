@@ -3,12 +3,15 @@ import { EMPTY_ANSWERS } from "@/constants/states"
 import { AnswerFilters } from '@/constants/Filter'
 import AnswerCard from "../cards/AnswerCard"
 import CommonFilter from '../filters/CommonFilter'
+import Pagination from '../Pagination'
 import DataRenderer from "../ui/DataRenderer"
 
 interface Props extends ActionResponse<Answer[]> {
   totalAnswers: number
+  page: number;
+  isNext: boolean;
 }
-const AllAnswers = ({ data, error, success, totalAnswers }: Props) => {
+const AllAnswers = ({ data, error, success, totalAnswers, page, isNext }: Props) => {
   return (
     <div className="mt-11 w-full min-w-0">
       <div className="flex min-w-0 items-center justify-between">
@@ -29,6 +32,7 @@ const AllAnswers = ({ data, error, success, totalAnswers }: Props) => {
         }
 
       />
+       <Pagination isNext={isNext || false} page={page} containerClasses=' mt-12' />
     </div>
   )
 }

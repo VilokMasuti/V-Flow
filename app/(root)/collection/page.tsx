@@ -1,5 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import CommonFilter from '@/components/filters/CommonFilter';
+import Pagination from '@/components/Pagination';
 
 import LocalSearch from "@/components/search/LocalSearch";
 
@@ -23,7 +24,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
     filter: filter || "",
   });
 
-  const { collection } = data || {};
+  const { collection ,isNext} = data || {};
 
   return (
     <>
@@ -57,6 +58,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
+       <Pagination isNext={isNext || false} page={page} containerClasses=' mt-12' />
     </>
   );
 };

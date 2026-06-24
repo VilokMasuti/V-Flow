@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 
@@ -70,7 +70,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
         />
       </head>
-      <body className="   bg-background text-foreground">
+      <body className="  bg-neutral-950  text-foreground">
         {/*    ↑ Critical — sets Satoshi as the default for the entire app.
                Without this, body text falls back to the system font.
                font-clash only needs to be applied per-element on headings. */}
