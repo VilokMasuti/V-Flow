@@ -1,6 +1,8 @@
 import TagCard from "@/components/cards/TagCard"
+import CommonFilter from '@/components/filters/CommonFilter'
 import LocalSearch from "@/components/search/LocalSearch"
 import DataRenderer from "@/components/ui/DataRenderer"
+import { TagFilters } from '@/constants/Filter'
 import ROUTES from "@/constants/routes"
 import { EMPTY_TAGS } from "@/constants/states"
 import { getTags } from "@/lib/actions/tag.actions"
@@ -24,13 +26,18 @@ const Tags = async ({ searchParams }: SearchParams) => {
   return (
     <>
       <h1 className="h1-bold font-satoshi text-dark100_light900 text-3xl">Tags</h1>
-      <section className="mt-11">
+      <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route={ROUTES.TAGS}
           imgSrc="/icons/search.svg"
           placeholder="Search tags..."
           otherClasses="flex-1"
           iconPosition="left"
+        />
+        <CommonFilter
+        filters={TagFilters}
+        otherClasses='min-h-[46px] w-full max-w-[560px]'
+
         />
       </section>
       <DataRenderer

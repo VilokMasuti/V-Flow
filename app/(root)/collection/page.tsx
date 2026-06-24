@@ -1,8 +1,10 @@
 import QuestionCard from "@/components/cards/QuestionCard";
+import CommonFilter from '@/components/filters/CommonFilter';
 
 import LocalSearch from "@/components/search/LocalSearch";
 
 import DataRenderer from '@/components/ui/DataRenderer';
+import { CollectionFilters } from '@/constants/Filter';
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
@@ -34,6 +36,11 @@ const Collections = async ({ searchParams }: SearchParams) => {
           placeholder="Search questions..."
           otherClasses="flex-1"
           iconPosition='left'
+        />
+
+        <CommonFilter
+        filters={CollectionFilters}
+        otherClasses=' min-h-[49px] sm:min-w-[170px]'
         />
       </div>
 

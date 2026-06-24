@@ -13,14 +13,15 @@ import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from '@/lib/actions/collection.action';
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
-import { hasSavedQuestion } from '@/lib/actions/collection.action';
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
+    const { page, pageSize, filter } = await searchParams;
   after(async () => {
     await incrementViews({ questionId: id });
   });
@@ -31,9 +32,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+  page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter
   });
 
   const hasVotedPromise = hasVoted({
