@@ -2,17 +2,16 @@ import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-
 import { auth, signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import ROUTES from "@/constants/routes";
+import NavLinks from '../NavLinks';
 
-import NavLinks from "../NavLinks";
 
 
 const LeftSidebar = async () => {
   const session = await auth();
-  const userId = session?.user?.id || '';
+  const userId = session?.user?.id!;
 
   return (
     <section className="custom-scrollbar background-light900_dark200 light-border sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
@@ -31,10 +30,10 @@ const LeftSidebar = async () => {
           >
             <Button
               type="submit"
-              className="base-medium   cursor-pointer   w-fit  mt-1.5  ml-[0.4rem]  !bg-transparent "
+              className="base-medium w-fit !bg-transparent px-4 py-3"
             >
               <LogOut className="size-5 text-black dark:text-white" />
-              <span className="text-dark300_light900 max-lg:hidden   font-semibold ">
+              <span className="text-dark300_light900 max-lg:hidden">
                 Logout
               </span>
             </Button>
@@ -53,7 +52,7 @@ const LeftSidebar = async () => {
                   height={20}
                   className="invert-colors lg:hidden"
                 />
-                <span className="primary-text-gradient max-lg:hidden font-clash" >
+                <span className="primary-text-gradient max-lg:hidden">
                   Log In
                 </span>
               </Link>
@@ -71,7 +70,7 @@ const LeftSidebar = async () => {
                   height={20}
                   className="invert-colors lg:hidden"
                 />
-                <span className="max-lg:hidden font-clash">Sign Up</span>
+                <span className="max-lg:hidden">Sign Up</span>
               </Link>
             </Button>
           </>
