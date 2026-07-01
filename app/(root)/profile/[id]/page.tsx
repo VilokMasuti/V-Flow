@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { Button } from '@/components/ui/button';
 import ProfileLink from '@/components/user/ProfileLink';
+import Stats from '@/components/user/Stats';
 import UserAvatar from '@/components/UserAvatar';
 import { getUser } from '@/lib/actions/user.action';
 import dayjs from "dayjs";
@@ -27,7 +28,8 @@ const page = async ({ params }: RouteParams) => {
   const { _id, name, image, portfolio, location, createdAt, username, bio } =
     user;
   return (
-     <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
+    <>
+ <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
       <div className="flex flex-col items-start gap-4 lg:flex-row">
         <UserAvatar
           id={_id}
@@ -74,7 +76,19 @@ const page = async ({ params }: RouteParams) => {
           </Link>
         )}
       </div>
+
     </section>
+    <Stats
+        totalQuestions={totalQuestions}
+        totalAnswers={totalAnswers}
+        badges={{
+          GOLD: 0,
+          SILVER: 0,
+          BRONZE: 0,
+        }}
+      />
+    </>
+
   )
 };
 export default page;
