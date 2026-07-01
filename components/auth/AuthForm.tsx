@@ -1,17 +1,6 @@
 "use client";
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import ROUTES from '@/constants/routes';
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
@@ -26,6 +15,18 @@ import {
 } from "react-hook-form";
 import { toast } from "sonner";
 import { ZodType } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import ROUTES from '@/constants/routes';
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;

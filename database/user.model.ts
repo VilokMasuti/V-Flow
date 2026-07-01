@@ -1,7 +1,7 @@
-import { model, models, Schema } from "mongoose";
+import { Model, model, models, Schema, Types } from "mongoose";
 
 export interface IUser {
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
   username: string;
   email: string;
@@ -13,7 +13,7 @@ export interface IUser {
   reputation?: number;
 }
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     username: { type: String, required: true },
@@ -27,6 +27,6 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-const User = models?.User || model<IUser>("User", UserSchema);
+const User = (models.User as Model<IUser>) || model<IUser>("User", UserSchema);
 
 export default User;

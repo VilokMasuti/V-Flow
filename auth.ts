@@ -1,11 +1,11 @@
+import bcrypt from 'bcryptjs';
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { IUser } from './database/user.model';
 
-import bcrypt from 'bcryptjs';
-import Credentials from "next-auth/providers/credentials";
 import { IAccountDoc } from "./database/account.model";
+import { IUser } from './database/user.model';
 import { api } from "./lib/api";
 import { SignInSchema } from './lib/validations';
 
@@ -25,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isValidPassword = (await bcrypt.compare(password, existingAccount.password!));
         if (isValidPassword) {
           return {
-            id: existingUser._id,
+            id: existingUser._id.toString(),
             name: existingUser.name,
             email: existingUser.email,
             image: existingUser.image,

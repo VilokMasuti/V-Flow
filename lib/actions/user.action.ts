@@ -1,28 +1,30 @@
 "use server";
-import { FilterQuery } from 'mongoose';
 
-import { PaginatedSearchParamsSchema } from "../validations";
+import type { QueryFilter, SortOrder } from "mongoose";
 
+import Answer from "@/database/answer.model";
+import Question from "@/database/question.model";
+import UserModel, { IUser } from "@/database/user.model";
 
-import User from "@/database/user.model";
+import action from "../handlers/actions";
+import handleError from "../handlers/error";
+import { GetUserSchema, PaginatedSearchParamsSchema } from "../validations";
 
-import action from '../handlers/actions';
-import handleError from '../handlers/error';
-export async function getUsers(  params: PaginatedSearchParams):Promise<ActionResponse<{users:User[];isNext:boolean} >>{
-const ValidationResult = await action({
-  params,
-schema: PaginatedSearchParamsSchema,
-})
+export async function getUsers(params: PaginatedSearchParams): Promise<ActionResponse<{ users: User[]; isNext: boolean }>> {
+  const validationResult = await action({
+    params,
+    schema: PaginatedSearchParamsSchema,
+  });
 
-if (ValidationResult instanceof Error) {
-    return handleError(ValidationResult) as ErrorResponse;
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
   }
-const {page =1,pageSize =10, query,filter} = params;
+
+  const { page = 1, pageSize = 10, query, filter } = params;
   const skip = (Number(page) - 1) * pageSize;
-  const limit = pageSize;
+  const limit = Number(pageSize);
 
-    const filterQuery: FilterQuery<typeof User> = {};
-
+  const filterQuery: QueryFilter<IUser> = {};
 
   if (query) {
     filterQuery.$or = [
@@ -31,9 +33,9 @@ const {page =1,pageSize =10, query,filter} = params;
     ];
   }
 
-  let sortCriteria = {};
+  let sortCriteria: Record<string, SortOrder> = {};
 
- switch (filter) {
+  switch (filter) {
     case "newest":
       sortCriteria = { createdAt: -1 };
       break;
@@ -48,26 +50,57 @@ const {page =1,pageSize =10, query,filter} = params;
       break;
   }
 
-
   try {
-      const totalUsers = await User.countDocuments(filterQuery);
-  const users = await User.find(filterQuery)
-      .sort(sortCriteria)
-      .skip(skip)
-      .limit(limit);
+    const totalUsers = await UserModel.countDocuments(filterQuery);
+    const users = await UserModel.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
 
-      const isNext = totalUsers > skip + users.length;
+    const isNext = totalUsers > skip + users.length;
 
-      return {
+    return {
       success: true,
       data: {
         users: JSON.parse(JSON.stringify(users)),
         isNext,
       },
-    }
-
+    };
   } catch (error) {
- return handleError(error) as ErrorResponse;
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUser(
+  params: GetUserParams
+): Promise<ActionResponse<{ user: User; totalQuestions: number; totalAnswers: number }>> {
+  const validationResult = await action({
+    params,
+    schema: GetUserSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
   }
 
+  const { userId } = params;
+
+  try {
+    const user = await UserModel.findById(userId).lean();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const totalQuestions = await Question.countDocuments({ author: userId });
+    const totalAnswers = await Answer.countDocuments({ author: userId });
+
+    return {
+      success: true,
+      data: {
+        user: JSON.parse(JSON.stringify(user)),
+        totalQuestions,
+        totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
 }

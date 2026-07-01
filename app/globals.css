@@ -4,6 +4,12 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+:root {
+  --radius: 8px;
+}
+body {
+  font-family: "Inter", sans-serif;
+}
 
 /* ═══════════════════════════════════════════════════════════════
    DEVFLOW DESIGN TOKENS

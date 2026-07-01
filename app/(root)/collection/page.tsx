@@ -1,9 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import CommonFilter from '@/components/filters/CommonFilter';
 import Pagination from '@/components/Pagination';
-
 import LocalSearch from "@/components/search/LocalSearch";
-
 import DataRenderer from '@/components/ui/DataRenderer';
 import { CollectionFilters } from '@/constants/Filter';
 import ROUTES from "@/constants/routes";

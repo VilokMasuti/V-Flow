@@ -1,13 +1,14 @@
 
 
+import { FileQuestionMark } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
 import TagCard from '@/components/cards/TagCard';
 import DataRenderer from '@/components/ui/DataRenderer';
 import ROUTES from '@/constants/routes';
 import { getHotQuestions } from '@/lib/actions/question.action';
 import { getTopTags } from '@/lib/actions/tag.actions';
-import { FileQuestionMark } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 
 
 

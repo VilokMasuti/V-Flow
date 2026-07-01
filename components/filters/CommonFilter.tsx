@@ -1,9 +1,6 @@
 
 "use client";
 
-import { formUrlQuery } from '@/lib/url';
-import { cn } from '@/lib/utils';
-
 import { useRouter, useSearchParams } from "next/navigation";
 
 import {
@@ -14,6 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formUrlQuery } from '@/lib/url';
+import { cn } from '@/lib/utils';
+
+
 
 interface Filter {
   name: string;

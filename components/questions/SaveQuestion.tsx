@@ -1,10 +1,11 @@
 "use client";
 
-import { ToggleQuestion } from '@/lib/actions/collection.action';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 import { use, useState } from 'react';
 import { toast } from 'sonner';
+
+import { ToggleQuestion } from '@/lib/actions/collection.action';
 const SaveQuestion = ({ questionId, hasSavedQuestionPromise, }: { questionId: string,  hasSavedQuestionPromise: Promise<ActionResponse<{ saved: boolean }>> }) => {
 
   const session = useSession()
@@ -25,7 +26,7 @@ const SaveQuestion = ({ questionId, hasSavedQuestionPromise, }: { questionId: st
       if (!success) throw new Error(error?.message || "An error occurred");
       toast.success(`Question ${data?.saved ? "saved" : "unsaved"} successfully`)
 
-    } catch (error) {
+    } catch {
       toast.error("An error occurred while saving the question. Please try again.")
     } finally {
       setIsLoading(false);

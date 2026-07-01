@@ -1,13 +1,12 @@
 
 "use server"
-import { FilterQuery } from 'mongoose';
-
+import type { QueryFilter, SortOrder } from 'mongoose';
+import { revalidatePath } from 'next/cache';
 
 import ROUTES from '@/constants/routes';
-import Collection from '@/database/collection.model';
-
+import Collection, { ICollection } from '@/database/collection.model';
 import Question from '@/database/question.model';
-import { revalidatePath } from 'next/cache';
+
 import action from '../handlers/actions';
 import handleError from '../handlers/error';
 import { CollectionBaseSchema, PaginatedSearchParamsSchema } from '../validations';
@@ -121,18 +120,18 @@ export async function getSavedQuestions(params: PaginatedSearchParams): Promise<
     return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
   }
   const userID = validationResult.session?.user?.id;
-  const { page = 1, pageSize = 10, query, filter, sort } = validationResult.params!;
+  const { page = 1, pageSize = 10, query, filter } = validationResult.params!;
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
 
-const filterQuery: FilterQuery<typeof Collection> = { author: userID };
+const filterQuery: QueryFilter<ICollection> = { author: userID };
   if (query) {
     filterQuery.$or = [{ title: { $regex: new RegExp(query, 'i') } }, { content: { $regex: new RegExp(query, 'i') } },
 
     ]
   }
 
-  let sortCriteria: any = {};
+  let sortCriteria: Record<string, SortOrder> = {};
   switch (filter) {
     case "mostrecent":
       sortCriteria = { createdAt: -1 };

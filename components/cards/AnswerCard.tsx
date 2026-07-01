@@ -1,11 +1,11 @@
 import Link from "next/link";
+import { Suspense } from 'react';
 
 import ROUTES from "@/constants/routes";
+import { hasVoted } from '@/lib/actions/vote.action';
 import { getTimeStamp } from "@/lib/utils";
 
 
-import { hasVoted } from '@/lib/actions/vote.action';
-import { Suspense } from 'react';
 import { Preview } from "../editar/Preview";
 import UserAvatar from "../UserAvatar";
 import Votes from '../votes/Votes';

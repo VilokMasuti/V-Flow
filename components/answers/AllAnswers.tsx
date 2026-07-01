@@ -1,6 +1,6 @@
+import { AnswerFilters } from '@/constants/Filter'
 import { EMPTY_ANSWERS } from "@/constants/states"
 
-import { AnswerFilters } from '@/constants/Filter'
 import AnswerCard from "../cards/AnswerCard"
 import CommonFilter from '../filters/CommonFilter'
 import Pagination from '../Pagination'
