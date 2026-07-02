@@ -113,7 +113,7 @@ export async function getUserQuestions(params: GetUserQuestionsParams): Promise<
     isNext: boolean;
   }>
 > {
-const validationResult = await action({
+  const validationResult = await action({
     params,
     schema: GetUserSchema,
   });
@@ -127,7 +127,7 @@ const validationResult = await action({
   const skip = (Number(page) - 1) * pageSize;
   const limit = pageSize;
   const totalQuestions = await Question.countDocuments({ author: userId });
-try {
+  try {
     const totalQuestions = await Question.countDocuments({ author: userId });
 
     const questions = await Question.find({ author: userId })
@@ -150,11 +150,11 @@ try {
   }
 
 
-  }
+}
 
 
 
-  export async function getUsersAnswers(params: GetUserAnswersParams): Promise<
+export async function getUsersAnswers(params: GetUserAnswersParams): Promise<
   ActionResponse<{
     answers: Answer[];
     isNext: boolean;
@@ -218,10 +218,33 @@ export async function getUserTopTags(params: GetUserTagsParams): Promise<
   const { userId } = params;
 
   try {
+
+    //     Think of it like a factory line:
+
+    // First, pick the items
+    // Then split them
+    // Then count them
+    // Then sort them
+    // Then take the top ones
     const pipeline: PipelineStage[] = [
+      //       $match
+      // This means “filter” or “find only the ones I want”. GET QUESTION FROM THSI SUER ONLY
       { $match: { author: new Types.ObjectId(userId) } },
+
+      // This means “break an array into separate pieces”.
       { $unwind: "$tags" },
+
+      // This means “put same things together and count them”.
+      // Meaning:
+
+      // group by tag name
+      // count how many times each tag appeared
+      // So if the user used:
+
+      // react 5 times
+      // javascript 3 times
       { $group: { _id: "$tags", count: { $sum: 1 } } },
+      // “Go to another table/collection and find matching information.”
       {
         $lookup: {
           from: "tags",
@@ -230,16 +253,24 @@ export async function getUserTopTags(params: GetUserTagsParams): Promise<
           as: "tagInfo",
         },
       },
+
+
       { $unwind: "$tagInfo" },
+
       { $sort: { count: -1 } },
+
       { $limit: 10 },
+
+
       {
         $project: {
           _id: "$tagInfo._id",
           name: "$tagInfo.name",
           count: 1,
         },
+
       },
+
     ];
 
     const tags = await Question.aggregate(pipeline);
