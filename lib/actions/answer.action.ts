@@ -7,9 +7,10 @@ import ROUTES from "@/constants/routes";
 import Answer, { IAnswer } from "@/database/answer.model";
 import Question from "@/database/question.model";
 
+import Vote from '@/database/vote.model';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import { CreateAnswerSchema, GetAnswersSchema } from "../validations";
+import { CreateAnswerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validations";
 
 export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswer>> {
   const validationResult = await action({
@@ -118,4 +119,52 @@ export async function getAnswers(params: GetAnswersParams): Promise<
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
+}
+
+
+
+
+
+export async function deleteAnswer(params: DeleteAnswerParams): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  })
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { answerId } = validationResult?.params!;
+  const { user } = validationResult?.session!;
+  try {
+
+    const answer = await Answer.findById(answerId);
+    if (!answer) throw new Error("Answer not found");
+    if (answer.author.toString() !== user?.id) throw new Error("Unauthorized");
+    // reduce the question answers count
+
+    await Question.findByIdAndUpdate(
+      answer.question,
+      { $in: { answers: -1 } },
+      { new: true }
+    )
+
+    // delete votes associated with answer
+    await Vote.deleteMany({
+      answerId: answer.id, actionType: "answer"
+    });
+    // delete the answer
+    await Answer.findByIdAndDelete(answerId);
+
+    revalidatePath(`/profile/${user?.id}`);
+
+    return { success: true };
+
+  } catch (error) {
+
+    return handleError(error) as ErrorResponse;
+  }
+
 }

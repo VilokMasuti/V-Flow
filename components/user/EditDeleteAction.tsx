@@ -2,30 +2,45 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+
+import { deleteQuestion } from '@/lib/actions/question.action';
+
+import { deleteAnswer } from '@/lib/actions/answer.action';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
 
 interface Prop{
-  type:string;
+  type:"Question" | "Answer";
   itemId:string;
 }
 const EditDeleteAction = ({ type, itemId }: Prop) => {
   const router = useRouter()
+  const itemType = type.toLowerCase() as "question" | "answer";
 
   const handleEdit = () => {
     router.push(`/question/${itemId}/edit`);
   }
 
   const handleDelete =  async () => {
-  if( type ==='question'){
-    //api
+  if( itemType ==='question'){
+    const result = await deleteQuestion({questionId:itemId})
 
-    toast.success('Question deleted successfully',{
-      description:'Add question again if you want'
+    if (!result.success) {
+      toast.error('Failed to delete question', {
+        description: result.error?.message || 'Please try again.',
+      })
+      return;
+    }
+
+    toast.error('Question deleted',{
+      description: "Your question has been successfully deleted.",
+
     })
-  } else if(type === 'answer'){
+    router.refresh();
+  } else if(itemType === 'answer'){
     //api
+     await deleteAnswer({ answerId: itemId });
     toast.success('Answer deleted successfully',{
-      description:'Add answer again if you want'
+       description: "Your answer has been successfully deleted.",
     })
 
   }
@@ -51,7 +66,7 @@ const EditDeleteAction = ({ type, itemId }: Prop) => {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your{" "}
-              {type === "Question" ? "question" : "answer"} and remove it from
+              {itemType} and remove it from
               our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
