@@ -6,9 +6,11 @@ import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Vote from "@/database/vote.model";
 
+import { after } from 'next/server';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "../validations";
+import { createInteraction } from './interaction';
 
 export async function updateVoteCount(params: UpdateVoteCountParams, session?: ClientSession): Promise<ActionResponse> {
   const validationResult = await action({
@@ -96,7 +98,20 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
 
       await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session);
     }
+    const Model = targetType === "question" ? Question : Answer;
 
+    const contentDoc = await Model.findById(targetId).session(session)
+    if (!contentDoc) throw new Error("Content not found");
+    const contentAuthorId = contentDoc.author.toString();
+    // log the interaction
+    after(async () => {
+      await createInteraction({
+        action: voteType,
+        actionId: targetId,
+        actionTarget: targetType,
+        authorId: contentAuthorId,
+      });
+    });
     await session.commitTransaction();
 
     return { success: true };

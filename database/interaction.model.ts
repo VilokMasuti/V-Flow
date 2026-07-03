@@ -7,7 +7,18 @@ export interface IInteraction {
   actionType: "question" | "answer";
 }
 
-const InteractionSchema = new Schema<IInteraction>(
+export const InteractionActionEnums = [
+  "view",
+  "upvote",
+  "downvote",
+  "bookmark",
+  "post",
+  "edit",
+  "delete",
+  "search",
+] as const;
+
+ export const InteractionSchema = new Schema<IInteraction>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     action: { type: String, required: true },

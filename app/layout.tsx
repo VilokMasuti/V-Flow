@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 
@@ -10,11 +10,20 @@ import "./globals.css";
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
 
-const inter = localFont({
-  src: "./fonts/InterVF.ttf",
-  variable: "--font-inter",
-  weight: "100 200 300 400 500 700 800 900",
-});
+ import { DM_Sans, Inter } from "next/font/google";
+
+   const inter = Inter({
+     subsets: ["latin"],
+     variable: "--font-inter",
+     weight: ["400", "500", "600", "700"],
+   });
+   const dmSans = DM_Sans({
+     subsets: ["latin"],
+     variable: "--font-dm-sans",
+     weight: ["400", "500", "600"],
+   });
+
+
 
 const spaceGrotesk = localFont({
   src: "./fonts/SpaceGroteskVF.ttf",
@@ -59,7 +68,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         spaceGrotesk.variable, // --font-space-grotesk
         satoshi.variable,      // --font-satoshi → utility: font-satoshi
         cabinet.variable,
-
+        dmSans.variable,        // --font-dm-sans
         "antialiased",
       ].join(" ")}
     >

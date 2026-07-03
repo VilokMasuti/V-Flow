@@ -11,6 +11,8 @@ import Vote from '@/database/vote.model';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import { CreateAnswerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validations";
+import { after } from 'next/server';
+import { createInteraction } from './interaction';
 
 export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswer>> {
   const validationResult = await action({
@@ -51,6 +53,16 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
 
     question.answers += 1;
     await question.save({ session });
+after(async () => {
+  await createInteraction({
+    action: "post",
+    actionId: newAnswer._id.toString(),
+    actionTarget: "answer",
+    authorId: userId as string,
+  });
+});
+
+
     await session.commitTransaction();
     revalidatePath(ROUTES.QUESTION(questionId));
 

@@ -7,74 +7,69 @@
 
 
 
-/* ═══════════════════════════════════════════════════════════════
-   DEVFLOW DESIGN TOKENS
-   Inspired by: Linear, Vercel, Raycast
-   Principles:  Refactoring UI — hierarchy, color depth, shadows
-   Fonts:       Cabinet Grotesk (display) + Satoshi (body)
-                → Download Cabinet Grotesk: fontshare.com/fonts/cabinet-grotesk
-                → Replace Clash Display with Cabinet Grotesk in layout.tsx
-═══════════════════════════════════════════════════════════════ */
-
 @theme {
-  /* ── Brand ──────────────────────────────────────────────── */
+  /* ── Brand ────────────────────────────────────────────────── */
   --color-primary-100: #fff4eb;
   --color-primary-500: #ff7000;
 
-  /* ── Dark Surfaces ──────────────────────────────────────── */
-  /* Refactoring UI: never use pure black — use dark blue-gray  */
-  --color-dark-100: #0d0e12;
-  --color-dark-200: #12141a;
-  --color-dark-300: #181b24;
-  --color-dark-400: #1f2333;
-  --color-dark-500: #141620;
+  /* ── Dark Surfaces (pure neutral black ladder) ────────────── */
+  --color-dark-100: #080808;   /* deepest bg */
+  --color-dark-200: #111111;   /* sidebars, nav */
+  --color-dark-300: #1a1a1a;   /* cards, panels */
+  --color-dark-400: #252525;   /* hover states, inputs */
+  --color-dark-500: #0d0d0d;   /* alternate deep */
 
-  /* ── Light Surfaces ─────────────────────────────────────── */
-  /* Refactoring UI: off-white feels more premium than pure white */
-  --color-light-400: #8896b3;
-  --color-light-500: #6e7fa8;
-  --color-light-700: #d4dced;
-  --color-light-800: #eef1f8;
-  --color-light-850: #f6f8fc;
-  --color-light-900: #ffffff;
+  /* ── Light Surfaces (pure neutral grays) ─────────────────── */
+  --color-light-400: #999999;   /* muted/placeholder text */
+  --color-light-500: #737373;   /* secondary text */
+  --color-light-700: #e5e5e5;   /* borders, dividers */
+  --color-light-800: #f0f0f0;   /* input backgrounds */
+  --color-light-850: #f7f7f7;   /* page background */
+  --color-light-900: #ffffff;   /* pure white surfaces */
 
-  /* ── Accent ─────────────────────────────────────────────── */
-  --color-link-100: #1da1f2;
+  /* ── Accent ───────────────────────────────────────────────── */
+  --color-link-100: #0070f3;
 
-  /* ── Radius ─────────────────────────────────────────────── */
-  --radius-2: 8px;
+  /* ── Radius ───────────────────────────────────────────────── */
+  --radius-2:   8px;
   --radius-1_5: 6px;
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-lg:  var(--radius);
+  --radius-md:  calc(var(--radius) - 2px);
+  --radius-sm:  calc(var(--radius) - 4px);
 
-  /* ── Shadows (Refactoring UI: two-part, offset from above) ─ */
+  /* ── Shadows ──────────────────────────────────────────────── */
   --shadow-light-100:
-    0px 1px 3px 0px rgba(15, 23, 42, 0.04),
-    0px 4px 12px 0px rgba(15, 23, 42, 0.04);
+    0px 1px 3px 0px rgba(0, 0, 0, 0.04),
+    0px 4px 12px 0px rgba(0, 0, 0, 0.04);
   --shadow-light-200:
-    0px 2px 8px 0px rgba(15, 23, 42, 0.06),
-    0px 8px 24px 0px rgba(15, 23, 42, 0.05);
+    0px 2px 8px 0px rgba(0, 0, 0, 0.06),
+    0px 8px 24px 0px rgba(0, 0, 0, 0.05);
   --shadow-light-300:
-    -2px 4px 16px 0px rgba(15, 23, 42, 0.06);
+    -2px 4px 16px 0px rgba(0, 0, 0, 0.06);
   --shadow-dark-100:
-    0px 1px 3px 0px rgba(0, 0, 0, 0.3),
-    0px 4px 12px 0px rgba(0, 0, 0, 0.2);
+    0px 1px 3px 0px rgba(0, 0, 0, 0.5),
+    0px 4px 12px 0px rgba(0, 0, 0, 0.4);
   --shadow-dark-200:
-    2px 0px 20px 0px rgba(0, 0, 0, 0.25);
+    2px 0px 20px 0px rgba(0, 0, 0, 0.5);
 
-  /* ── Auth backgrounds ───────────────────────────────────── */
-  --background-image-auth-dark: url("/images/auth-dark.png");
+  /* ── Auth bg images ───────────────────────────────────────── */
+  --background-image-auth-dark:  url("/images/auth-dark.png");
   --background-image-auth-light: url("/images/auth-light.png");
 
-  /* ── Breakpoints ────────────────────────────────────────── */
+  /* ── Breakpoints ──────────────────────────────────────────── */
   --breakpoint-xs: 420px;
 
-  /* ── Fonts ──────────────────────────────────────────────── */
-  --font-inter: var(--font-inter);
-  --font-space-grotesk: var(--font-space-grotesk);
+  /* ── Fonts ────────────────────────────────────────────────── */
+  /* These CSS vars are set by next/font on the <html> element.
+     We wire them to Tailwind's font-{name} utilities below.    */
+  --font-inter:    var(--font-inter);
+  --font-dm-sans:  var(--font-dm-sans);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   FIRST @layer base — border-color + body letter-spacing
+   (Must come before @utility blocks in Tailwind v4)
+───────────────────────────────────────────────────────────── */
 @layer base {
   *,
   ::after,
@@ -92,7 +87,7 @@
    BACKGROUND UTILITIES
 ═══════════════════════════════════════════════════════════════ */
 @utility background-light850_dark100 {
-  @apply bg-light-850 dark:bg-dark-100;
+  @apply bg-light-900 dark:bg-dark-500;
 }
 @utility background-light900_dark200 {
   @apply bg-light-900 dark:bg-dark-200;
@@ -124,6 +119,9 @@
 
 /* ═══════════════════════════════════════════════════════════════
    TEXT UTILITIES
+   Naming: text-{light-mode-token}_{dark-mode-token}
+   In LIGHT mode: uses the "dark" token (dark = dark text color)
+   In DARK mode:  uses the "light" token (light = light text color)
 ═══════════════════════════════════════════════════════════════ */
 @utility text-dark100_light900 {
   @apply text-dark-100! dark:text-light-900!;
@@ -177,70 +175,73 @@
 
 /* ═══════════════════════════════════════════════════════════════
    TYPOGRAPHY SCALE
-   Refactoring UI:
-   1. h1 must LOOK different from h3 — size AND weight
-   2. Consistent line-height ratios (not magic px numbers)
-   3. Body text needs generous line-height for readability
+   Headings → Inter (strong, clean, system-native feel)
+   Body     → DM Sans (readable, modern, slightly warm)
+
+   Replace font-clash → font-inter
+   Replace font-satoshi → font-dm-sans
+   (or keep clash/satoshi if you have them loaded — just update
+    the CSS variable names in @theme inline below)
 ═══════════════════════════════════════════════════════════════ */
 @utility h1-bold {
-  @apply font-clash text-[32px] leading-[1.25] font-bold tracking-tight;
+  @apply font-inter text-[32px] leading-[1.2] font-bold tracking-[-0.02em];
 }
 @utility h2-bold {
-  @apply font-clash text-[24px] leading-[1.3] font-bold tracking-tight;
+  @apply font-inter text-[24px] leading-[1.3] font-bold tracking-[-0.015em];
 }
 @utility h2-semibold {
-  @apply font-clash text-[24px] leading-[1.3] font-semibold tracking-tight;
+  @apply font-inter text-[24px] leading-[1.3] font-semibold tracking-[-0.015em];
 }
 @utility h3-bold {
-  @apply font-clash text-[20px] leading-[1.35] font-bold;
+  @apply font-inter text-[20px] leading-[1.35] font-bold tracking-[-0.01em];
 }
 @utility h3-semibold {
-  @apply font-clash text-[20px] leading-[1.35] font-semibold;
+  @apply font-inter text-[20px] leading-[1.35] font-semibold tracking-[-0.01em];
 }
 @utility base-medium {
-  @apply font-satoshi text-[18px] leading-[1.6] font-medium;
+  @apply font-dm-sans text-[18px] leading-[1.6] font-medium;
 }
 @utility base-semibold {
-  @apply font-satoshi text-[18px] leading-[1.6] font-semibold;
+  @apply font-dm-sans text-[18px] leading-[1.6] font-semibold;
 }
 @utility base-bold {
-  @apply font-satoshi text-[18px] leading-[1.6] font-bold;
+  @apply font-dm-sans text-[18px] leading-[1.6] font-bold;
 }
 @utility paragraph-regular {
-  @apply font-satoshi text-[16px] leading-[1.65] font-normal;
+  @apply font-dm-sans text-[16px] leading-[1.65] font-normal;
 }
 @utility paragraph-medium {
-  @apply font-satoshi text-[16px] leading-[1.65] font-medium;
+  @apply font-dm-sans text-[16px] leading-[1.65] font-medium;
 }
 @utility paragraph-semibold {
-  @apply font-satoshi text-[16px] leading-[1.5] font-semibold;
+  @apply font-dm-sans text-[16px] leading-[1.5] font-semibold;
 }
 @utility body-regular {
-  @apply font-satoshi text-[14px] leading-[1.6] font-normal;
+  @apply font-dm-sans text-[14px] leading-[1.6] font-normal;
 }
 @utility body-medium {
-  @apply font-satoshi text-[14px] leading-[1.55] font-medium;
+  @apply font-dm-sans text-[14px] leading-[1.55] font-medium;
 }
 @utility body-semibold {
-  @apply font-satoshi text-[14px] leading-[1.55] font-semibold;
+  @apply font-dm-sans text-[14px] leading-[1.55] font-semibold;
 }
 @utility body-bold {
-  @apply font-satoshi text-[14px] leading-[1.55] font-bold;
+  @apply font-dm-sans text-[14px] leading-[1.55] font-bold;
 }
 @utility small-regular {
-  @apply font-satoshi text-[12px] leading-[1.5] font-normal;
+  @apply font-dm-sans text-[12px] leading-[1.5] font-normal;
 }
 @utility small-medium {
-  @apply font-satoshi text-[12px] leading-[1.5] font-medium;
+  @apply font-dm-sans text-[12px] leading-[1.5] font-medium;
 }
 @utility small-semibold {
-  @apply font-satoshi text-[12px] leading-[1.5] font-semibold;
+  @apply font-dm-sans text-[12px] leading-[1.5] font-semibold;
 }
 @utility subtle-medium {
-  @apply font-satoshi text-[11px]! leading-[1.4]! font-medium!;
+  @apply font-dm-sans text-[11px]! leading-[1.4]! font-medium!;
 }
 @utility subtle-regular {
-  @apply font-satoshi text-[11px] leading-[1.4] font-normal;
+  @apply font-dm-sans text-[11px] leading-[1.4] font-normal;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -249,9 +250,26 @@
 @utility placeholder {
   @apply placeholder:text-light-400 dark:placeholder:text-light-500;
 }
+
 @utility invert-colors {
-  @apply invert dark:invert-0;
+  /*
+    FIXED icon rendering:
+    - Light mode: brightness(0) collapses any icon to pure black silhouette.
+      This works for dark logos (Next.js, GitHub etc.) on white bg.
+    - Dark mode: brightness(0) invert(1) = black → white.
+      Gives you a clean white icon on dark backgrounds.
+
+    NOTE: This utility is ONLY for monochrome icons.
+    Do NOT apply it to colorful/multi-color logos — they'll go black.
+    For colored logos, use separate light/dark src images instead.
+  */
+  filter: brightness(0);
 }
+html.dark .invert-colors,
+.dark .invert-colors {
+  filter: brightness(0) invert(1);
+}
+
 @utility shadow-light100_dark100 {
   @apply shadow-light-100 dark:shadow-dark-100;
 }
@@ -266,10 +284,10 @@
   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
 }
 @utility dark-gradient {
-  background: linear-gradient(232deg, rgba(20, 24, 32, 0.5) 0%, rgba(15, 18, 25, 0.8) 100%);
+  background: linear-gradient(232deg, rgba(26, 26, 26, 0.5) 0%, rgba(8, 8, 8, 0.85) 100%);
 }
 @utility light-gradient {
-  background: linear-gradient(132deg, rgba(247, 249, 255, 0.6) 0%, rgba(229, 237, 255, 0.3) 100%);
+  background: linear-gradient(132deg, rgba(255, 255, 255, 0.7) 0%, rgba(240, 240, 240, 0.4) 100%);
 }
 @utility primary-text-gradient {
   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
@@ -292,9 +310,9 @@
 }
 @utility card-wrapper {
   @apply bg-light-900 dark:bg-dark-300
-    border border-light-800/60 dark:border-dark-400/50
-    shadow-[0px_1px_3px_rgba(15,23,42,0.04),0px_4px_12px_rgba(15,23,42,0.04)]
-    dark:shadow-[0px_1px_3px_rgba(0,0,0,0.3),0px_4px_12px_rgba(0,0,0,0.2)];
+    border border-light-700 dark:border-dark-400
+    shadow-[0px_1px_3px_rgba(0,0,0,0.05),0px_4px_12px_rgba(0,0,0,0.04)]
+    dark:shadow-[0px_1px_3px_rgba(0,0,0,0.5),0px_4px_12px_rgba(0,0,0,0.4)];
 }
 @utility btn {
   @apply bg-light-800! dark:bg-dark-300!;
@@ -312,15 +330,54 @@
 /* ═══════════════════════════════════════════════════════════════
    MARKDOWN
 ═══════════════════════════════════════════════════════════════ */
- .markdown {
-    @apply prose max-w-none prose-p:my-2 prose-ol:my-0 prose-ul:my-0 dark:prose-p:text-light-700 dark:prose-ol:text-light-700 dark:prose-ul:text-light-500 dark:prose-strong:text-white dark:prose-headings:text-white prose-headings:text-dark-400 prose-h1:text-dark-300 prose-h2:text-dark-300 prose-p:text-dark-500 prose-ul:text-dark-500 prose-ol:text-dark-500;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
+.markdown {
+  @apply prose max-w-none
+    prose-p:my-2 prose-ol:my-0 prose-ul:my-0
+    prose-headings:text-dark-300
+    prose-p:text-dark-500
+    prose-ul:text-dark-500
+    prose-ol:text-dark-500
+    dark:prose-headings:text-white
+    dark:prose-p:text-light-700
+    dark:prose-ol:text-light-700
+    dark:prose-ul:text-light-500
+    dark:prose-strong:text-white;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* Let prose handle its own heading colors — don't fight the base rule */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  color: inherit;
+}
 
-  .markdown-editor {
-    @apply prose max-w-full prose-p:m-0 dark:prose-headings:text-white prose-headings:text-dark-400 prose-p:text-dark-500 dark:prose-p:text-light-700 prose-ul:text-dark-500 dark:prose-ul:text-light-700 prose-ol:text-dark-500 dark:prose-ol:text-light-700 dark:prose-strong:text-white prose-blockquote:text-dark-500 dark:prose-blockquote:text-light-700;
-  }
+.markdown-editor {
+  @apply prose max-w-full prose-p:m-0
+    prose-headings:text-dark-400
+    prose-p:text-dark-500
+    prose-ul:text-dark-500
+    prose-ol:text-dark-500
+    prose-blockquote:text-dark-500
+    dark:prose-headings:text-white
+    dark:prose-p:text-light-700
+    dark:prose-ul:text-light-700
+    dark:prose-ol:text-light-700
+    dark:prose-strong:text-white
+    dark:prose-blockquote:text-light-700;
+}
+.markdown-editor h1,
+.markdown-editor h2,
+.markdown-editor h3,
+.markdown-editor h4,
+.markdown-editor h5,
+.markdown-editor h6 {
+  color: inherit;
+}
+
 @utility tab {
   @apply dark:bg-dark-400! bg-light-800! text-light-500!
     dark:data-[state=active]:bg-dark-300! data-[state=active]:bg-primary-100!
@@ -328,7 +385,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   @theme inline — Tailwind v4 token mapping
+   @theme inline — Tailwind v4 token wiring
 ═══════════════════════════════════════════════════════════════ */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -336,48 +393,46 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  --color-background:                var(--background);
+  --color-foreground:                var(--foreground);
+  --color-card:                      var(--card);
+  --color-card-foreground:           var(--card-foreground);
+  --color-popover:                   var(--popover);
+  --color-popover-foreground:        var(--popover-foreground);
+  --color-primary:                   var(--primary);
+  --color-primary-foreground:        var(--primary-foreground);
+  --color-secondary:                 var(--secondary);
+  --color-secondary-foreground:      var(--secondary-foreground);
+  --color-muted:                     var(--muted);
+  --color-muted-foreground:          var(--muted-foreground);
+  --color-accent:                    var(--accent);
+  --color-accent-foreground:         var(--accent-foreground);
+  --color-destructive:               var(--destructive);
+  --color-destructive-foreground:    var(--destructive-foreground);
+  --color-border:                    var(--border);
+  --color-input:                     var(--input);
+  --color-ring:                      var(--ring);
+  --color-chart-1:                   var(--chart-1);
+  --color-chart-2:                   var(--chart-2);
+  --color-chart-3:                   var(--chart-3);
+  --color-chart-4:                   var(--chart-4);
+  --color-chart-5:                   var(--chart-5);
+  --color-sidebar:                   var(--sidebar);
+  --color-sidebar-foreground:        var(--sidebar-foreground);
+  --color-sidebar-primary:           var(--sidebar-primary);
+  --color-sidebar-primary-foreground:var(--sidebar-primary-foreground);
+  --color-sidebar-accent:            var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-shadow-color: var(--shadow-color);
+  --color-sidebar-border:            var(--sidebar-border);
+  --color-sidebar-ring:              var(--sidebar-ring);
+  --color-shadow-color:              var(--shadow-color);
 
-  /* ✅ All fonts wired up */
-  --font-sans: var(--font-satoshi), sans-serif;
-  --font-satoshi: var(--font-satoshi);
-  --font-clash: var(--font-clash);
-  --font-inter: var(--font-inter);
-  --font-space-grotesk: var(--font-space-grotesk);
-  --font-mono: "Geist Mono", ui-monospace, monospace;
-  --font-serif: Georgia, serif;
+  /* Fonts — wired from CSS vars set by next/font on <html> */
+  --font-sans:          var(--font-dm-sans), system-ui, sans-serif;
+  --font-dm-sans:       var(--font-dm-sans);
+  --font-inter:         var(--font-inter);
+  --font-mono:          "Geist Mono", ui-monospace, monospace;
+  --font-serif:         Georgia, serif;
 
   --radius: 0.5rem;
 
@@ -396,80 +451,84 @@
   --shadow-sm:  var(--shadow-sm);
   --shadow-xs:  var(--shadow-xs);
   --shadow-2xs: var(--shadow-2xs);
-  --spacing: var(--spacing);
-  --letter-spacing: var(--letter-spacing);
+  --spacing:         var(--spacing);
+  --letter-spacing:  var(--letter-spacing);
   --shadow-offset-y: var(--shadow-offset-y);
   --shadow-offset-x: var(--shadow-offset-x);
-  --shadow-spread: var(--shadow-spread);
-  --shadow-blur: var(--shadow-blur);
-  --shadow-opacity: var(--shadow-opacity);
+  --shadow-spread:   var(--shadow-spread);
+  --shadow-blur:     var(--shadow-blur);
+  --shadow-opacity:  var(--shadow-opacity);
 }
 
 /* ═══════════════════════════════════════════════════════════════
    :root — LIGHT MODE
-   Refactoring UI: blue-gray tint on surfaces = "designed" feel
-   Not pure white, not pure black anywhere
+   Pure neutral colors. No blue/gray hue on surfaces.
 ═══════════════════════════════════════════════════════════════ */
 :root {
   --radius: 0.5rem;
 
-  --background:             oklch(0.982 0.003 247);
-  --foreground:             oklch(0.13 0.015 258);
-  --card:                   oklch(1 0 0);
-  --card-foreground:        oklch(0.13 0.015 258);
-  --popover:                oklch(0.99 0.002 247);
-  --popover-foreground:     oklch(0.13 0.015 258);
-  --primary:                oklch(0.13 0.015 258);
+  --background:             oklch(0.985 0 0);   /* #f9f9f9 — off-white page bg */
+  --foreground:             oklch(0.09 0 0);    /* #111 — near-black body text */
+
+  --card:                   oklch(1 0 0);        /* pure white */
+  --card-foreground:        oklch(0.09 0 0);
+
+  --popover:                oklch(1 0 0);
+  --popover-foreground:     oklch(0.09 0 0);
+
+  --primary:                oklch(0.09 0 0);    /* near-black buttons */
   --primary-foreground:     oklch(1 0 0);
-  --secondary:              oklch(0.955 0.006 247);
-  --secondary-foreground:   oklch(0.13 0.015 258);
-  --muted:                  oklch(0.955 0.006 247);
-  --muted-foreground:       oklch(0.48 0.025 255);
-  --accent:                 oklch(0.955 0.006 247);
-  --accent-foreground:      oklch(0.13 0.015 258);
-  --destructive:            oklch(0.60 0.21 22);
+
+  --secondary:              oklch(0.96 0 0);    /* light gray */
+  --secondary-foreground:   oklch(0.09 0 0);
+
+  --muted:                  oklch(0.96 0 0);
+  --muted-foreground:       oklch(0.45 0 0);   /* #6b6b6b */
+
+  --accent:                 oklch(0.96 0 0);
+  --accent-foreground:      oklch(0.09 0 0);
+
+  --destructive:            oklch(0.58 0.22 22);
   --destructive-foreground: oklch(1 0 0);
-  --border:                 oklch(0.895 0.008 247);
-  --input:                  oklch(0.945 0.006 247);
-  --ring:                   oklch(0.52 0.025 255);
 
-  --chart-1:  oklch(0.72 0.19 52);
-  --chart-2:  oklch(0.58 0.18 255);
-  --chart-3:  oklch(0.65 0.15 160);
-  --chart-4:  oklch(0.70 0.14 300);
-  --chart-5:  oklch(0.62 0.20 20);
+  --border:                 oklch(0.91 0 0);   /* #e5e5e5 */
+  --input:                  oklch(0.96 0 0);   /* slightly lighter than border */
+  --ring:                   oklch(0.60 0 0);
 
-  --sidebar:                    oklch(0.972 0.004 247);
-  --sidebar-foreground:         oklch(0.13 0.015 258);
-  --sidebar-primary:            oklch(0.13 0.015 258);
+  --chart-1: oklch(0.72 0.19 52);
+  --chart-2: oklch(0.58 0.18 255);
+  --chart-3: oklch(0.65 0.15 160);
+  --chart-4: oklch(0.70 0.14 300);
+  --chart-5: oklch(0.62 0.20 20);
+
+  --sidebar:                    oklch(0.975 0 0);
+  --sidebar-foreground:         oklch(0.09 0 0);
+  --sidebar-primary:            oklch(0.09 0 0);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent:             oklch(0.955 0.006 247);
-  --sidebar-accent-foreground:  oklch(0.13 0.015 258);
-  --sidebar-border:             oklch(0.895 0.008 247);
-  --sidebar-ring:               oklch(0.52 0.025 255);
+  --sidebar-accent:             oklch(0.96 0 0);
+  --sidebar-accent-foreground:  oklch(0.09 0 0);
+  --sidebar-border:             oklch(0.91 0 0);
+  --sidebar-ring:               oklch(0.60 0 0);
 
-  /* Refactoring UI: two-part shadows, offset downward
-     Part 1 = tight shadow (close contact)
-     Part 2 = soft ambient (scattered light)                     */
-  --shadow-color:    hsl(218 30% 18%);
-  --shadow-opacity:  0.06;
+  --shadow-color:    hsl(0 0% 0%);
+  --shadow-opacity:  0.05;
   --shadow-blur:     6px;
   --shadow-spread:   0px;
   --shadow-offset-x: 0px;
   --shadow-offset-y: 2px;
-  --shadow-2xs: 0px 1px 2px 0px hsl(218 30% 18% / 0.04);
-  --shadow-xs:  0px 1px 3px 0px hsl(218 30% 18% / 0.06);
-  --shadow-sm:  0px 1px 2px 0px hsl(218 30% 18% / 0.06),
-                0px 2px 6px 0px hsl(218 30% 18% / 0.04);
-  --shadow:     0px 1px 3px 0px hsl(218 30% 18% / 0.08),
-                0px 4px 10px 0px hsl(218 30% 18% / 0.05);
-  --shadow-md:  0px 2px 4px 0px hsl(218 30% 18% / 0.08),
-                0px 6px 16px -2px hsl(218 30% 18% / 0.07);
-  --shadow-lg:  0px 4px 6px 0px hsl(218 30% 18% / 0.07),
-                0px 12px 24px -4px hsl(218 30% 18% / 0.09);
-  --shadow-xl:  0px 8px 10px 0px hsl(218 30% 18% / 0.06),
-                0px 20px 40px -6px hsl(218 30% 18% / 0.10);
-  --shadow-2xl: 0px 24px 60px -8px hsl(218 30% 18% / 0.16);
+  --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.04);
+  --shadow-xs:  0px 1px 3px 0px rgba(0, 0, 0, 0.06);
+  --shadow-sm:  0px 1px 2px 0px rgba(0, 0, 0, 0.06),
+                0px 2px 6px  0px rgba(0, 0, 0, 0.04);
+  --shadow:     0px 1px 3px 0px rgba(0, 0, 0, 0.08),
+                0px 4px 10px 0px rgba(0, 0, 0, 0.05);
+  --shadow-md:  0px 2px 4px  0px rgba(0, 0, 0, 0.08),
+                0px 6px 16px -2px rgba(0, 0, 0, 0.07);
+  --shadow-lg:  0px 4px 6px  0px rgba(0, 0, 0, 0.07),
+                0px 12px 24px -4px rgba(0, 0, 0, 0.09);
+  --shadow-xl:  0px 8px 10px 0px rgba(0, 0, 0, 0.06),
+                0px 20px 40px -6px rgba(0, 0, 0, 0.10);
+  --shadow-2xl: 0px 24px 60px -8px rgba(0, 0, 0, 0.16);
 
   --letter-spacing:  0em;
   --spacing:         0.25rem;
@@ -478,65 +537,73 @@
 
 /* ═══════════════════════════════════════════════════════════════
    .dark — DARK MODE
-   Linear-inspired deep blue-gray, layered surfaces
-   Refactoring UI: layered bg/card/popover removes need for borders
+   Pure neutral blacks — no blue tint.
 ═══════════════════════════════════════════════════════════════ */
 .dark {
-  --background:             oklch(0.128 0.018 258);
-  --foreground:             oklch(0.94 0.006 245);
-  --card:                   oklch(0.168 0.018 258);
-  --card-foreground:        oklch(0.94 0.006 245);
-  --popover:                oklch(0.185 0.020 258);
-  --popover-foreground:     oklch(0.94 0.006 245);
-  --primary:                oklch(0.94 0.006 245);
-  --primary-foreground:     oklch(0.128 0.018 258);
-  --secondary:              oklch(0.215 0.020 258);
-  --secondary-foreground:   oklch(0.94 0.006 245);
-  --muted:                  oklch(0.205 0.018 258);
-  --muted-foreground:       oklch(0.62 0.018 255);
-  --accent:                 oklch(0.245 0.022 258);
-  --accent-foreground:      oklch(0.94 0.006 245);
-  --destructive:            oklch(0.67 0.22 22);
+  --background:             oklch(0.08 0 0);   /* #0a0a0a */
+  --foreground:             oklch(0.96 0 0);   /* #f5f5f5 */
+
+  --card:                   oklch(0.13 0 0);   /* #1a1a1a */
+  --card-foreground:        oklch(0.96 0 0);
+
+  --popover:                oklch(0.16 0 0);   /* #222 */
+  --popover-foreground:     oklch(0.96 0 0);
+
+  --primary:                oklch(0.96 0 0);
+  --primary-foreground:     oklch(0.08 0 0);
+
+  --secondary:              oklch(0.20 0 0);   /* #2a2a2a */
+  --secondary-foreground:   oklch(0.96 0 0);
+
+  --muted:                  oklch(0.18 0 0);
+  --muted-foreground:       oklch(0.55 0 0);
+
+  --accent:                 oklch(0.22 0 0);
+  --accent-foreground:      oklch(0.96 0 0);
+
+  --destructive:            oklch(0.65 0.22 22);
   --destructive-foreground: oklch(0.98 0 0);
-  --border:                 oklch(0.240 0.022 258);
-  --input:                  oklch(0.245 0.022 258);
-  --ring:                   oklch(0.62 0.018 255);
 
-  --chart-1:  oklch(0.79 0.17 55);
-  --chart-2:  oklch(0.60 0.18 255);
-  --chart-3:  oklch(0.65 0.14 162);
-  --chart-4:  oklch(0.68 0.16 298);
-  --chart-5:  oklch(0.65 0.20 22);
+  --border:                 oklch(0.22 0 0);   /* #2e2e2e */
+  --input:                  oklch(0.20 0 0);   /* slightly darker than border */
+  --ring:                   oklch(0.55 0 0);
 
-  --sidebar:                    oklch(0.148 0.018 258);
-  --sidebar-foreground:         oklch(0.94 0.006 245);
-  --sidebar-primary:            oklch(0.94 0.006 245);
-  --sidebar-primary-foreground: oklch(0.128 0.018 258);
-  --sidebar-accent:             oklch(0.245 0.022 258);
-  --sidebar-accent-foreground:  oklch(0.94 0.006 245);
-  --sidebar-border:             oklch(0.240 0.022 258);
-  --sidebar-ring:               oklch(0.62 0.018 255);
+  --chart-1: oklch(0.79 0.17 55);
+  --chart-2: oklch(0.60 0.18 255);
+  --chart-3: oklch(0.65 0.14 162);
+  --chart-4: oklch(0.68 0.16 298);
+  --chart-5: oklch(0.65 0.20 22);
+
+  --sidebar:                    oklch(0.10 0 0);
+  --sidebar-foreground:         oklch(0.96 0 0);
+  --sidebar-primary:            oklch(0.96 0 0);
+  --sidebar-primary-foreground: oklch(0.08 0 0);
+  --sidebar-accent:             oklch(0.22 0 0);
+  --sidebar-accent-foreground:  oklch(0.96 0 0);
+  --sidebar-border:             oklch(0.22 0 0);
+  --sidebar-ring:               oklch(0.55 0 0);
 
   --radius: 0.5rem;
-  --shadow-color:    hsl(235 30% 5%);
-  --shadow-opacity:  0.4;
+
+  --shadow-color:    hsl(0 0% 0%);
+  --shadow-opacity:  0.6;
   --shadow-blur:     6px;
   --shadow-spread:   0px;
   --shadow-offset-x: 0px;
   --shadow-offset-y: 2px;
-  --shadow-2xs: 0px 1px 2px 0px hsl(235 30% 5% / 0.25);
-  --shadow-xs:  0px 1px 3px 0px hsl(235 30% 5% / 0.35);
-  --shadow-sm:  0px 1px 2px 0px hsl(235 30% 5% / 0.40),
-                0px 2px 6px 0px hsl(235 30% 5% / 0.30);
-  --shadow:     0px 1px 3px 0px hsl(235 30% 5% / 0.45),
-                0px 4px 10px 0px hsl(235 30% 5% / 0.35);
-  --shadow-md:  0px 2px 4px 0px hsl(235 30% 5% / 0.45),
-                0px 6px 16px -2px hsl(235 30% 5% / 0.40);
-  --shadow-lg:  0px 4px 6px 0px hsl(235 30% 5% / 0.40),
-                0px 12px 24px -4px hsl(235 30% 5% / 0.45);
-  --shadow-xl:  0px 8px 10px 0px hsl(235 30% 5% / 0.40),
-                0px 20px 40px -6px hsl(235 30% 5% / 0.50);
-  --shadow-2xl: 0px 24px 60px -8px hsl(235 30% 5% / 0.65);
+  --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.4);
+  --shadow-xs:  0px 1px 3px 0px rgba(0, 0, 0, 0.5);
+  --shadow-sm:  0px 1px 2px 0px rgba(0, 0, 0, 0.55),
+                0px 2px 6px  0px rgba(0, 0, 0, 0.45);
+  --shadow:     0px 1px 3px 0px rgba(0, 0, 0, 0.60),
+                0px 4px 10px 0px rgba(0, 0, 0, 0.50);
+  --shadow-md:  0px 2px 4px  0px rgba(0, 0, 0, 0.60),
+                0px 6px 16px -2px rgba(0, 0, 0, 0.55);
+  --shadow-lg:  0px 4px 6px  0px rgba(0, 0, 0, 0.55),
+                0px 12px 24px -4px rgba(0, 0, 0, 0.60);
+  --shadow-xl:  0px 8px 10px 0px rgba(0, 0, 0, 0.55),
+                0px 20px 40px -6px rgba(0, 0, 0, 0.65);
+  --shadow-2xl: 0px 24px 60px -8px rgba(0, 0, 0, 0.80);
 
   --letter-spacing:  0em;
   --spacing:         0.25rem;
@@ -544,18 +611,15 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   BASE LAYER
+   SECOND @layer base — global element defaults
 ═══════════════════════════════════════════════════════════════ */
 @layer base {
-  :root {
-    --radius: 0.5rem;
-  }
-
   * {
     @apply border-border outline-ring/50;
   }
 
   html {
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -563,35 +627,97 @@
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Refactoring UI: balance headings, pretty-wrap body */
+  /*
+    HEADING COLORS — explicitly set per mode.
+    Using html.dark (not just .dark) ensures specificity beats
+    any Tailwind utility class that might try to override color.
+
+    WHY html.dark: Tailwind's .dark is toggled on <html>.
+    "html.dark h1" has higher specificity than ".dark h1"
+    because it chains two selectors instead of one class + one element.
+  */
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-inter), system-ui, sans-serif;
     text-wrap: balance;
+    color: oklch(0.09 0 0);   /* near-black in light mode */
   }
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark h4,
+  html.dark h5,
+  html.dark h6 {
+    color: oklch(0.96 0 0);   /* near-white in dark mode */
+  }
+
   p, li {
     text-wrap: pretty;
+  }
+
+  /*
+    INPUT / SEARCH BAR FIX — light mode
+    The issue: shadcn inputs use bg-background which is fine (#f9f9f9),
+    but placeholder text was going nearly invisible because it inherited
+    white color from a parent with text-white on it.
+    Force input text to near-black in light, near-white in dark.
+  */
+  input, textarea, select {
+    color: oklch(0.09 0 0);
+  }
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    color: oklch(0.96 0 0);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
    SCROLLBARS
 ═══════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-  border-radius: 2px;
+  width: 4px;
+  height: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: oklch(0.75 0.01 255);
-  border-radius: 50px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 100px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.60 0.01 255);
+  background: rgba(0, 0, 0, 0.28);
+}
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -616,36 +742,33 @@
 ═══════════════════════════════════════════════════════════════ */
 .mdxeditor-toolbar {
   background: #ffffff !important;
-  border-bottom: 1px solid oklch(0.895 0.008 247) !important;
+  border-bottom: 1px solid oklch(0.91 0 0) !important;
 }
 .dark .mdxeditor-toolbar {
-  background: oklch(0.168 0.018 258) !important;
-  border-bottom: 1px solid oklch(0.240 0.022 258) !important;
+  background: #1a1a1a !important;
+  border-bottom: 1px solid oklch(0.22 0 0) !important;
 }
 .dark .mdxeditor-toolbar button svg {
-  color: #8896b3 !important;
+  color: #999999 !important;
 }
 .dark .mdxeditor-toolbar button:hover svg {
   color: #ffffff !important;
 }
 .dark .mdxeditor-toolbar [role="separator"] {
-  border-color: oklch(0.240 0.022 258) !important;
+  border-color: oklch(0.22 0 0) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
    MARKDOWN CONTENT
 ═══════════════════════════════════════════════════════════════ */
 .markdown a {
-  color: #1da1f2;
+  color: #0070f3;
 }
 .markdown a,
 .markdown code {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
   hyphens: auto;
   padding: 2px;
   color: #ff7000 !important;
