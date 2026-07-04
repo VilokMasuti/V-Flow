@@ -4,9 +4,25 @@ import { IUser } from "@/database/user.model";
 
 import { fetchHandler } from "./handlers/fetch";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api`;
+const getApiBaseUrl = () => {
+  if (typeof window !== "undefined") return "/api";
+
+  const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const isLocalPublicUrl = publicApiBaseUrl?.includes("localhost");
+
+  if (publicApiBaseUrl && !(process.env.VERCEL_URL && isLocalPublicUrl)) {
+    return publicApiBaseUrl.replace(/\/$/, "");
+  }
+
+  const appUrl =
+    process.env.NEXTAUTH_URL ||
+    process.env.AUTH_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+  return `${appUrl.replace(/\/$/, "")}/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const api = {
   auth: {
