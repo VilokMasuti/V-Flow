@@ -46,24 +46,29 @@ const cabinet = localFont({
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "DevFlow",
   description: "A community-driven platform for asking and answering programming questions.",
   icons: { icon: "/images/logo.png" },
-
-  // ADD THIS BEFORE DEPLOYING:
   openGraph: {
     title: "DevFlow | Ask & Answer Programming Questions",
     description: "Get help, share knowledge, and collaborate with developers worldwide.",
-    url: "https://your-vercel-url.vercel.app",
+    url: siteUrl,
     siteName: "DevFlow",
-    images: [{ url: "/images/og-banner.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "DevFlow" }],
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "DevFlow | Ask & Answer Programming Questions",
+    description: "Get help, share knowledge, and collaborate with developers worldwide.",
+    images: ["/images/logo.png"],
+  },
   robots: { index: true, follow: true },
-
-
-}
+};
 
 export const viewport = {
   themeColor: "#18181b",

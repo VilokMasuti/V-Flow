@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 import slugify from "slugify";
 
+
+
 import Account from "@/database/account.model";
 import User from "@/database/user.model";
 import handleError from "@/lib/handlers/error";
@@ -10,12 +12,14 @@ import dbConnect from "@/lib/mongoose";
 import { SignInWithOAuthSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
+
+
   const { provider, providerAccountId, user } = await request.json();
 
   await dbConnect();
 
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const mongoSession = await mongoose.startSession();
+  mongoSession.startTransaction();
 
   try {
     const validatedData = SignInWithOAuthSchema.safeParse({
@@ -35,12 +39,12 @@ export async function POST(request: Request) {
       trim: true,
     });
 
-    let existingUser = await User.findOne({ email }).session(session);
+    let existingUser = await User.findOne({ email }).session(mongoSession);
 
     if (!existingUser) {
       [existingUser] = await User.create(
         [{ name, username: slugifiedUsername, email, image }],
-        { session }
+        { session: mongoSession }
       );
     } else {
       const updatedData: { name?: string; image?: string } = {};
@@ -52,7 +56,7 @@ export async function POST(request: Request) {
         await User.updateOne(
           { _id: existingUser._id },
           { $set: updatedData }
-        ).session(session);
+        ).session(mongoSession);
       }
     }
 
@@ -60,7 +64,7 @@ export async function POST(request: Request) {
       userId: existingUser._id,
       provider,
       providerAccountId,
-    }).session(session);
+    }).session(mongoSession);
 
     if (!existingAccount) {
       await Account.create(
@@ -73,17 +77,17 @@ export async function POST(request: Request) {
             providerAccountId,
           },
         ],
-        { session }
+        { session: mongoSession }
       );
     }
 
-    await session.commitTransaction();
+    await mongoSession.commitTransaction();
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    await session.abortTransaction();
+    await mongoSession.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
   } finally {
-    session.endSession();
+    mongoSession.endSession();
   }
 }

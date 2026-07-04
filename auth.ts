@@ -10,6 +10,7 @@ import { api } from "./lib/api";
 import { SignInSchema } from './lib/validations';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [GitHub, Google, Credentials({
     async authorize(credentials) {
       const validatedFields = SignInSchema.safeParse(credentials)
