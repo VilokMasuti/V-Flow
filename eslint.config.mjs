@@ -1,7 +1,7 @@
-import { globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
 import importPlugin from "eslint-plugin-import";
+import { globalIgnores } from "eslint/config";
 
 const eslintConfig = [
   ...nextVitals,
@@ -29,7 +29,10 @@ const eslintConfig = [
           alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
+
+
     },
+    ignorePatterns:["components/ui/**"],
   },
   {
     files: ["*.ts", "*.tsx"],
