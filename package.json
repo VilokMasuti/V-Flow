@@ -40,6 +40,7 @@
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/typography": "^0.5.19",
+    "@vercel/analytics": "^2.0.1",
     "ai": "^6.0.180",
     "bcryptjs": "^3.0.3",
     "bright": "^1.0.0",

@@ -1,11 +1,11 @@
+import { auth } from "@/auth";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
-
-import { auth } from "@/auth";
 import "./globals.css";
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
@@ -105,6 +105,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
             disableTransitionOnChange
           >
             {children}
+             <Analytics/>
           </ThemeProvider>
           <Toaster richColors position="bottom-right" />
         </SessionProvider>
