@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
@@ -18,6 +19,23 @@ import { getQuestions } from "@/lib/actions/question.action";
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "All Questions | V-Flow",
+  description: "Browse the latest programming questions and answers on V-Flow.",
+  openGraph: {
+    title: "All Questions | V-Flow",
+    description: "Browse the latest programming questions and answers on V-Flow.",
+    type: "website",
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "All Questions | V-Flow",
+    description: "Browse the latest programming questions and answers on V-Flow.",
+    images: ["/images/logo.png"],
+  },
+};
 
 const Home = async ({ searchParams }: SearchParams) => {
   const { page, pageSize, query, filter } = await searchParams;

@@ -2,11 +2,13 @@
 "use server"
 import type { QueryFilter, SortOrder } from 'mongoose';
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 
 import ROUTES from '@/constants/routes';
 import Collection, { ICollection } from '@/database/collection.model';
 import Question from '@/database/question.model';
 
+import { createInteraction } from './interaction';
 import action from '../handlers/actions';
 import handleError from '../handlers/error';
 import { CollectionBaseSchema, PaginatedSearchParamsSchema } from '../validations';
@@ -49,6 +51,16 @@ export async function ToggleQuestion(params: CollectionBaseParams): Promise<Acti
       question: questionId,
       author: userId,
     })
+
+    after(async () => {
+      await createInteraction({
+        action: "bookmark",
+        actionId: questionId,
+        actionTarget: "question",
+        authorId: question.author.toString(),
+      });
+    });
+
     revalidatePath(ROUTES.QUESTION(questionId));
     return {
       success: true,

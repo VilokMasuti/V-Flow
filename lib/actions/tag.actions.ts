@@ -1,4 +1,5 @@
 import type { QueryFilter, SortOrder } from "mongoose";
+import { cache } from "react";
 
 import Question, { IQuestion } from "@/database/question.model";
 import Tag, { ITag } from "@/database/tag.model";
@@ -67,7 +68,7 @@ export const getTags = async (
   }
 };
 
-export const getTagQuestions = async (
+export const getTagQuestions = cache(async (
   params: GetTagQuestionsParams
 ): Promise<ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>> => {
   const validationResult = await action({
@@ -116,7 +117,24 @@ export const getTagQuestions = async (
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-};
+});
+
+export const getTagById = cache(async (tagId: string): Promise<ActionResponse<ITag>> => {
+  try {
+    const tag = await Tag.findById(tagId);
+
+    if (!tag) {
+      return handleError(new Error("Tag not found")) as ErrorResponse;
+    }
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(tag)),
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+});
 
 export const getTopTags = async (): Promise<ActionResponse<Tag[]>> => {
   try {

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import QuestionCard from "@/components/cards/QuestionCard";
 import CommonFilter from '@/components/filters/CommonFilter';
 import Pagination from '@/components/Pagination';
@@ -11,6 +13,23 @@ import { getSavedQuestions } from "@/lib/actions/collection.action";
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Saved Questions | V-Flow",
+  description: "Review your saved questions and keep track of topics you want to revisit.",
+  openGraph: {
+    title: "Saved Questions | V-Flow",
+    description: "Review your saved questions and keep track of topics you want to revisit.",
+    type: "website",
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Saved Questions | V-Flow",
+    description: "Review your saved questions and keep track of topics you want to revisit.",
+    images: ["/images/logo.png"],
+  },
+};
 
 const Collections = async ({ searchParams }: SearchParams) => {
   const { page, pageSize, query, filter } = await searchParams;

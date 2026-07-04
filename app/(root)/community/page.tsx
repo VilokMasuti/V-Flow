@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import UserCard from '@/components/cards/UserCard';
 import CommonFilter from '@/components/filters/CommonFilter';
 import Pagination from '@/components/Pagination';
@@ -7,6 +9,23 @@ import { UserFilters } from '@/constants/Filter';
 import ROUTES from '@/constants/routes';
 import { EMPTY_USERS } from '@/constants/states';
 import { getUsers } from '@/lib/actions/user.action';
+
+export const metadata: Metadata = {
+  title: "Community | V-Flow",
+  description: "Discover developers and community members on V-Flow.",
+  openGraph: {
+    title: "Community | V-Flow",
+    description: "Discover developers and community members on V-Flow.",
+    type: "website",
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Community | V-Flow",
+    description: "Discover developers and community members on V-Flow.",
+    images: ["/images/logo.png"],
+  },
+};
 
 const Community = async ({ searchParams }: RouteParams) => {
   const {page,pageSize,query,filter} = await searchParams

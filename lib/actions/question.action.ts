@@ -1,20 +1,22 @@
 "use server";
 
-import type { FilterQuery, QueryFilter, SortOrder } from "mongoose";
+import type { QueryFilter, SortOrder } from "mongoose";
 import mongoose, { Types } from "mongoose";
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 
+import { auth } from '@/auth';
 import Answer from '@/database/answer.model';
 import Collection from '@/database/collection.model';
+import Interaction from '@/database/interaction.model';
 import Question, { IQuestion } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITag } from "@/database/tag.model";
 import "@/database/user.model";
 import Vote from '@/database/vote.model';
 
-import { auth } from '@/auth';
-import Interaction from '@/database/interaction.model';
-import { after } from 'next/server';
+
+
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import dbConnect from '../mongoose';
@@ -232,11 +234,13 @@ export async function getRecommendedQuestions({
     actionType: "question",
     action: { $in: ["view", "upvote", "bookmark", "post"] }
   })
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1, createdAt: -1 })
     .limit(50)
     .lean();
 
-  const interactedQuestionIds = interactions.map((i) => i.actionId)
+  const interactedQuestionIds = [...new Set(interactions.map((i) => i.actionId.toString()))].map(
+    (id) => new Types.ObjectId(id)
+  );
 
   // Get tags from interacted questions
 
@@ -252,15 +256,17 @@ export async function getRecommendedQuestions({
   // Remove duplicates
   const uniqueTagIds = [...new Set(allTags)];
 
-  const recommendedQuery: FilterQuery<typeof Question> = {
+  const recommendedQuery: QueryFilter<IQuestion> = {
     // exclude interacted questions
     _id: { $nin: interactedQuestionIds },
     // exclude the user's own questions
     author: { $ne: new Types.ObjectId(userId) },
-    // include questions with any of the unique tags
-    tags: { $in: uniqueTagIds.map((id) => new Types.ObjectId(id)) },
   }
 
+  if (uniqueTagIds.length > 0) {
+    // include questions with any of the unique tags
+    recommendedQuery.tags = { $in: uniqueTagIds.map((id) => new Types.ObjectId(id)) };
+  }
 
   if (query) {
     recommendedQuery.$or = [
@@ -273,7 +279,7 @@ export async function getRecommendedQuestions({
   const questions = await Question.find(recommendedQuery)
     .populate("tags", "name")
     .populate("author", "name image")
-    .sort({ upvotes: -1, views: -1 }) // prioritizing engagement
+    .sort({ upvotes: -1, views: -1, createdAt: -1 }) // prioritizing engagement
     .skip(skip)
     .limit(limit)
     .lean();
@@ -284,33 +290,38 @@ export async function getRecommendedQuestions({
 
 }
 
-export async function getQuestion(params: GetQuestionParams): Promise<ActionResponse<Question>> {
+import { cache } from "react";
+
+export const getQuestion = cache(async function getQuestion(
+  params: GetQuestionParams
+): Promise<ActionResponse<Question>> {
   const validationResult = await action({
     params,
     schema: GetQuestionSchema,
-    authorize: true,
   });
 
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
   }
-  if (!validationResult) {
+    if (!validationResult) {
     return handleError(new Error("Validation failed")) as ErrorResponse;
   }
+
   const { questionId } = validationResult.params!;
 
-  try {
-    const question = await Question.findById(questionId).populate("tags").populate("author", "name image");
 
-    if (!question) {
-      throw new Error("Question not found");
-    }
+  try {
+    const question = await Question.findById(questionId)
+      .populate("tags", "_id name")
+      .populate("author", "_id name image");
+
+    if (!question) throw new Error("Question not found");
 
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});
 
 export async function getQuestions(
   params: PaginatedSearchParams
@@ -330,9 +341,6 @@ export async function getQuestions(
 
   const filterQuery: QueryFilter<IQuestion> = {};
 
-  if (filter === "recommended") {
-    return { success: true, data: { questions: [], isNext: false } };
-  }
 
   if (query) {
     filterQuery.$or = [{ title: { $regex: new RegExp(query, "i") } }, { content: { $regex: new RegExp(query, "i") } }];
@@ -447,6 +455,29 @@ export async function incrementViews(params: IncrementViewsParams): Promise<Acti
     question.views += 1;
 
     await question.save();
+
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (userId && question.author.toString() !== userId) {
+      await Interaction.findOneAndUpdate(
+        {
+          user: new Types.ObjectId(userId),
+          action: "view",
+          actionId: question._id,
+          actionType: "question",
+        },
+        {
+          $set: {
+            user: new Types.ObjectId(userId),
+            action: "view",
+            actionId: question._id,
+            actionType: "question",
+          },
+        },
+        { upsert: true, new: true }
+      );
+    }
 
     return {
       success: true,

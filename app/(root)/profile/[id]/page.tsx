@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { auth } from "@/auth";
 import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
@@ -10,17 +12,55 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
+import ROUTES from "@/constants/routes";
 import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/states";
 import {
-  getUser,
-  getUserQuestions,
-  getUsersAnswers,
-  getUserStats,
-  getUserTopTags,
+    getUser,
+    getUserQuestions,
+    getUsersAnswers,
+    getUserStats,
+    getUserTopTags,
 } from "@/lib/actions/user.action";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const { success, data } = await getUser({ userId: id });
+
+  if (!success || !data?.user) {
+    return {
+      title: "Profile not found | V-Flow",
+      description: "The requested profile could not be found.",
+    };
+  }
+
+  const description = data.user.bio
+    ? data.user.bio.slice(0, 160)
+    : `View ${data.user.name}'s profile and activity on V-Flow.`;
+
+  return {
+    title: `${data.user.name} | V-Flow`,
+    description,
+    alternates: {
+      canonical: ROUTES.PROFILE(id),
+    },
+    openGraph: {
+      title: `${data.user.name} | V-Flow`,
+      description,
+      type: "profile",
+      url: ROUTES.PROFILE(id),
+      images: [{ url: data.user.image || "/images/logo.png", width: 400, height: 400, alt: data.user.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${data.user.name} | V-Flow`,
+      description,
+      images: [data.user.image || "/images/logo.png"],
+    },
+  };
+}
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   // /12312313
@@ -142,8 +182,8 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         reputationPoints={user.reputation|| 0}
       />
 
-      <section className="mt-10 flex gap-10">
-        <Tabs defaultValue="top-posts" className="flex-[2]">
+      <section className="mt-10 flex flex-col gap-8 lg:flex-row">
+        <Tabs defaultValue="top-posts" className="w-full flex-1">
           <TabsList className="background-light800_dark400 min-h-[42px] p-1">
             <TabsTrigger value="top-posts" className="tab">
               Top Posts
@@ -207,7 +247,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           </TabsContent>
         </Tabs>
 
-        <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
+        <div className="flex w-full min-w-[250px] flex-col lg:max-w-[280px]">
           <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
             <DataRenderer

@@ -1,6 +1,7 @@
 "use server";
 
 import { PipelineStage, Types, type QueryFilter, type SortOrder } from "mongoose";
+import { cache } from "react";
 
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
@@ -70,7 +71,7 @@ export async function getUsers(params: PaginatedSearchParams): Promise<ActionRes
   }
 }
 
-export async function getUser(params: GetUserParams): Promise<
+export const getUser = cache(async function getUser(params: GetUserParams): Promise<
   ActionResponse<{
     user: User;
   }>
@@ -99,7 +100,7 @@ export async function getUser(params: GetUserParams): Promise<
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});
 
 
 export async function getUserQuestions(params: GetUserQuestionsParams): Promise<

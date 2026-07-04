@@ -48,12 +48,26 @@ const cabinet = localFont({
 
 export const metadata: Metadata = {
   title: "DevFlow",
-  description:
-    "A community-driven platform for asking and answering programming questions. " +
-    "Get help, share knowledge, and collaborate with developers from around the world.",
-  icons: { icon: "images/logo.png" },
-};
+  description: "A community-driven platform for asking and answering programming questions.",
+  icons: { icon: "/images/logo.png" },
 
+  // ADD THIS BEFORE DEPLOYING:
+  openGraph: {
+    title: "DevFlow | Ask & Answer Programming Questions",
+    description: "Get help, share knowledge, and collaborate with developers worldwide.",
+    url: "https://your-vercel-url.vercel.app",
+    siteName: "DevFlow",
+    images: [{ url: "/images/og-banner.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  robots: { index: true, follow: true },
+
+
+}
+
+export const viewport = {
+  themeColor: "#18181b",
+}
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {

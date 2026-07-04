@@ -17,6 +17,67 @@ import { hasSavedQuestion } from '@/lib/actions/collection.action';
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import type { Metadata } from "next";
+
+const stripMetadataText = (value: string = "") =>
+  value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const { success, data: question } = await getQuestion({ questionId: id });
+
+  if (!success || !question) {
+    return {
+      title: "Question not found | V-Flow",
+      description: "The requested question could not be found.",
+      openGraph: {
+        title: "Question not found | V-Flow",
+        description: "The requested question could not be found.",
+        type: "website",
+        images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Question not found | V-Flow",
+        description: "The requested question could not be found.",
+        images: ["/images/logo.png"],
+      },
+    };
+  }
+
+  const description = stripMetadataText(question.content).slice(0, 160) || "Explore this question on V-Flow.";
+
+  return {
+    title: `${question.title} | V-Flow`,
+    description,
+    alternates: {
+      canonical: `/question/${id}`,
+    },
+    openGraph: {
+      title: question.title,
+      description,
+      type: "article",
+      url: `/question/${id}`,
+      images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: question.title,
+      description,
+      images: ["/images/logo.png"],
+    },
+  };
+}
+
+
+
+
+
+
+
+
 
 const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
   const { id } = await params;

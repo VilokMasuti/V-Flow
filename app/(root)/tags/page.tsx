@@ -1,16 +1,35 @@
-import TagCard from "@/components/cards/TagCard"
-import CommonFilter from '@/components/filters/CommonFilter'
-import Pagination from '@/components/Pagination'
-import LocalSearch from "@/components/search/LocalSearch"
-import DataRenderer from "@/components/ui/DataRenderer"
-import { TagFilters } from '@/constants/Filter'
-import ROUTES from "@/constants/routes"
-import { EMPTY_TAGS } from "@/constants/states"
-import { getTags } from "@/lib/actions/tag.actions"
+import type { Metadata } from "next";
+
+import TagCard from "@/components/cards/TagCard";
+import CommonFilter from '@/components/filters/CommonFilter';
+import Pagination from '@/components/Pagination';
+import LocalSearch from "@/components/search/LocalSearch";
+import DataRenderer from "@/components/ui/DataRenderer";
+import { TagFilters } from '@/constants/Filter';
+import ROUTES from "@/constants/routes";
+import { EMPTY_TAGS } from "@/constants/states";
+import { getTags } from "@/lib/actions/tag.actions";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Tags | V-Flow",
+  description: "Explore topics and categories across the V-Flow community.",
+  openGraph: {
+    title: "Tags | V-Flow",
+    description: "Explore topics and categories across the V-Flow community.",
+    type: "website",
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tags | V-Flow",
+    description: "Explore topics and categories across the V-Flow community.",
+    images: ["/images/logo.png"],
+  },
+};
 
 const Tags = async ({ searchParams }: SearchParams) => {
   const { page, pageSize, query, filter } = await searchParams;
