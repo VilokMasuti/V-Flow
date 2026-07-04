@@ -16,9 +16,9 @@ export async function POST(request: Request) {
 
   const { provider, providerAccountId, user } = await request.json();
 
-  await dbConnect();
+  const connection = await dbConnect();
 
-  const mongoSession = await mongoose.startSession();
+  const mongoSession = await connection.startSession();
   mongoSession.startTransaction();
 
   try {

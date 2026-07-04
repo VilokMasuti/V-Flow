@@ -9,6 +9,7 @@ import Vote from "@/database/vote.model";
 import { after } from 'next/server';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
+import dbConnect from "../mongoose";
 import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "../validations";
 import { createInteraction } from './interaction';
 
@@ -61,7 +62,8 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
   const { targetId, targetType, voteType } = validationResult.params;
   const userId = validationResult.session.user.id;
 
-  const session = await mongoose.startSession();
+  const connection = await dbConnect();
+  const session = await connection.startSession();
   session.startTransaction();
 
   try {

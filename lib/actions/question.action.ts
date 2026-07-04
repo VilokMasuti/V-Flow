@@ -53,7 +53,8 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
   const userId = validationResult.session.user.id;
 
   // Start a transaction so all related writes succeed or fail together.
-  const session = await mongoose.startSession();
+  const connection = await dbConnect();
+  const session = await connection.startSession();
   session.startTransaction();
   try {
     // Create the main question document first.

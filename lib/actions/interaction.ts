@@ -3,6 +3,7 @@ import User from '@/database/user.model';
 import mongoose from "mongoose";
 import action from '../handlers/actions';
 import handleError from '../handlers/error';
+import dbConnect from '../mongoose';
 import { CreateInteractionSchema } from '../validations';
 
 export async function createInteraction(params: CreateInteractionParams): Promise<ActionResponse<IInteraction>> {
@@ -13,14 +14,15 @@ export async function createInteraction(params: CreateInteractionParams): Promis
     authorize: true,
   })
 
-  if (ValidationResult instanceof Error) {
-    return handleError(ValidationResult) as ErrorResponse;
+  if (ValidationResult instanceof Error || !ValidationResult?.params || !ValidationResult.session?.user?.id) {
+    return handleError(ValidationResult || new Error("Validation failed")) as ErrorResponse;
   }
-  const { action: actionType, actionId, authorId, actionTarget } = ValidationResult!.params;
+  const { action: actionType, actionId, authorId, actionTarget } = ValidationResult.params;
 
-  const userId = ValidationResult!.session?.user?.id;
+  const userId = ValidationResult.session.user.id;
 
-  const session = await mongoose.startSession();
+  const connection = await dbConnect();
+  const session = await connection.startSession();
   session.startTransaction();
 
 

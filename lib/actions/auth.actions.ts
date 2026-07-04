@@ -11,6 +11,7 @@ import User from "@/database/user.model";
 import action from '../handlers/actions';
 import handleError from "../handlers/error";
 import { NotFoundError } from "../http-errors";
+import dbConnect from "../mongoose";
 import { SignInSchema, SignUpSchema } from "../validations";
 
 export async function signUpWithCredentials(
@@ -18,13 +19,14 @@ export async function signUpWithCredentials(
 ): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignUpSchema });
 
-  if (!validationResult || validationResult instanceof Error) {
+  if (!validationResult || validationResult instanceof Error || !validationResult.params) {
     return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
   }
 
   const { name, username, email, password } = validationResult.params;
 
-  const session = await mongoose.startSession();
+  const connection = await dbConnect();
+  const session = await connection.startSession();
   session.startTransaction();
 
   try {
@@ -78,7 +80,7 @@ export async function signInWithCredentials(
 ): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignInSchema });
 
-  if (!validationResult || validationResult instanceof Error) {
+  if (!validationResult || validationResult instanceof Error || !validationResult.params) {
     return handleError(validationResult || new Error("Validation failed")) as ErrorResponse;
   }
 

@@ -10,6 +10,7 @@ import Question from "@/database/question.model";
 import Vote from '@/database/vote.model';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
+import dbConnect from "../mongoose";
 import { CreateAnswerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validations";
 import { after } from 'next/server';
 import { createInteraction } from './interaction';
@@ -32,7 +33,8 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
   const { content, questionId } = validationResult.params;
   const userId = validationResult.session.user.id;
 
-  const session = await mongoose.startSession();
+  const connection = await dbConnect();
+  const session = await connection.startSession();
   session.startTransaction();
   try {
     const question = await Question.findById(questionId).session(session);
