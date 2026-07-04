@@ -1,63 +1,72 @@
-@import url("@radix-ui/colors/tomato-dark.css");
-@import url("@radix-ui/colors/mauve-dark.css");
+.dark-editor {
+  --accentBase: #fff4eb;
+  --accentBgSubtle: #fff4eb;
+  --accentBg: #ffe2cc;
+  --accentBgHover: #ffd0aa;
+  --accentBgActive: #ffbd88;
+  --accentLine: #ff9a4d;
+  --accentBorder: #ff8a2a;
+  --accentBorderHover: #ff7000;
+  --accentSolid: #ff7000;
+  --accentSolidHover: #e86600;
+  --accentText: #bf5200;
+  --accentTextContrast: #ffffff;
+
+  --baseBase: #ffffff;
+  --basePageBg: #f0f0f0;
+  --baseBgSubtle: #ffffff;
+  --baseBg: #f7f7f7;
+  --baseBgHover: #f0f0f0;
+  --baseBgActive: #e5e5e5;
+  --baseLine: #e5e5e5;
+  --baseBorder: #d4d4d4;
+  --baseBorderHover: #a3a3a3;
+  --baseSolid: #737373;
+  --baseSolidHover: #525252;
+  --baseText: #252525;
+  --baseTextContrast: #080808;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: var(--basePageBg);
+  color: var(--baseText);
+}
 
 .dark .dark-editor {
-  --accentBase: var(--tomato-1);
-  --accentBgSubtle: var(--tomato-2);
-  --accentBg: var(--tomato-3);
-  --accentBgHover: var(--tomato-4);
-  --accentBgActive: var(--tomato-5);
-  --accentLine: var(--tomato-6);
-  --accentBorder: var(--tomato-7);
-  --accentBorderHover: var(--tomato-8);
-  --accentSolid: var(--tomato-9);
-  --accentSolidHover: var(--tomato-10);
-  --accentText: var(--tomato-11);
-  --accentTextContrast: var(--tomato-12);
+  --accentBase: #1a1008;
+  --accentBgSubtle: #25160b;
+  --accentBg: #321d0d;
+  --accentBgHover: #432510;
+  --accentBgActive: #593013;
+  --accentLine: #8a480f;
+  --accentBorder: #b65d12;
+  --accentBorderHover: #ff7000;
+  --accentSolid: #ff7000;
+  --accentSolidHover: #ff8a2a;
+  --accentText: #ffb27a;
+  --accentTextContrast: #080808;
 
-  --baseBase: var(--mauve-1);
-  --baseBgSubtle: var(--mauve-2);
-  --baseBg: var(--mauve-3);
-  --baseBgHover: var(--mauve-4);
-  --baseBgActive: var(--mauve-5);
-  --baseLine: var(--mauve-6);
-  --baseBorder: var(--mauve-7);
-  --baseBorderHover: var(--mauve-8);
-  --baseSolid: var(--mauve-9);
-  --baseSolidHover: var(--mauve-10);
-  --baseText: var(--mauve-11);
-  --baseTextContrast: var(--mauve-12);
+  --baseBase: #080808;
+  --basePageBg: #111111;
+  --baseBgSubtle: #1a1a1a;
+  --baseBg: #252525;
+  --baseBgHover: #303030;
+  --baseBgActive: #3a3a3a;
+  --baseLine: #303030;
+  --baseBorder: #404040;
+  --baseBorderHover: #525252;
+  --baseSolid: #a3a3a3;
+  --baseSolidHover: #d4d4d4;
+  --baseText: #e5e5e5;
+  --baseTextContrast: #ffffff;
 
-  --admonitionTipBg: var(--cyan4);
-  --admonitionTipBorder: var(--cyan8);
-
-  --admonitionInfoBg: var(--grass4);
-  --admonitionInfoBorder: var(--grass8);
-
-  --admonitionCautionBg: var(--amber4);
-  --admonitionCautionBorder: var(--amber8);
-
-  --admonitionDangerBg: var(--red4);
-  --admonitionDangerBorder: var(--red8);
-
-  --admonitionNoteBg: var(--mauve-4);
-  --admonitionNoteBorder: var(--mauve-8);
-
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    "Open Sans",
-    "Helvetica Neue",
-    sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-  color: var(--baseText);
-  --basePageBg: black;
   background: var(--basePageBg);
+  color: var(--baseText);
+}
+
+.dark-editor .mdxeditor-root-contenteditable {
+  background: var(--basePageBg);
+}
+
+.dark-editor [contenteditable="true"] {
+  color: var(--baseText);
 }

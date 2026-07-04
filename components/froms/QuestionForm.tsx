@@ -122,7 +122,7 @@ const QuestionForm = ({ question, isEdit }: Params) => {
 
   return (
     <Form {...form}>
-      <form className="flex w-full flex-col gap-10" onSubmit={form.handleSubmit(handleCreateQuestion)}>
+      <form className="flex flex-col  w-full gap-10" onSubmit={form.handleSubmit(handleCreateQuestion)}>
         <FormField
           control={form.control}
           name="title"
@@ -148,7 +148,7 @@ const QuestionForm = ({ question, isEdit }: Params) => {
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
+            <FormItem className="flex  flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Detailed explanation of your problem <span className="text-primary-500">*</span>
               </FormLabel>

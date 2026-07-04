@@ -48,18 +48,12 @@ const EditDeleteAction = ({ type, itemId }: Prop) => {
   return (
     <div className={`flex items-center justify-center gap-4 max-sm:w-full ${type==='Answer' && 'gap-0 justify-center' }`} >
 {type === "Question" && (
-        <Image
-          src="/icons/edit.svg"
-          alt="edit"
-          width={14}
-          height={14}
-          className="cursor-pointer object-contain"
-          onClick={handleEdit}
-        />
+
+       <div></div>
       )}
        <AlertDialog>
         <AlertDialogTrigger className="cursor-pointer">
-          <Image src="/icons/trash.svg" alt="trash" width={14} height={14} />
+          <Image src="/icons/trash.svg" alt="trash" width={18} height={18}  className=' duration-1000 cursor-pointer' />
         </AlertDialogTrigger>
         <AlertDialogContent className="background-light800_dark300">
           <AlertDialogHeader>

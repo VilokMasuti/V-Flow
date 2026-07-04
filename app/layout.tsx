@@ -70,9 +70,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export const viewport = {
-  themeColor: "#18181b",
-}
+
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {

@@ -1,4 +1,3 @@
-import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
@@ -6,9 +5,10 @@ import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
 import logger from "@/lib/logger";
 import { AIAnswerSchema } from "@/lib/validations";
-
+import { groq } from "@ai-sdk/groq";
 export async function POST(req: Request) {
   const { question, content, userAnswer } = await req.json();
+
 
   try {
     const validatedData = AIAnswerSchema.safeParse({ question, content });
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     }
 
    const { text } = await generateText({
-      model: openai("gpt-4-turbo"),
+      model: groq("llama-3.1-8b-instant"),
       prompt: `Generate a markdown-formatted response to the following question: "${question}".
 
       Consider the provided context:

@@ -31,10 +31,10 @@ const MobileNavigation = async () => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="background-light900_dark200 border-none"
+        className="background-light900_dark200 border-none shadow-md"
       >
         <SheetTitle className="hidden">Navigation</SheetTitle>
-        <Link href="/" className="flex items-center gap-1">
+        <Link href="/" className="flex items-center gap-1 mt-1 p-2">
           <Image
             src="/images/site-logo.svg"
             width={23}
@@ -49,7 +49,7 @@ const MobileNavigation = async () => {
 
         <div className="no-scrollbar flex h-[calc(100vh-80px)] flex-col justify-between overflow-y-auto">
           <SheetClose asChild>
-            <section className="flex h-full flex-col gap-6 pt-16">
+            <section className="flex h-full flex-col gap-6 pt-10">
               <NavLinks userId={userId} isMobileNav />
             </section>
           </SheetClose>

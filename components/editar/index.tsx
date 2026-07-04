@@ -1,36 +1,38 @@
 "use client";
 
 import {
-  headingsPlugin,
-  listsPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
-  markdownShortcutPlugin,
-  MDXEditor,
-  type MDXEditorMethods,
-  ConditionalContents,
-  ChangeCodeMirrorLanguage,
-  toolbarPlugin,
-  UndoRedo,
-  Separator,
   BoldItalicUnderlineToggles,
-  ListsToggle,
+  ChangeCodeMirrorLanguage,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  ConditionalContents,
   CreateLink,
+  diffSourcePlugin,
+  headingsPlugin,
+  imagePlugin,
+  InsertCodeBlock,
   InsertImage,
   InsertTable,
   InsertThematicBreak,
-  InsertCodeBlock,
-  linkPlugin,
   linkDialogPlugin,
+  linkPlugin,
+  listsPlugin,
+  ListsToggle,
+  markdownShortcutPlugin,
+  MDXEditor,
+  quotePlugin,
+  Separator,
   tablePlugin,
-  imagePlugin,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  diffSourcePlugin,
+  thematicBreakPlugin,
+  toolbarPlugin,
+  UndoRedo,
+  type MDXEditorMethods,
 } from "@mdxeditor/editor";
 import { basicDark } from "cm6-theme-basic-dark";
 import { useTheme } from "next-themes";
 import type { ForwardedRef } from "react";
+
+import { cn } from "@/lib/utils";
 
 import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
@@ -39,9 +41,10 @@ interface Props {
   value: string;
   fieldChange: (value: string) => void;
   editorRef: ForwardedRef<MDXEditorMethods> | null;
+  className?: string;
 }
 
-const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
+const Editor = ({ value, editorRef, fieldChange, className, ...props }: Props) => {
   const { resolvedTheme } = useTheme();
 
   const theme = resolvedTheme === "dark" ? [basicDark] : [];
@@ -51,7 +54,10 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
       key={resolvedTheme}
       markdown={value}
       ref={editorRef}
-      className="background-light800_dark200 light-border-2 markdown-editor dark-editor w-full border"
+      className={cn(
+        "background-light800_dark200 light-border-2 markdown-editor dark-editor w-full max-w-full min-w-0 overflow-hidden border",
+        className
+      )}
       onChange={fieldChange}
       plugins={[
         headingsPlugin(),

@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,6 +31,7 @@ interface Props {
 const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const [editorVersion, setEditorVersion] = useState(0);
   const router = useRouter();
   const session = useSession();
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -51,6 +52,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
 
       if (result.success) {
         form.reset();
+        setEditorVersion((version) => version + 1);
         router.refresh();
         toast.success("Success", {
           description: "Your answer has been posted successfully",
@@ -83,11 +85,16 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
       }
 
       const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+      form.setValue("content", formattedAnswer, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+
       if (editorRef.current) {
         editorRef.current.setMarkdown(formattedAnswer);
-
-        form.setValue("content", formattedAnswer);
-        form.trigger("content");
+      } else {
+        setEditorVersion((version) => version + 1);
       }
     } catch {
       toast.error("Error", {
@@ -99,12 +106,12 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+    <div className="w-full min-w-0">
+      <div className="flex w-full min-w-0 flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">Write your answer here</h4>
         <Button
           type="button"
-          className="btn light-border-2 text-primary-500 dark:text-primary-500 cursor-pointer gap-1.5 rounded-md border px-4 py-2.5 shadow-none"
+          className="btn light-border-2 text-primary-500 dark:text-primary-500 w-full cursor-pointer justify-center gap-1.5 rounded-md border px-4 py-2.5 shadow-none sm:w-fit"
           disabled={isAISubmitting}
           onClick={generateAIAnswer}
         >
@@ -128,14 +135,14 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         </Button>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 flex w-full flex-col gap-10">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 flex w-full min-w-0 flex-col gap-10">
           <FormField
             control={form.control}
             name="content"
             render={({ field }) => (
-              <FormItem className="flex w-full flex-col gap-3">
+              <FormItem className="flex w-full min-w-0 flex-col gap-3">
                 <FormControl className="mt-3.5">
-                  <Editor value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
+                  <Editor key={editorVersion} value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

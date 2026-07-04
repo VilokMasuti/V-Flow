@@ -8,23 +8,24 @@ import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editar/Preview";
 import AnswerForm from "@/components/froms/AnswerForm";
 import Metric from "@/components/Metric";
-import SaveQuestion from '@/components/questions/SaveQuestion';
+import SaveQuestion from "@/components/questions/SaveQuestion";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
-import { hasSavedQuestion } from '@/lib/actions/collection.action';
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 import type { Metadata } from "next";
 
 const stripMetadataText = (value: string = "") =>
-  value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-export async function generateMetadata({
-  params,
-}: RouteParams): Promise<Metadata> {
+export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
 
@@ -71,18 +72,10 @@ export async function generateMetadata({
   };
 }
 
-
-
-
-
-
-
-
-
-const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
-    const { page, pageSize, filter } = await searchParams;
+  const { page, pageSize, filter } = await searchParams;
   after(async () => {
     await incrementViews({ questionId: id });
   });
@@ -93,10 +86,9 @@ const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-  page: Number(page) || 1,
+    page: Number(page) || 1,
     pageSize: Number(pageSize) || 10,
-    filter
-
+    filter,
   });
 
   const hasVotedPromise = hasVoted({
@@ -104,50 +96,49 @@ const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
     targetType: "question",
   });
 
-
   const hasSavedQuestionPromise = hasSavedQuestion({
     questionId: question._id,
   });
   const { author, createdAt, answers, views, tags, content, title, upvotes, downvotes } = question;
 
   return (
-    <>
-      <div className="flex-start w-full flex-col">
-        <div className="flex w-full flex-col-reverse justify-between">
+    <main className="w-full min-w-0">
+      <div className="flex-start w-full min-w-0 flex-col">
+        <div className="flex w-full min-w-0 flex-col-reverse justify-between gap-4 sm:flex-row">
           <div className="flex items-center justify-start gap-1">
             <UserAvatar
               id={author._id}
               name={author.name}
               imageUrl={author.image}
-              className="size-8"
-              fallbackClassName="text-xs"
+              className="size-[22px]"
+              fallbackClassName="text-[10px]"
             />
             <Link href={ROUTES.PROFILE(author._id)}>
               <p className="paragraph-semibold text-dark300_light700">{author.name}</p>
             </Link>
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex shrink-0 items-center justify-end gap-4">
             <Suspense fallback={<div>Loading...</div>}>
               <Votes
-                upvotes={upvotes}
-                downvotes={downvotes}
-                targetId={question._id}
                 targetType="question"
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
               />
             </Suspense>
 
             <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={question._id}  hasSavedQuestionPromise={hasSavedQuestionPromise} />
+              <SaveQuestion questionId={question._id} hasSavedQuestionPromise={hasSavedQuestionPromise} />
             </Suspense>
           </div>
         </div>
 
-        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">{title}</h2>
+        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full min-w-0 break-words">{title}</h2>
       </div>
 
-      <div className="mt-5 mb-8 flex flex-wrap gap-4">
+      <div className="mt-5 mb-8 flex min-w-0 flex-wrap gap-4">
         <Metric
           imgUrl="/icons/clock.svg"
           alt="clock icon"
@@ -173,25 +164,27 @@ const QuestionDetails = async ({ params,searchParams   }: RouteParams) => {
 
       <Preview content={content} />
 
-      <div className="mt-8 flex flex-wrap gap-2">
+      <div className="mt-8 flex min-w-0 flex-wrap gap-2">
         {tags.map((tag: Tag) => (
           <TagCard key={tag._id} _id={tag._id as string} name={tag.name} compact />
         ))}
       </div>
-      <section className="my-5">
+
+      <section className="my-5 min-w-0">
         <AllAnswers
+          page={Number(page) || 1}
+          isNext={answersResult?.isNext || false}
           data={answersResult?.answers}
           success={areAnswersLoaded}
           error={answersError}
           totalAnswers={answersResult?.totalAnswers || 0}
-            page={Number(page) || 1}
-          isNext={answersResult?.isNext || false}
         />
       </section>
-      <section className="my-5">
-        <AnswerForm questionId={id} questionTitle={question.title} questionContent={question.content} />
+
+      <section className="my-5 min-w-0">
+        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent={question.content} />
       </section>
-    </>
+    </main>
   );
 };
 

@@ -6,7 +6,6 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import TagCard from '@/components/cards/TagCard';
 
 import Pagination from "@/components/Pagination";
-import { Button } from "@/components/ui/button";
 import DataRenderer from '@/components/ui/DataRenderer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
@@ -15,11 +14,11 @@ import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/states";
 import {
-    getUser,
-    getUserQuestions,
-    getUsersAnswers,
-    getUserStats,
-    getUserTopTags,
+  getUser,
+  getUserQuestions,
+  getUsersAnswers,
+  getUserStats,
+  getUserTopTags,
 } from "@/lib/actions/user.action";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -167,9 +166,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           {loggedInUser?.user?.id === id && (
             <Link href="/profile/edit">
-              <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-12 min-w-44 px-4 py-3">
+              {/* <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-12 min-w-44 px-4 py-3">
                 Edit Profile
-              </Button>
+              </Button> */}
             </Link>
           )}
         </div>

@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^3.0.63",
+    "@ai-sdk/deepseek": "^3.0.5",
+    "@ai-sdk/google": "^4.0.8",
+    "@ai-sdk/groq": "^4.0.5",
+    "@ai-sdk/openai": "^4.0.7",
     "@hookform/resolvers": "^5.2.2",
     "@mdxeditor/editor": "^3.50.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -41,7 +44,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^2.0.1",
-    "ai": "^6.0.180",
+    "ai": "^7.0.15",
     "bcryptjs": "^3.0.3",
     "bright": "^1.0.0",
     "class-variance-authority": "^0.7.1",
