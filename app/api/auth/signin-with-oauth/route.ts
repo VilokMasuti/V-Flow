@@ -12,16 +12,16 @@ import dbConnect from "@/lib/mongoose";
 import { SignInWithOAuthSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
-
-
-  const { provider, providerAccountId, user } = await request.json();
-
-  const connection = await dbConnect();
-
-  const mongoSession = await connection.startSession();
-  mongoSession.startTransaction();
+  let mongoSession: mongoose.ClientSession | null = null;
 
   try {
+    const { provider, providerAccountId, user } = await request.json();
+
+    await dbConnect();
+
+    mongoSession = await mongoose.startSession();
+    mongoSession.startTransaction();
+
     const validatedData = SignInWithOAuthSchema.safeParse({
       provider,
       providerAccountId,
@@ -85,9 +85,18 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    await mongoSession.abortTransaction();
+    if (mongoSession) {
+      try {
+        await mongoSession.abortTransaction();
+      } catch {
+        // ignore abort errors from an unstarted or already-finished transaction
+      }
+    }
+
     return handleError(error, "api") as APIErrorResponse;
   } finally {
-    mongoSession.endSession();
+    if (mongoSession) {
+      mongoSession.endSession();
+    }
   }
 }

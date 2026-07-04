@@ -8,11 +8,11 @@ import Answer, { IAnswer } from "@/database/answer.model";
 import Question from "@/database/question.model";
 
 import Vote from '@/database/vote.model';
+import { after } from 'next/server';
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
 import dbConnect from "../mongoose";
 import { CreateAnswerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validations";
-import { after } from 'next/server';
 import { createInteraction } from './interaction';
 
 export async function createAnswer(params: CreateAnswerParams): Promise<ActionResponse<IAnswer>> {
@@ -33,10 +33,12 @@ export async function createAnswer(params: CreateAnswerParams): Promise<ActionRe
   const { content, questionId } = validationResult.params;
   const userId = validationResult.session.user.id;
 
-  const connection = await dbConnect();
-  const session = await connection.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | undefined;
+
   try {
+    await dbConnect();
+    session = await mongoose.startSession();
+    session.startTransaction();
     const question = await Question.findById(questionId).session(session);
     if (!question) throw new Error("Question not found");
 
@@ -73,10 +75,19 @@ after(async () => {
       data: JSON.parse(JSON.stringify(newAnswer)),
     };
   } catch (error) {
-    await session.abortTransaction();
+    if (session) {
+      try {
+        await session.abortTransaction();
+      } catch {
+        // ignore abort errors from an unstarted or already-finished transaction
+      }
+    }
+
     return handleError(error) as ErrorResponse;
   } finally {
-    await session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 }
 

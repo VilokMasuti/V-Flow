@@ -62,11 +62,12 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
   const { targetId, targetType, voteType } = validationResult.params;
   const userId = validationResult.session.user.id;
 
-  const connection = await dbConnect();
-  const session = await connection.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | undefined;
 
   try {
+    await dbConnect();
+    session = await mongoose.startSession();
+    session.startTransaction();
     const existingVote = await Vote.findOne({
       author: userId,
       id: targetId,
@@ -118,10 +119,19 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
 
     return { success: true };
   } catch (error) {
-    await session.abortTransaction();
+    if (session) {
+      try {
+        await session.abortTransaction();
+      } catch {
+        // ignore abort errors from an unstarted or already-finished transaction
+      }
+    }
+
     return handleError(error) as ErrorResponse;
   } finally {
-    await session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 }
 export async function hasVoted(params: HasVotedParams): Promise<ActionResponse<HasVotedResponse>> {

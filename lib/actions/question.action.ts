@@ -52,11 +52,13 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
   // The logged-in user becomes the author of the question.
   const userId = validationResult.session.user.id;
 
-  // Start a transaction so all related writes succeed or fail together.
-  const connection = await dbConnect();
-  const session = await connection.startSession();
-  session.startTransaction();
+  let session: mongoose.ClientSession | undefined;
+
   try {
+    // Start a transaction so all related writes succeed or fail together.
+    await dbConnect();
+    session = await mongoose.startSession();
+    session.startTransaction();
     // Create the main question document first.
     const [question] = await Question.create([{ title, content, author: userId }], { session });
 
@@ -112,14 +114,20 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
     // Something failed, so undo every database change in this transaction.
+    if (session) {
+      try {
+        await session.abortTransaction();
+      } catch {
+        // ignore abort errors from an unstarted or already-finished transaction
+      }
+    }
 
-
-
-    await session.abortTransaction();
     return handleError(error) as ErrorResponse;
   } finally {
     // Always close the session, whether we succeeded or failed.
-    session.endSession();
+    if (session) {
+      session.endSession();
+    }
   }
 }
 
