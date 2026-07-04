@@ -4,7 +4,18 @@ import mongoose, { Mongoose } from "mongoose";
 
 import logger from "./logger";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const normalizeMongoUri = (value?: string) => {
+  const trimmed = value?.trim();
+
+  if (!trimmed) return "";
+
+  const withoutSurroundingQuotes = trimmed.replace(/^['"]|['"]$/g, "");
+  const uriMatch = withoutSurroundingQuotes.match(/mongodb(?:\+srv)?:\/\/.+/);
+
+  return uriMatch?.[0] ?? withoutSurroundingQuotes;
+};
+
+const MONGODB_URI = normalizeMongoUri(process.env.MONGODB_URI);
 const MONGODB_DNS_SERVERS =
   process.env.MONGODB_DNS_SERVERS?.split(",")
     .map((server) => server.trim())
@@ -13,6 +24,10 @@ let mongoUriPromise: Promise<string> | null = null;
 
 if (!MONGODB_URI) {
   throw new Error("MONGODB_URI is not defined");
+}
+
+if (!MONGODB_URI.startsWith("mongodb://") && !MONGODB_URI.startsWith("mongodb+srv://")) {
+  throw new Error('MONGODB_URI must start with "mongodb://" or "mongodb+srv://". Check the Vercel env value.');
 }
 
 if (MONGODB_DNS_SERVERS.length > 0) {
