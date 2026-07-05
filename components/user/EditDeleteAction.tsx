@@ -7,6 +7,7 @@ import { deleteQuestion } from '@/lib/actions/question.action';
 
 import { deleteAnswer } from '@/lib/actions/answer.action';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
+import { Button } from '../ui/button';
 
 interface Prop{
   type:"Question" | "Answer";
@@ -48,8 +49,7 @@ const EditDeleteAction = ({ type, itemId }: Prop) => {
   return (
     <div className={`flex items-center justify-center gap-4 max-sm:w-full ${type==='Answer' && 'gap-0 justify-center' }`} >
 {type === "Question" && (
-
-       <div></div>
+       <div><Button onClick={handleEdit}>DELETE</Button></div>
       )}
        <AlertDialog>
         <AlertDialogTrigger className="cursor-pointer">
