@@ -106,3 +106,12 @@ interface RecommendationParams {
   skip: number;
   limit: number;
 }
+
+interface UpdateProfileParams{
+  name?:string;
+  userName?:string;
+  email?:string;
+  image?:string;
+  password?:string
+
+}

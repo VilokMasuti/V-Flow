@@ -1,4 +1,5 @@
 "use server";
+import { UpdateUserSchema } from './../validations';
 
 import { PipelineStage, Types, type QueryFilter, type SortOrder } from "mongoose";
 import { cache } from "react";
@@ -353,4 +354,36 @@ export async function getUserStats(params: GetUserParams): Promise<
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
+}
+
+
+export async function updateUser(
+  params: UpdateProfileParams
+): Promise<ActionResponse<{ user: User }>> {
+
+  const validationResult = await action({
+    params,
+    schema: UpdateUserSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+  const { user } = validationResult.session!;
+
+  try {
+    const updateUser = await User.findByIdAndUpdate(user?.id,params,{
+      new:true
+    })
+
+    return {
+      success: true,
+      data: { user: JSON.parse(JSON.stringify(updateUser)) },
+    };
+
+  } catch (error) {
+ return handleError(error) as ErrorResponse;
+  }
+
 }

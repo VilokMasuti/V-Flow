@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { deleteQuestion } from '@/lib/actions/question.action';
 
 import { deleteAnswer } from '@/lib/actions/answer.action';
+import { Edit3 } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog';
-import { Button } from '../ui/button';
 
 interface Prop{
   type:"Question" | "Answer";
@@ -49,11 +49,15 @@ const EditDeleteAction = ({ type, itemId }: Prop) => {
   return (
     <div className={`flex items-center justify-center gap-4 max-sm:w-full ${type==='Answer' && 'gap-0 justify-center' }`} >
 {type === "Question" && (
-       <div><Button onClick={handleEdit}>DELETE</Button></div>
+       <div>
+
+        <Edit3 className='  cursor-pointer' height={15} width={15} onClick={handleEdit}/>
+
+        </div>
       )}
        <AlertDialog>
         <AlertDialogTrigger className="cursor-pointer">
-          <Image src="/icons/trash.svg" alt="trash" width={18} height={18}  className=' duration-1000 cursor-pointer' />
+          <Image src="/icons/trash.svg" alt="trash" width={15} height={15}  className=' duration-1000 cursor-pointer' />
         </AlertDialogTrigger>
         <AlertDialogContent className="background-light800_dark300">
           <AlertDialogHeader>
