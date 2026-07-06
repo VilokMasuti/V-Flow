@@ -5,329 +5,57 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════════════
+   @theme — design tokens
+   Vercel-inspired: pure neutrals, one orange accent
+═══════════════════════════════════════════════════════════════ */
 @theme {
-  /* ── Brand ────────────────────────────────────────────────── */
+  /* Brand */
   --color-primary-100: #fff4eb;
   --color-primary-500: #ff7000;
 
-  /* ── Dark Surfaces (pure neutral black ladder) ────────────── */
-  --color-dark-100: #080808; /* deepest bg */
-  --color-dark-200: #111111; /* sidebars, nav */
-  --color-dark-300: #1a1a1a; /* cards, panels */
-  --color-dark-400: #252525; /* hover states, inputs */
-  --color-dark-500: #0d0d0d; /* alternate deep */
+  /* Dark surfaces — pure black ladder, no blue tint */
+  --color-dark-100: #080808;
+  --color-dark-200: #111111;
+  --color-dark-300: #1a1a1a;
+  --color-dark-400: #252525;
+  --color-dark-500: #0d0d0d;
 
-  /* ── Light Surfaces (pure neutral grays) ─────────────────── */
-  --color-light-400: #999999; /* muted/placeholder text */
-  --color-light-500: #737373; /* secondary text */
-  --color-light-700: #e5e5e5; /* borders, dividers */
-  --color-light-800: #f0f0f0; /* input backgrounds */
-  --color-light-850: #f7f7f7; /* page background */
-  --color-light-900: #ffffff; /* pure white surfaces */
+  /* Light surfaces — pure neutral grays */
+  --color-light-400: #999999;
+  --color-light-500: #737373;
+  --color-light-700: #e5e5e5;
+  --color-light-800: #f0f0f0;
+  --color-light-850: #f7f7f7;
+  --color-light-900: #ffffff;
 
-  /* ── Accent ───────────────────────────────────────────────── */
+  /* Accent */
   --color-link-100: #0070f3;
 
-  /* ── Radius ───────────────────────────────────────────────── */
+  /* Radius */
   --radius-2: 8px;
   --radius-1_5: 6px;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* ── Shadows ──────────────────────────────────────────────── */
-  --shadow-light-100: 0px 1px 3px 0px rgba(0, 0, 0, 0.04), 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
-  --shadow-light-200: 0px 2px 8px 0px rgba(0, 0, 0, 0.06), 0px 8px 24px 0px rgba(0, 0, 0, 0.05);
-  --shadow-light-300: -2px 4px 16px 0px rgba(0, 0, 0, 0.06);
-  --shadow-dark-100: 0px 1px 3px 0px rgba(0, 0, 0, 0.5), 0px 4px 12px 0px rgba(0, 0, 0, 0.4);
-  --shadow-dark-200: 2px 0px 20px 0px rgba(0, 0, 0, 0.5);
+  /* Shadows — light mode */
+  --shadow-light-100: 0px 1px 3px 0px rgba(0,0,0,0.04), 0px 4px 12px 0px rgba(0,0,0,0.04);
+  --shadow-light-200: 0px 2px 8px 0px rgba(0,0,0,0.06), 0px 8px 24px 0px rgba(0,0,0,0.05);
+  --shadow-light-300: -2px 4px 16px 0px rgba(0,0,0,0.06);
+  --shadow-dark-100: 0px 1px 3px 0px rgba(0,0,0,0.5), 0px 4px 12px 0px rgba(0,0,0,0.4);
+  --shadow-dark-200: 2px 0px 20px 0px rgba(0,0,0,0.5);
 
-  /* ── Auth bg images ───────────────────────────────────────── */
+  /* Auth backgrounds */
   --background-image-auth-dark: url("/images/auth-dark.png");
   --background-image-auth-light: url("/images/auth-light.png");
 
-  /* ── Breakpoints ──────────────────────────────────────────── */
+  /* Breakpoints */
   --breakpoint-xs: 420px;
 
-  /* ── Fonts ────────────────────────────────────────────────── */
-  /* These CSS vars are set by next/font on the <html> element.
-     We wire them to Tailwind's font-{name} utilities below.    */
+  /* Fonts — wired from next/font CSS vars on <html> */
   --font-inter: var(--font-inter);
   --font-dm-sans: var(--font-dm-sans);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   FIRST @layer base — border-color + body letter-spacing
-   (Must come before @utility blocks in Tailwind v4)
-───────────────────────────────────────────────────────────── */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-  body {
-    letter-spacing: var(--tracking-normal);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   BACKGROUND UTILITIES
-═══════════════════════════════════════════════════════════════ */
-@utility background-light850_dark100 {
-  @apply bg-light-900 dark:bg-dark-500;
-}
-@utility background-light900_dark200 {
-  @apply bg-light-900 dark:bg-dark-200;
-}
-@utility background-light900_dark300 {
-  @apply bg-light-900 dark:bg-dark-300;
-}
-@utility background-light800_darkgradient {
-  @apply bg-light-800 dark:dark-gradient;
-}
-@utility background-light800_dark400 {
-  @apply bg-light-800! dark:bg-dark-400!;
-}
-@utility background-light700_dark400 {
-  @apply bg-light-700 dark:bg-dark-400;
-}
-@utility background-light700_dark300 {
-  @apply bg-light-700 dark:bg-dark-300;
-}
-@utility background-light800_dark300 {
-  @apply bg-light-800! dark:bg-dark-300!;
-}
-@utility background-light800_dark200 {
-  @apply bg-light-800 dark:bg-dark-200;
-}
-@utility background-dark400_light900 {
-  @apply dark:bg-dark-400! bg-light-900!;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   TEXT UTILITIES
-   Naming: text-{light-mode-token}_{dark-mode-token}
-   In LIGHT mode: uses the "dark" token (dark = dark text color)
-   In DARK mode:  uses the "light" token (light = light text color)
-═══════════════════════════════════════════════════════════════ */
-@utility text-dark100_light900 {
-  @apply text-dark-100! dark:text-light-900!;
-}
-@utility text-dark200_light900 {
-  @apply text-dark-200 dark:text-light-900;
-}
-@utility text-dark200_light800 {
-  @apply text-dark-200! dark:text-light-800!;
-}
-@utility text-dark300_light700 {
-  @apply text-dark-300 dark:text-light-700;
-}
-@utility text-dark400_light700 {
-  @apply text-dark-400 dark:text-light-700;
-}
-@utility text-dark500_light700 {
-  @apply text-dark-500! dark:text-light-700!;
-}
-@utility text-dark500_light500 {
-  @apply text-dark-500 dark:text-light-500;
-}
-@utility text-dark500_light400 {
-  @apply text-dark-500 dark:text-light-400;
-}
-@utility text-dark300_light900 {
-  @apply text-dark-300! dark:text-light-900!;
-}
-@utility text-dark400_light800 {
-  @apply text-dark-400 dark:text-light-800;
-}
-@utility text-light400_light500 {
-  @apply text-light-400! dark:text-light-500!;
-}
-@utility text-dark400_light500 {
-  @apply text-dark-400 dark:text-light-500;
-}
-@utility text-dark400_light900 {
-  @apply text-dark-400! dark:text-light-900!;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   BORDER UTILITIES
-═══════════════════════════════════════════════════════════════ */
-@utility light-border {
-  @apply border-light-800 dark:border-dark-300;
-}
-@utility light-border-2 {
-  @apply border-light-700! dark:border-dark-400!;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   TYPOGRAPHY SCALE
-   Headings → Inter (strong, clean, system-native feel)
-   Body     → DM Sans (readable, modern, slightly warm)
-
-   Replace font-clash → font-inter
-   Replace font-satoshi → font-dm-sans
-   (or keep clash/satoshi if you have them loaded — just update
-    the CSS variable names in @theme inline below)
-═══════════════════════════════════════════════════════════════ */
-@utility h1-bold {
-  @apply font-inter text-[32px] leading-[1.2] font-bold tracking-[-0.02em];
-}
-@utility h2-bold {
-  @apply font-inter text-[24px] leading-[1.3] font-bold tracking-[-0.015em];
-}
-@utility h2-semibold {
-  @apply font-inter text-[24px] leading-[1.3] font-semibold tracking-[-0.015em];
-}
-@utility h3-bold {
-  @apply font-inter text-[20px] leading-[1.35] font-bold tracking-[-0.01em];
-}
-@utility h3-semibold {
-  @apply font-inter text-[20px] leading-[1.35] font-semibold tracking-[-0.01em];
-}
-@utility base-medium {
-  @apply font-dm-sans text-[18px] leading-[1.6] font-medium;
-}
-@utility base-semibold {
-  @apply font-dm-sans text-[18px] leading-[1.6] font-semibold;
-}
-@utility base-bold {
-  @apply font-dm-sans text-[18px] leading-[1.6] font-bold;
-}
-@utility paragraph-regular {
-  @apply font-dm-sans text-[16px] leading-[1.65] font-normal;
-}
-@utility paragraph-medium {
-  @apply font-dm-sans text-[16px] leading-[1.65] font-medium;
-}
-@utility paragraph-semibold {
-  @apply font-dm-sans text-[16px] leading-[1.5] font-semibold;
-}
-@utility body-regular {
-  @apply font-dm-sans text-[14px] leading-[1.6] font-normal;
-}
-@utility body-medium {
-  @apply font-dm-sans text-[14px] leading-[1.55] font-medium;
-}
-@utility body-semibold {
-  @apply font-dm-sans text-[14px] leading-[1.55] font-semibold;
-}
-@utility body-bold {
-  @apply font-dm-sans text-[14px] leading-[1.55] font-bold;
-}
-@utility small-regular {
-  @apply font-dm-sans text-[12px] leading-[1.5] font-normal;
-}
-@utility small-medium {
-  @apply font-dm-sans text-[12px] leading-[1.5] font-medium;
-}
-@utility small-semibold {
-  @apply font-dm-sans text-[12px] leading-[1.5] font-semibold;
-}
-@utility subtle-medium {
-  @apply font-dm-sans text-[11px]! leading-[1.4]! font-medium!;
-}
-@utility subtle-regular {
-  @apply font-dm-sans text-[11px] leading-[1.4] font-normal;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   MISC UTILITIES
-═══════════════════════════════════════════════════════════════ */
-@utility placeholder {
-  @apply placeholder:text-light-400 dark:placeholder:text-light-500;
-}
-
-@utility invert-colors {
-  /*
-    FIXED icon rendering:
-    - Light mode: brightness(0) collapses any icon to pure black silhouette.
-      This works for dark logos (Next.js, GitHub etc.) on white bg.
-    - Dark mode: brightness(0) invert(1) = black → white.
-      Gives you a clean white icon on dark backgrounds.
-
-    NOTE: This utility is ONLY for monochrome icons.
-    Do NOT apply it to colorful/multi-color logos — they'll go black.
-    For colored logos, use separate light/dark src images instead.
-  */
-  filter: brightness(0);
-}
-html.dark .invert-colors,
-.dark .invert-colors {
-  filter: brightness(0) invert(1);
-}
-
-@utility shadow-light100_dark100 {
-  @apply shadow-light-100 dark:shadow-dark-100;
-}
-@utility shadow-light100_darknone {
-  @apply shadow-light-100 dark:shadow-none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   GRADIENTS
-═══════════════════════════════════════════════════════════════ */
-@utility primary-gradient {
-  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-}
-@utility dark-gradient {
-  background: linear-gradient(232deg, rgba(26, 26, 26, 0.5) 0%, rgba(8, 8, 8, 0.85) 100%);
-}
-@utility light-gradient {
-  background: linear-gradient(132deg, rgba(255, 255, 255, 0.7) 0%, rgba(240, 240, 240, 0.4) 100%);
-}
-@utility primary-text-gradient {
-  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   LAYOUT UTILITIES
-═══════════════════════════════════════════════════════════════ */
-@utility flex-center {
-  @apply flex items-center justify-center;
-}
-@utility flex-between {
-  @apply flex items-center justify-between;
-}
-@utility flex-start {
-  @apply flex items-center justify-start;
-}
-@utility card-wrapper {
-  @apply bg-light-900 dark:bg-dark-300 border-light-700 dark:border-dark-400 border shadow-[0px_1px_3px_rgba(0,0,0,0.05),0px_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0px_1px_3px_rgba(0,0,0,0.5),0px_4px_12px_rgba(0,0,0,0.4)];
-}
-@utility btn {
-  @apply bg-light-800! dark:bg-dark-300!;
-}
-@utility btn-secondary {
-  @apply bg-light-800! dark:bg-dark-400!;
-}
-@utility btn-tertiary {
-  @apply bg-light-700! dark:bg-dark-300!;
-}
-@utility no-focus {
-  @apply focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0!;
-}
-
-@utility tab {
-  @apply dark:bg-dark-400! bg-light-800! text-light-500! dark:data-[state=active]:bg-dark-300! data-[state=active]:bg-primary-100! data-[state=active]:text-primary-500! min-h-full!;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   MARKDOWN
-═══════════════════════════════════════════════════════════════ */
-
-@utility markdown {
-  @apply prose prose-p:my-2 prose-ol:my-0 prose-ul:my-0 prose-headings:text-dark-400 prose-h1:text-dark-300 prose-h2:text-dark-300 prose-p:text-dark-500 prose-ul:text-dark-500 prose-ol:text-dark-500 dark:prose-headings:text-light-900 dark:prose-p:text-light-700 dark:prose-ul:text-light-700 dark:prose-ol:text-light-700 dark:prose-strong:text-light-900 !max-w-full;
-}
-
-@utility markdown-editor {
-  @apply prose prose-p:m-0 prose-headings:text-dark-400 prose-p:text-dark-500 prose-ul:text-dark-500 prose-ol:text-dark-500 prose-blockquote:text-dark-500 dark:prose-headings:text-light-900 dark:prose-p:text-light-700 dark:prose-ul:text-light-700 dark:prose-ol:text-light-700 dark:prose-strong:text-light-900 dark:prose-blockquote:text-light-700 !max-w-full;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -339,107 +67,99 @@ html.dark .invert-colors,
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-destructive-foreground:  var(--destructive-foreground);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-ring:                    var(--ring);
+  --color-chart-1:                 var(--chart-1);
+  --color-chart-2:                 var(--chart-2);
+  --color-chart-3:                 var(--chart-3);
+  --color-chart-4:                 var(--chart-4);
+  --color-chart-5:                 var(--chart-5);
+  --color-sidebar:                 var(--sidebar);
+  --color-sidebar-foreground:      var(--sidebar-foreground);
+  --color-sidebar-primary:         var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent:          var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-shadow-color: var(--shadow-color);
+  --color-sidebar-border:          var(--sidebar-border);
+  --color-sidebar-ring:            var(--sidebar-ring);
+  --color-shadow-color:            var(--shadow-color);
 
-  /* Fonts — wired from CSS vars set by next/font on <html> */
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-sans:  var(--font-dm-sans), system-ui, sans-serif;
   --font-dm-sans: var(--font-dm-sans);
   --font-inter: var(--font-inter);
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-mono:  "Geist Mono", ui-monospace, monospace;
   --font-serif: Georgia, serif;
 
   --radius: 0.5rem;
 
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
-  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
-  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
-  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
-  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
-  --tracking-normal: var(--tracking-normal);
+  --tracking-tight:   calc(var(--tracking-normal) - 0.025em);
+  --tracking-wide:    calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider:   calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest:  calc(var(--tracking-normal) + 0.1em);
+  --tracking-normal:  var(--tracking-normal);
 
   --shadow-2xl: var(--shadow-2xl);
-  --shadow-xl: var(--shadow-xl);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-md: var(--shadow-md);
-  --shadow: var(--shadow);
-  --shadow-sm: var(--shadow-sm);
-  --shadow-xs: var(--shadow-xs);
+  --shadow-xl:  var(--shadow-xl);
+  --shadow-lg:  var(--shadow-lg);
+  --shadow-md:  var(--shadow-md);
+  --shadow:     var(--shadow);
+  --shadow-sm:  var(--shadow-sm);
+  --shadow-xs:  var(--shadow-xs);
   --shadow-2xs: var(--shadow-2xs);
-  --spacing: var(--spacing);
+
+  --spacing:        var(--spacing);
   --letter-spacing: var(--letter-spacing);
   --shadow-offset-y: var(--shadow-offset-y);
   --shadow-offset-x: var(--shadow-offset-x);
-  --shadow-spread: var(--shadow-spread);
-  --shadow-blur: var(--shadow-blur);
-  --shadow-opacity: var(--shadow-opacity);
+  --shadow-spread:   var(--shadow-spread);
+  --shadow-blur:     var(--shadow-blur);
+  --shadow-opacity:  var(--shadow-opacity);
 }
 
 /* ═══════════════════════════════════════════════════════════════
    :root — LIGHT MODE
-   Pure neutral colors. No blue/gray hue on surfaces.
+   Vercel-inspired: warm white, neutral grays, orange accent
 ═══════════════════════════════════════════════════════════════ */
 :root {
   --radius: 0.5rem;
 
-  --background: oklch(0.985 0 0); /* #f9f9f9 — off-white page bg */
-  --foreground: oklch(0.09 0 0); /* #111 — near-black body text */
-
-  --card: oklch(1 0 0); /* pure white */
+  --background:    oklch(0.985 0 0);
+  --foreground:    oklch(0.09 0 0);
+  --card:          oklch(1 0 0);
   --card-foreground: oklch(0.09 0 0);
-
-  --popover: oklch(1 0 0);
+  --popover:       oklch(1 0 0);
   --popover-foreground: oklch(0.09 0 0);
-
-  --primary: oklch(0.09 0 0); /* near-black buttons */
+  --primary:       oklch(0.09 0 0);
   --primary-foreground: oklch(1 0 0);
-
-  --secondary: oklch(0.96 0 0); /* light gray */
+  --secondary:     oklch(0.96 0 0);
   --secondary-foreground: oklch(0.09 0 0);
-
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0); /* #6b6b6b */
-
-  --accent: oklch(0.96 0 0);
+  --muted:         oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent:        oklch(0.96 0 0);
   --accent-foreground: oklch(0.09 0 0);
-
-  --destructive: oklch(0.58 0.22 22);
+  --destructive:   oklch(0.58 0.22 22);
   --destructive-foreground: oklch(1 0 0);
-
-  --border: oklch(0.91 0 0); /* #e5e5e5 */
-  --input: oklch(0.96 0 0); /* slightly lighter than border */
-  --ring: oklch(0.6 0 0);
+  --border:        oklch(0.91 0 0);
+  --input:         oklch(0.96 0 0);
+  --ring:          oklch(0.6 0 0);
 
   --chart-1: oklch(0.72 0.19 52);
   --chart-2: oklch(0.58 0.18 255);
@@ -447,67 +167,59 @@ html.dark .invert-colors,
   --chart-4: oklch(0.7 0.14 300);
   --chart-5: oklch(0.62 0.2 20);
 
-  --sidebar: oklch(0.975 0 0);
+  --sidebar:          oklch(0.975 0 0);
   --sidebar-foreground: oklch(0.09 0 0);
-  --sidebar-primary: oklch(0.09 0 0);
+  --sidebar-primary:  oklch(0.09 0 0);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
+  --sidebar-accent:   oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0.09 0 0);
-  --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: oklch(0.6 0 0);
+  --sidebar-border:   oklch(0.91 0 0);
+  --sidebar-ring:     oklch(0.6 0 0);
 
-  --shadow-color: hsl(0 0% 0%);
-  --shadow-opacity: 0.05;
-  --shadow-blur: 6px;
-  --shadow-spread: 0px;
+  --shadow-color:    hsl(0 0% 0%);
+  --shadow-opacity:  0.05;
+  --shadow-blur:     6px;
+  --shadow-spread:   0px;
   --shadow-offset-x: 0px;
   --shadow-offset-y: 2px;
-  --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.04);
-  --shadow-xs: 0px 1px 3px 0px rgba(0, 0, 0, 0.06);
-  --shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.06), 0px 2px 6px 0px rgba(0, 0, 0, 0.04);
-  --shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.08), 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 6px 16px -2px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0px 4px 6px 0px rgba(0, 0, 0, 0.07), 0px 12px 24px -4px rgba(0, 0, 0, 0.09);
-  --shadow-xl: 0px 8px 10px 0px rgba(0, 0, 0, 0.06), 0px 20px 40px -6px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0px 24px 60px -8px rgba(0, 0, 0, 0.16);
+  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.04);
+  --shadow-xs:  0px 1px 3px 0px rgba(0,0,0,0.06);
+  --shadow-sm:  0px 1px 2px 0px rgba(0,0,0,0.06), 0px 2px 6px 0px rgba(0,0,0,0.04);
+  --shadow:     0px 1px 3px 0px rgba(0,0,0,0.08), 0px 4px 10px 0px rgba(0,0,0,0.05);
+  --shadow-md:  0px 2px 4px 0px rgba(0,0,0,0.08), 0px 6px 16px -2px rgba(0,0,0,0.07);
+  --shadow-lg:  0px 4px 6px 0px rgba(0,0,0,0.07), 0px 12px 24px -4px rgba(0,0,0,0.09);
+  --shadow-xl:  0px 8px 10px 0px rgba(0,0,0,0.06), 0px 20px 40px -6px rgba(0,0,0,0.1);
+  --shadow-2xl: 0px 24px 60px -8px rgba(0,0,0,0.16);
 
   --letter-spacing: 0em;
-  --spacing: 0.25rem;
+  --spacing:        0.25rem;
   --tracking-normal: -0.012em;
 }
 
 /* ═══════════════════════════════════════════════════════════════
    .dark — DARK MODE
-   Pure neutral blacks — no blue tint.
+   Pure neutral black — Vercel style. No blue tint anywhere.
 ═══════════════════════════════════════════════════════════════ */
 .dark {
-  --background: oklch(0.08 0 0); /* #0a0a0a */
-  --foreground: oklch(0.96 0 0); /* #f5f5f5 */
-
-  --card: oklch(0.13 0 0); /* #1a1a1a */
+  --background:    oklch(0.08 0 0);
+  --foreground:    oklch(0.96 0 0);
+  --card:          oklch(0.13 0 0);
   --card-foreground: oklch(0.96 0 0);
-
-  --popover: oklch(0.16 0 0); /* #222 */
+  --popover:       oklch(0.16 0 0);
   --popover-foreground: oklch(0.96 0 0);
-
-  --primary: oklch(0.96 0 0);
+  --primary:       oklch(0.96 0 0);
   --primary-foreground: oklch(0.08 0 0);
-
-  --secondary: oklch(0.2 0 0); /* #2a2a2a */
+  --secondary:     oklch(0.2 0 0);
   --secondary-foreground: oklch(0.96 0 0);
-
-  --muted: oklch(0.18 0 0);
+  --muted:         oklch(0.18 0 0);
   --muted-foreground: oklch(0.55 0 0);
-
-  --accent: oklch(0.22 0 0);
+  --accent:        oklch(0.22 0 0);
   --accent-foreground: oklch(0.96 0 0);
-
-  --destructive: oklch(0.65 0.22 22);
+  --destructive:   oklch(0.65 0.22 22);
   --destructive-foreground: oklch(0.98 0 0);
-
-  --border: oklch(0.22 0 0); /* #2e2e2e */
-  --input: oklch(0.2 0 0); /* slightly darker than border */
-  --ring: oklch(0.55 0 0);
+  --border:        oklch(0.22 0 0);
+  --input:         oklch(0.2 0 0);
+  --ring:          oklch(0.55 0 0);
 
   --chart-1: oklch(0.79 0.17 55);
   --chart-2: oklch(0.6 0.18 255);
@@ -515,43 +227,49 @@ html.dark .invert-colors,
   --chart-4: oklch(0.68 0.16 298);
   --chart-5: oklch(0.65 0.2 22);
 
-  --sidebar: oklch(0.1 0 0);
+  --sidebar:          oklch(0.1 0 0);
   --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: oklch(0.96 0 0);
+  --sidebar-primary:  oklch(0.96 0 0);
   --sidebar-primary-foreground: oklch(0.08 0 0);
-  --sidebar-accent: oklch(0.22 0 0);
+  --sidebar-accent:   oklch(0.22 0 0);
   --sidebar-accent-foreground: oklch(0.96 0 0);
-  --sidebar-border: oklch(0.22 0 0);
-  --sidebar-ring: oklch(0.55 0 0);
-
+  --sidebar-border:   oklch(0.22 0 0);
+  --sidebar-ring:     oklch(0.55 0 0);
   --radius: 0.5rem;
 
-  --shadow-color: hsl(0 0% 0%);
-  --shadow-opacity: 0.6;
-  --shadow-blur: 6px;
-  --shadow-spread: 0px;
+  --shadow-color:    hsl(0 0% 0%);
+  --shadow-opacity:  0.6;
+  --shadow-blur:     6px;
+  --shadow-spread:   0px;
   --shadow-offset-x: 0px;
   --shadow-offset-y: 2px;
-  --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.4);
-  --shadow-xs: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
-  --shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.55), 0px 2px 6px 0px rgba(0, 0, 0, 0.45);
-  --shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.6), 0px 4px 10px 0px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0px 2px 4px 0px rgba(0, 0, 0, 0.6), 0px 6px 16px -2px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0px 4px 6px 0px rgba(0, 0, 0, 0.55), 0px 12px 24px -4px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0px 8px 10px 0px rgba(0, 0, 0, 0.55), 0px 20px 40px -6px rgba(0, 0, 0, 0.65);
-  --shadow-2xl: 0px 24px 60px -8px rgba(0, 0, 0, 0.8);
+  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.4);
+  --shadow-xs:  0px 1px 3px 0px rgba(0,0,0,0.5);
+  --shadow-sm:  0px 1px 2px 0px rgba(0,0,0,0.55), 0px 2px 6px 0px rgba(0,0,0,0.45);
+  --shadow:     0px 1px 3px 0px rgba(0,0,0,0.6), 0px 4px 10px 0px rgba(0,0,0,0.5);
+  --shadow-md:  0px 2px 4px 0px rgba(0,0,0,0.6), 0px 6px 16px -2px rgba(0,0,0,0.55);
+  --shadow-lg:  0px 4px 6px 0px rgba(0,0,0,0.55), 0px 12px 24px -4px rgba(0,0,0,0.6);
+  --shadow-xl:  0px 8px 10px 0px rgba(0,0,0,0.55), 0px 20px 40px -6px rgba(0,0,0,0.65);
+  --shadow-2xl: 0px 24px 60px -8px rgba(0,0,0,0.8);
 
   --letter-spacing: 0em;
-  --spacing: 0.25rem;
+  --spacing:        0.25rem;
   --tracking-normal: -0.012em;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECOND @layer base — global element defaults
+   @layer base — global element resets and defaults
 ═══════════════════════════════════════════════════════════════ */
 @layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
   * {
     @apply border-border outline-ring/50;
+    /* Premium feel: smooth transitions on all interactive elements */
+    transition-property: color, background-color, border-color, opacity, box-shadow,
+
   }
 
   html {
@@ -559,61 +277,56 @@ html.dark .invert-colors,
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Hide scrollbar globally — no scrollbar anywhere */
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-dm-sans), system-ui, sans-serif;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: var(--tracking-normal);
+    /* Hide scrollbar on body too */
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  /*
-    HEADING COLORS — explicitly set per mode.
-    Using html.dark (not just .dark) ensures specificity beats
-    any Tailwind utility class that might try to override color.
+  body::-webkit-scrollbar {
+    display: none;
+  }
 
-    WHY html.dark: Tailwind's .dark is toggled on <html>.
-    "html.dark h1" has higher specificity than ".dark h1"
-    because it chains two selectors instead of one class + one element.
-  */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  /* Headings — Inter, balanced */
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-inter), system-ui, sans-serif;
     text-wrap: balance;
-    color: oklch(0.09 0 0); /* near-black in light mode */
+    color: oklch(0.09 0 0);
   }
+
   html.dark h1,
   html.dark h2,
   html.dark h3,
   html.dark h4,
   html.dark h5,
   html.dark h6 {
-    color: oklch(0.96 0 0); /* near-white in dark mode */
+    color: oklch(0.96 0 0);
   }
 
-  p,
-  li {
+  p, li {
     text-wrap: pretty;
   }
 
-  /*
-    INPUT / SEARCH BAR FIX — light mode
-    The issue: shadcn inputs use bg-background which is fine (#f9f9f9),
-    but placeholder text was going nearly invisible because it inherited
-    white color from a parent with text-white on it.
-    Force input text to near-black in light, near-white in dark.
-  */
-  input,
-  textarea,
-  select {
+  /* Input text colors */
+  input, textarea, select {
     color: oklch(0.09 0 0);
   }
+
   html.dark input,
   html.dark textarea,
   html.dark select {
@@ -621,36 +334,152 @@ html.dark .invert-colors,
   }
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-  border-radius: 2px;
+/* ═══════════════════════════════════════════════════════════════
+   BACKGROUND UTILITIES
+═══════════════════════════════════════════════════════════════ */
+@utility background-light850_dark100   { @apply bg-light-900 dark:bg-dark-500; }
+@utility background-light900_dark200   { @apply bg-light-900 dark:bg-dark-200; }
+@utility background-light900_dark300   { @apply bg-light-900 dark:bg-dark-300; }
+@utility background-light800_darkgradient { @apply bg-light-800 dark:dark-gradient; }
+@utility background-light800_dark400   { @apply bg-light-800! dark:bg-dark-400!; }
+@utility background-light700_dark400   { @apply bg-light-700 dark:bg-dark-400; }
+@utility background-light700_dark300   { @apply bg-light-700 dark:bg-dark-300; }
+@utility background-light800_dark300   { @apply bg-light-800! dark:bg-dark-300!; }
+@utility background-light800_dark200   { @apply bg-light-800 dark:bg-dark-200; }
+@utility background-dark400_light900   { @apply dark:bg-dark-400! bg-light-900!; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TEXT UTILITIES
+═══════════════════════════════════════════════════════════════ */
+@utility text-dark100_light900  { @apply text-dark-100! dark:text-light-900!; }
+@utility text-dark200_light900  { @apply text-dark-200 dark:text-light-900; }
+@utility text-dark200_light800  { @apply text-dark-200! dark:text-light-800!; }
+@utility text-dark300_light700  { @apply text-dark-300 dark:text-light-700; }
+@utility text-dark400_light700  { @apply text-dark-400 dark:text-light-700; }
+@utility text-dark500_light700  { @apply text-dark-500! dark:text-light-700!; }
+@utility text-dark500_light500  { @apply text-dark-500 dark:text-light-500; }
+@utility text-dark500_light400  { @apply text-dark-500 dark:text-light-400; }
+@utility text-dark300_light900  { @apply text-dark-300! dark:text-light-900!; }
+@utility text-dark400_light800  { @apply text-dark-400 dark:text-light-800; }
+@utility text-light400_light500 { @apply text-light-400! dark:text-light-500!; }
+@utility text-dark400_light500  { @apply text-dark-400 dark:text-light-500; }
+@utility text-dark400_light900  { @apply text-dark-400! dark:text-light-900!; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BORDER UTILITIES
+═══════════════════════════════════════════════════════════════ */
+@utility light-border   { @apply border-light-800 dark:border-dark-300; }
+@utility light-border-2 { @apply border-light-700! dark:border-dark-400!; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPOGRAPHY SCALE
+═══════════════════════════════════════════════════════════════ */
+@utility h1-bold        { @apply font-inter text-[32px] leading-[1.2] font-bold tracking-[-0.02em]; }
+@utility h2-bold        { @apply font-inter text-[24px] leading-[1.3] font-bold tracking-[-0.015em]; }
+@utility h2-semibold    { @apply font-inter text-[24px] leading-[1.3] font-semibold tracking-[-0.015em]; }
+@utility h3-bold        { @apply font-inter text-[20px] leading-[1.35] font-bold tracking-[-0.01em]; }
+@utility h3-semibold    { @apply font-inter text-[20px] leading-[1.35] font-semibold tracking-[-0.01em]; }
+@utility base-medium    { @apply font-dm-sans text-[18px] leading-[1.6] font-medium; }
+@utility base-semibold  { @apply font-dm-sans text-[18px] leading-[1.6] font-semibold; }
+@utility base-bold      { @apply font-dm-sans text-[18px] leading-[1.6] font-bold; }
+@utility paragraph-regular  { @apply font-dm-sans text-[16px] leading-[1.65] font-normal; }
+@utility paragraph-medium   { @apply font-dm-sans text-[16px] leading-[1.65] font-medium; }
+@utility paragraph-semibold { @apply font-dm-sans text-[16px] leading-[1.5] font-semibold; }
+@utility body-regular   { @apply font-dm-sans text-[14px] leading-[1.6] font-normal; }
+@utility body-medium    { @apply font-dm-sans text-[14px] leading-[1.55] font-medium; }
+@utility body-semibold  { @apply font-dm-sans text-[14px] leading-[1.55] font-semibold; }
+@utility body-bold      { @apply font-dm-sans text-[14px] leading-[1.55] font-bold; }
+@utility small-regular  { @apply font-dm-sans text-[12px] leading-[1.5] font-normal; }
+@utility small-medium   { @apply font-dm-sans text-[12px] leading-[1.5] font-medium; }
+@utility small-semibold { @apply font-dm-sans text-[12px] leading-[1.5] font-semibold; }
+@utility subtle-medium  { @apply font-dm-sans text-[11px]! leading-[1.4]! font-medium!; }
+@utility subtle-regular { @apply font-dm-sans text-[11px] leading-[1.4] font-normal; }
+
+/* ═══════════════════════════════════════════════════════════════
+   MISC UTILITIES
+═══════════════════════════════════════════════════════════════ */
+@utility placeholder {
+  @apply placeholder:text-light-400 dark:placeholder:text-light-500;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #ffffff;
+@utility invert-colors {
+  filter: brightness(0);
+}
+html.dark .invert-colors,
+.dark .invert-colors {
+  filter: brightness(0) invert(1);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 50px;
+@utility shadow-light100_dark100   { @apply shadow-light-100 dark:shadow-dark-100; }
+@utility shadow-light100_darknone  { @apply shadow-light-100 dark:shadow-none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   GRADIENTS
+═══════════════════════════════════════════════════════════════ */
+@utility primary-gradient {
+  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
+}
+@utility dark-gradient {
+  background: linear-gradient(232deg, rgba(26,26,26,0.5) 0%, rgba(8,8,8,0.85) 100%);
+}
+@utility light-gradient {
+  background: linear-gradient(132deg, rgba(255,255,255,0.7) 0%, rgba(240,240,240,0.4) 100%);
+}
+@utility primary-text-gradient {
+  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT UTILITIES
+═══════════════════════════════════════════════════════════════ */
+@utility flex-center   { @apply flex items-center justify-center; }
+@utility flex-between  { @apply flex items-center justify-between; }
+@utility flex-start    { @apply flex items-center justify-start; }
+@utility card-wrapper {
+  @apply bg-light-900 dark:bg-dark-300 border-light-700 dark:border-dark-400 border
+         shadow-[0px_1px_3px_rgba(0,0,0,0.05),0px_4px_12px_rgba(0,0,0,0.04)]
+         dark:shadow-[0px_1px_3px_rgba(0,0,0,0.5),0px_4px_12px_rgba(0,0,0,0.4)];
+}
+@utility btn           { @apply bg-light-800! dark:bg-dark-300!; }
+@utility btn-secondary { @apply bg-light-800! dark:bg-dark-400!; }
+@utility btn-tertiary  { @apply bg-light-700! dark:bg-dark-300!; }
+@utility no-focus {
+  @apply focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0!;
+}
+@utility tab {
+  @apply dark:bg-dark-400! bg-light-800! text-light-500!
+         dark:data-[state=active]:bg-dark-300! data-[state=active]:bg-primary-100!
+         data-[state=active]:text-primary-500! min-h-full!;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* ═══════════════════════════════════════════════════════════════
+   MARKDOWN RENDERING
+═══════════════════════════════════════════════════════════════ */
+@utility markdown {
+  @apply prose prose-p:my-2 prose-ol:my-0 prose-ul:my-0
+         prose-headings:text-dark-400 prose-h1:text-dark-300 prose-h2:text-dark-300
+         prose-p:text-dark-500 prose-ul:text-dark-500 prose-ol:text-dark-500
+         dark:prose-headings:text-light-900 dark:prose-p:text-light-700
+         dark:prose-ul:text-light-700 dark:prose-ol:text-light-700
+         dark:prose-strong:text-light-900 !max-w-full;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+@utility markdown-editor {
+  @apply prose prose-p:m-0
+         prose-headings:text-dark-400 prose-p:text-dark-500
+         prose-ul:text-dark-500 prose-ol:text-dark-500 prose-blockquote:text-dark-500
+         dark:prose-headings:text-light-900 dark:prose-p:text-light-700
+         dark:prose-ul:text-light-700 dark:prose-ol:text-light-700
+         dark:prose-strong:text-light-900 dark:prose-blockquote:text-light-700 !max-w-full;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   MISC ONE-OFF CLASSES
+   (kept because they are referenced by component class names)
+═══════════════════════════════════════════════════════════════ */
 .active-theme {
   filter: invert(53%) sepia(98%) saturate(3332%) hue-rotate(0deg) brightness(104%) contrast(106%) !important;
 }
@@ -661,7 +490,10 @@ html.dark .invert-colors,
   display: block;
 }
 
-/* MDXEditor injects its own layout. Keep it shrinkable and neutral. */
+/* ═══════════════════════════════════════════════════════════════
+   MDX EDITOR OVERRIDES
+   Minimal — only what is needed to match the app theme
+═══════════════════════════════════════════════════════════════ */
 .mdxeditor-toolbar {
   background: var(--color-light-900) !important;
   border-bottom: 1px solid var(--color-light-700) !important;
@@ -676,17 +508,9 @@ html.dark .invert-colors,
   border-bottom-color: var(--color-dark-400) !important;
 }
 
-.dark .mdxeditor-toolbar button svg {
-  color: var(--color-light-700) !important;
-}
-
-.dark .mdxeditor-toolbar button:hover svg {
-  color: var(--color-light-900) !important;
-}
-
-.dark .mdxeditor-toolbar [role="separator"] {
-  border-color: var(--color-dark-400) !important;
-}
+.dark .mdxeditor-toolbar button svg       { color: var(--color-light-700) !important; }
+.dark .mdxeditor-toolbar button:hover svg { color: var(--color-light-900) !important; }
+.dark .mdxeditor-toolbar [role="separator"] { border-color: var(--color-dark-400) !important; }
 
 .mdxeditor,
 .mdxeditor-root-contenteditable,
@@ -701,11 +525,11 @@ html.dark .invert-colors,
   word-break: break-word;
 }
 
-.markdown a {
-  color: #1da1f2;
-}
+/* ═══════════════════════════════════════════════════════════════
+   MARKDOWN CONTENT — overflow and word-break safety
+═══════════════════════════════════════════════════════════════ */
+.markdown a { color: #1da1f2; }
 
-/* Markdown can contain long URLs, tables, images, and code blocks. */
 .markdown,
 .markdown > * {
   max-width: 100%;
@@ -734,11 +558,7 @@ html.dark .invert-colors,
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
   hyphens: auto;
-
   padding: 2px;
   color: #ff7000 !important;
 }
@@ -754,17 +574,17 @@ html.dark .invert-colors,
   width: 100%;
   display: block;
   overflow-x: auto;
-
   color: inherit !important;
 }
 
+/* MDX lexical editor height */
 [data-lexical-editor="true"] {
   height: 350px !important;
   overflow-y: auto !important;
   max-width: 100%;
 }
 
-/* Bright renders code blocks with nested wrappers; keep scroll inside them. */
+/* Bright code block rendering */
 [data-bright-mode="dark"]:not(html.light [data-bright-mode="dark"]),
 [data-bright-mode="light"]:not(:not(html.light [data-bright-mode="light"])) {
   display: grid !important;

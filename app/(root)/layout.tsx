@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="background-light850_dark100 relative w-full">
+    <main className="   background-light800_darkgradient relative w-full">
       <Navbar />
 
       <div className="flex min-w-0">

@@ -1,8 +1,10 @@
 import { auth } from "@/auth";
+import { LenisProvider } from "@/components/lens/LenisProvider";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import { ViewTransitions } from "next-view-transitions";
 import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
@@ -77,7 +79,8 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
   return (
-    <html
+        <ViewTransitions>
+<html
       lang="en"
       suppressHydrationWarning
       className={[
@@ -96,7 +99,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
         />
       </head>
-      <body className="  bg-neutral-950  text-foreground">
+      <body className="   overflow-y-scroll no-scrollbar antialiased">
         {/*    ↑ Critical — sets Satoshi as the default for the entire app.
                Without this, body text falls back to the system font.
                font-clash only needs to be applied per-element on headings. */}
@@ -107,13 +110,21 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <LenisProvider>
+              {/* <Navbar /> */}
+
+              {children}
+
+            </LenisProvider>
              <Analytics/>
           </ThemeProvider>
           <Toaster richColors position="bottom-right" />
         </SessionProvider>
       </body>
     </html>
+
+        </ViewTransitions>
+
   );
 };
 

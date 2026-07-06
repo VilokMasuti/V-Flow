@@ -34,8 +34,10 @@ const AnswerCard = ({
   });
 
   return (
-    <article className={cn("light-border relative min-w-0 border-b py-10", containerClasses)}>
-      <span id={`answer-${_id}`} className="hash-span" />
+    <article
+     id={`answer-${_id}`}
+    className={cn("light-border relative min-w-0 border-b py-10 ", containerClasses)}>
+
       {showActionBtns && (
         <div className="background-light800 flex-center absolute -top-5 -right-2 size-9 rounded-full">
           <EditDeleteAction type="Answer" itemId={_id} />
@@ -80,7 +82,7 @@ const AnswerCard = ({
 
       {showReadMore && (
         <Link
-          href={`/questions/${question}#answer-${_id}`}
+          href={`/question/${question}#answer-${_id}`}
           className="body-semibold font-space-grotesk text-primary-500 relative z-10"
         >
           <p className="mt-1">Read more...</p>

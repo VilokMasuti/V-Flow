@@ -12,14 +12,17 @@ interface RemoveUrlQueryParams {
 }
 
 export const formUrlQuery = ({ params, key, value }: UrlQueryParams) => {
-  const queryString = qs.parse(params);
+  const cleanParams = params.split("#")[0]; // safety strip
+  const queryString = qs.parse(cleanParams);
 
   queryString[key] = value;
 
-  return qs.stringifyUrl({
+  const baseUrl = qs.stringifyUrl({
     url: window.location.pathname,
     query: queryString,
   });
+
+  return `${baseUrl}${window.location.hash}`;
 };
 
 export const removeKeysFromUrlQuery = ({ params, keysToRemove }: RemoveUrlQueryParams) => {
@@ -29,11 +32,13 @@ export const removeKeysFromUrlQuery = ({ params, keysToRemove }: RemoveUrlQueryP
     delete queryString[key];
   });
 
-  return qs.stringifyUrl(
+  const baseUrl = qs.stringifyUrl(
     {
       url: window.location.pathname,
       query: queryString,
     },
     { skipNull: true }
   );
+
+  return `${baseUrl}${window.location.hash}`;
 };

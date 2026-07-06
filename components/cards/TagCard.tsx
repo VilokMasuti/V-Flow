@@ -27,7 +27,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
 
   const Content = (
     <>
-      <Badge className="subtle-medium  flex flex-row gap-2 rounded-md  border-none px-4 py-2 uppercase   font-inter  dark:bg-neutral-800 text-neutral-50">
+      <Badge className="subtle-medium flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase font-inter bg-light-300 dark:bg-dark-400 text-dark-300 dark:text-light-700 shadow-md">
         <div className="flex-center space-x-2  rounded-md invert-0">
           <i className={`${iconClass} text-sm`}></i>
           <span>{name}</span>
@@ -39,7 +39,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
             width={12}
             height={12}
             alt="close icon"
-            className="cursor-pointer object-contain invert-0 dark:invert"
+            className="cursor-pointer object-contain "
             onClick={handleRemove}
           />
         )}
