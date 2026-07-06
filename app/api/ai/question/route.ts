@@ -20,12 +20,40 @@ const cleanTags = (tags: string[]) =>
   [...new Set(tags.map((tag) => tag.trim().toLowerCase().replace(/^#+/, "")).filter(Boolean))].slice(0, 3);
 
 const parseJsonResponse = (text: string) => {
-  const jsonText = text
+  // Step 1 — strip markdown code fences
+  let cleaned = text
     .trim()
     .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/i, "");
+    .replace(/\s*```$/i, "")
+    .trim();
 
-  return JSON.parse(jsonText);
+  // Step 2 — extract just the JSON object, ignore anything before or after
+  const firstBrace = cleaned.indexOf("{");
+  const lastBrace = cleaned.lastIndexOf("}");
+  if (firstBrace !== -1 && lastBrace !== -1) {
+    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+  }
+
+  // Step 3 — try direct parse
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // Step 4 — AI put real newlines/tabs inside JSON string values
+    // JSON requires \n not actual newline characters inside strings
+    // This regex finds content inside JSON string values and escapes it
+    const sanitized = cleaned.replace(
+      /"((?:[^"\\]|\\.)*)"/g,
+      (_match, inner: string) => {
+        const escaped = inner
+          .replace(/\n/g, "\\n")
+          .replace(/\r/g, "\\r")
+          .replace(/\t/g, "\\t");
+        return `"${escaped}"`;
+      }
+    );
+
+    return JSON.parse(sanitized);
+  }
 };
 
 export async function POST(req: Request) {
@@ -55,14 +83,19 @@ Your job:
 7. Generate 1 to 3 short lowercase tags such as "javascript", "java", "react", or "node.js".
 8. Make it detailed enough that developers can actually help.
 
-Return ONLY valid JSON in this exact shape:
+CRITICAL JSON RULES — you must follow these exactly:
+- Return ONLY a raw JSON object. Nothing before it. Nothing after it.
+- Do NOT wrap in markdown code fences like \`\`\`json.
+- Inside the content field value, write newlines as \\n — never as real line breaks.
+- Inside the content field value, write tabs as \\t — never as real tabs.
+- The entire response must be parseable by JSON.parse() without any processing.
+
+Return this exact shape:
 {
   "title": "clear question title",
-  "content": "markdown question body",
+  "content": "markdown body with \\n for line breaks",
   "tags": ["tag-one", "tag-two"]
 }
-
-Do not wrap the JSON in markdown fences. Do not add explanation or preamble.
 `,
       system:
         "You are a technical writing expert. Improve developer questions while preserving the user's original intent. Return valid JSON only.",
