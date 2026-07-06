@@ -5,7 +5,7 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import React, { useRef, useTransition } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -32,7 +32,9 @@ const QuestionForm = ({ question, isEdit }: Params) => {
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const form = useForm({
+  const [isEnhancing, setIsEnhancing] = useState(false);
+  const [editorVersion, setEditorVersion] = useState(0);
+  const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
       title: question?.title || "",
@@ -75,54 +77,105 @@ const QuestionForm = ({ question, isEdit }: Params) => {
     }
   };
 
-  const handleCreateQuestion = async (
-    data: z.infer<typeof AskQuestionSchema>
-  ) => {
+  const handleCreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
       if (isEdit && question) {
         const result = await editQuestion({
           questionId: question?._id,
           ...data,
-        })
+        });
 
         if (result.success) {
           toast.success("Question updated successfully", {
-            description: "You can now view your question on the home page"
-          })
+            description: "You can now view your question on the home page",
+          });
           if (result.data) router.push(ROUTES.QUESTION(result.data._id));
         } else {
           toast.error("Failed to update question", {
             description: result.error?.message || "Something went wrong",
-          })
+          });
         }
         return;
-
       }
 
-      const result = await createQuestion(data)
+      const result = await createQuestion(data);
       if (result.success) {
         toast.success("Question created successfully", {
           description: "You can now view your question on the home page",
-        })
+        });
         if (result.data) router.push(ROUTES.QUESTION((result.data as { _id: string })._id));
       } else {
         toast.error("Failed to create question", {
           description: result.error?.message || "Something went wrong",
         });
       }
-    })
+    });
   };
 
+  const handleEnhanceQuestion = async () => {
+    const title = form.getValues("title");
+    const content = form.getValues("content");
 
+    if (!title || !content) {
+      return toast.error("Please fill in title and content first");
+    }
 
+    setIsEnhancing(true);
 
+    try {
+      const res = await fetch("/api/ai/question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content }),
+      });
 
+      const result = await res.json();
 
+      if (!res.ok || !result.success) {
+        return toast.error("Failed to enhance question");
+      }
 
+      const enhanced =
+        typeof result.data === "string" ? { title, content: result.data, tags: form.getValues("tags") } : result.data;
+
+      if (!enhanced?.title || !enhanced?.content || !Array.isArray(enhanced?.tags)) {
+        return toast.error("AI returned an invalid question format");
+      }
+
+      form.setValue("title", enhanced.title, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+      form.setValue("content", enhanced.content, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+      form.setValue("tags", enhanced.tags, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+      form.clearErrors(["title", "content", "tags"]);
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(enhanced.content);
+      } else {
+        setEditorVersion((version) => version + 1);
+      }
+
+      toast.success("Question enhanced!");
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
 
   return (
     <Form {...form}>
-      <form className="flex flex-col  w-full gap-10" onSubmit={form.handleSubmit(handleCreateQuestion)}>
+      <form className="flex w-full flex-col gap-10" onSubmit={form.handleSubmit(handleCreateQuestion)}>
         <FormField
           control={form.control}
           name="title"
@@ -148,12 +201,12 @@ const QuestionForm = ({ question, isEdit }: Params) => {
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="flex  flex-col">
+            <FormItem className="flex flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Detailed explanation of your problem <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
-                <Editor value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
+                <Editor key={editorVersion} value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
               </FormControl>
               <FormDescription className="body-regular text-light-500 mt-2.5">
                 Introduce the problem and expand on what you&apos;ve put in the title.
@@ -200,7 +253,23 @@ const QuestionForm = ({ question, isEdit }: Params) => {
           )}
         />
 
-        <div className="mt-16 flex justify-end">
+        <div className="mt-16 flex justify-end gap-3">
+          {/* Enhance button */}
+          <Button
+            type="button"
+            disabled={isEnhancing || isPending}
+            onClick={handleEnhanceQuestion}
+            className="light-border-2 btn gap-1.5 rounded-md border px-4 py-2.5 primary-gradient text-light-900! "
+          >
+            {isEnhancing ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                Enhancing...
+              </>
+            ) : (
+              "Enhance Question"
+            )}
+          </Button>
           <Button disabled={isPending} type="submit" className="primary-gradient text-light-900! w-fit">
             {isPending ? (
               <>
@@ -210,7 +279,6 @@ const QuestionForm = ({ question, isEdit }: Params) => {
             ) : (
               <>{isEdit ? "Edit" : "Ask a Question"}</>
             )}
-
           </Button>
         </div>
       </form>
