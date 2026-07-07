@@ -214,7 +214,7 @@ const lineHoverStyles = `
 .link-hover--sweep::before {
   top: 0;
   height: 100%;
-  background: color-mix(in srgb, currentColor 12%, transparent);
+  background: color-mix(in srgb, currentColor 10%, transparent);
   opacity: 0;
 }
 

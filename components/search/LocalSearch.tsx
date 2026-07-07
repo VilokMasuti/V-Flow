@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
+import AnimatedButton from '../ui/animated-button';
 
 interface Props {
   route: string;
@@ -55,8 +56,8 @@ const LocalSearch = ({ route, imgSrc, placeholder, iconPosition, otherClasses }:
   }, [search, route, pathname, router, searchParams]);
 
   return (
-    <div
-      className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
+    <AnimatedButton
+      className={`bbg-[#0a0a0a] border border-[#1f1f1f] flex min-h-[56px] grow items-center gap-4 rounded-md border-dashed px-4 ${otherClasses}`}
     >
       {iconPosition === "left" && (
         <Image
@@ -79,7 +80,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, iconPosition, otherClasses }:
       {iconPosition === "right" && (
         <Image src={imgSrc} alt="search" width={15} height={15} className="cursor-pointer" />
       )}
-    </div>
+    </AnimatedButton>
   );
 };
 

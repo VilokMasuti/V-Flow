@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion, MotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { motion, MotionProps } from "framer-motion";
+import React from "react";
 
 type AnimatedButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   MotionProps & {
@@ -26,17 +26,11 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   return (
     <Component
       {...rest}
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-        mass: 0.5,
-      }}
+
+
       // Set a CSS variable `--shine` that we override for dark mode via Tailwind.
       className={cn(
-        "group inline-flex items-center justify-center px-6 py-2 rounded-md relative overflow-hidden bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-[#222]",
+        "group inline-flex items-center justify-center px-6 py-2 relative overflow-hidden bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-[#222]",
         "text-neutral-900 dark:text-neutral-100 font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50",
         "[--shine:rgba(0,0,0,.66)] dark:[--shine:rgba(255,255,255,.66)]",
         className,

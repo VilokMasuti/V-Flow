@@ -4,8 +4,8 @@ import React from "react";
 
 import ROUTES from "@/constants/routes";
 import { cn, getDeviconClassName, getTechDescription } from "@/lib/utils";
+import LineHoverLink from '../ui/line-hover-link';
 
-import { Badge } from '../ui/badge';
 interface Props {
   _id: string;
   name: string;
@@ -27,7 +27,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
 
   const Content = (
     <>
-      <Badge className="subtle-medium flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase font-inter bg-light-300 dark:bg-[#111111] text-dark-100 dark:text-neutral-50  bg-[#ffffff] shadow-2xl">
+      <LineHoverLink variant='scribble'  className="subtle-medium flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase font-inter bg-[#1a1a1a]   text-neutral-100 shadow-md leading-2.5    tracking-[0.03em]">
         <div className="flex-center space-x-2  rounded-md invert-0">
           <i className={`${iconClass} text-sm`}></i>
           <span>{name}</span>
@@ -43,7 +43,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
             onClick={handleRemove}
           />
         )}
-      </Badge>
+      </LineHoverLink>
 
       {showCount && <p className="small-medium text-dark500_light700">{questions}</p>}
     </>
