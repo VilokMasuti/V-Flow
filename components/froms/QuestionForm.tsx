@@ -15,7 +15,8 @@ import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
-import { Button } from "../ui/button";
+import CornerButton from '../ui/corner-button';
+import CreepyButton from '../ui/creepy-button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 
@@ -255,11 +256,11 @@ const QuestionForm = ({ question, isEdit }: Params) => {
 
         <div className="mt-16 flex justify-end gap-3">
           {/* Enhance button */}
-          <Button
+          <CreepyButton
             type="button"
             disabled={isEnhancing || isPending}
             onClick={handleEnhanceQuestion}
-            className="light-border-2 btn gap-1.5 rounded-md border px-4 py-2.5 primary-gradient text-light-900! "
+            className="   gap-1.5 primary-gradient text-light-900! "
           >
             {isEnhancing ? (
               <>
@@ -269,8 +270,8 @@ const QuestionForm = ({ question, isEdit }: Params) => {
             ) : (
               "Enhance Question"
             )}
-          </Button>
-          <Button disabled={isPending} type="submit" className="primary-gradient text-light-900! w-fit">
+          </CreepyButton>
+          <CornerButton accentColor="#ff7000" disabled={isPending} type="submit" className="min-h-[46px] px-4 py-3 !text-light-900 w-fit">
             {isPending ? (
               <>
                 <ReloadIcon className="mr-2 size-4 animate-spin" />
@@ -279,7 +280,7 @@ const QuestionForm = ({ question, isEdit }: Params) => {
             ) : (
               <>{isEdit ? "Edit" : "Ask a Question"}</>
             )}
-          </Button>
+          </CornerButton>
         </div>
       </form>
     </Form>

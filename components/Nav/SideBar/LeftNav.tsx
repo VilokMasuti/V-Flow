@@ -14,7 +14,7 @@ const LeftSidebar = async () => {
   const userId = session?.user?.id!;
 
   return (
-    <section className="custom-scrollbar  background-light900_dark200 light-border sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
+    <section className="custom-scrollbar   light-border-2  border-dashed sticky left-0 border-r top-0 flex h-screen flex-col justify-between overflow-y-auto  p-6 pt-36  shadow-2xl max-sm:hidden lg:w-[266px]">
       <div className="flex flex-1 flex-col gap-6">
         <NavLinks userId={userId} />
       </div>
@@ -30,7 +30,7 @@ const LeftSidebar = async () => {
           >
             <Button
               type="submit"
-              className="base-medium w-fit !bg-transparent px-4 py-3"
+              className="base-medium w-fit bg-transparent! px-4 py-3 cursor-pointer"
             >
               <LogOut className="size-5 text-black dark:text-white" />
               <span className="text-dark300_light900 max-lg:hidden">
