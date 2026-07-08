@@ -147,7 +147,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
             <CornerButton    accentColor="#ff7000"   type="submit" className="primary-gradient w-fit" disabled={isAnswering}>
               {isAnswering ? (
                 <>
-                  <ReloadIcon className="mr-2 size-4 animate-spin" />
+
                   Posting...
                 </>
               ) : (

@@ -9,7 +9,7 @@ const Navbar = async () => {
   const session = await auth();
 
   return (
-    <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 border-b p-6 dark:shadow-none sm:px-12">
+    <nav className="flex-between border-card fixed z-50 w-full gap-5 border border-b-amber-50 p-6  shadow-md  border-dotted sm:px-12">
       <Link href="/" className="flex items-center gap-1">
         <Image
           src="/images/site-logo.svg"

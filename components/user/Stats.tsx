@@ -16,7 +16,7 @@ interface StatsCardProps {
 }
 
 const StatsCard = ({ imgUrl, value, title, }: StatsCardProps) => (
-  <div className="light-border background-light900_dark300 flex flex-wrap items-center justify-start gap-4 rounded-md border p-6 shadow-light-300 dark:shadow-dark-200">
+  <div className="border-card flex flex-wrap items-center justify-start gap-4 rounded-md border p-6 ">
     <Image src={imgUrl} alt={title} width={40} height={50} />
     <div>
       <p className="paragraph-semibold text-dark200_light900">{value}</p>
@@ -28,14 +28,14 @@ const StatsCard = ({ imgUrl, value, title, }: StatsCardProps) => (
 const Stats = ({ totalAnswers, totalQuestions, badges, reputationPoints }: Props) => {
   return (
      <div className="mt-3">
-       <h4 className="h3-semibold text-dark200_light900">
+       <h4 className="h3-semibold text-dark200_light900 antialiased u">
         Stats{" "}
-        <span className="small-semibold primary-text-gradient">
+        <span className="small-semibold primary-text-gradient text-xs">
           {formatNumber(reputationPoints)}
         </span>
       </h4>
 
-      <div className="light-border background-light900_dark300 flex flex-wrap items-center justify-evenly gal-4 rounded-md border p-6 shadow-light-300 dark:shadow-dark-200">
+      <div className="border-card flex flex-wrap items-center justify-evenly gal-4 rounded-md border p-6  dark:shadow-dark-200">
           <div>
             <p className="paragraph-semibold text-dark200_light900">
               {formatNumber(totalQuestions)}

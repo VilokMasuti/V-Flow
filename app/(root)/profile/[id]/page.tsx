@@ -183,18 +183,18 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       />
 
       <section className="mt-10 flex flex-col gap-8 lg:flex-row">
-        <Tabs defaultValue="top-posts" className="w-full flex-1">
-          <TabsList className="background-light800_dark400 min-h-[42px] p-1">
-            <TabsTrigger value="top-posts" className="tab">
+        <Tabs defaultValue="top-posts" className="w-full flex-1 border-card! bg-dark-100!">
+          <TabsList className=" min-h-[42px] p-1">
+            <TabsTrigger value="top-posts" className="cursor-pointer">
               Top Posts
             </TabsTrigger>
-            <TabsTrigger value="answers" className="tab">
+            <TabsTrigger value="answers" className="cursor-pointer">
               Answers
             </TabsTrigger>
           </TabsList>
           <TabsContent
             value="top-posts"
-            className="mt-5 flex w-full flex-col gap-6"
+            className="mt-5 flex w-full flex-col gap-6 "
           >
             <DataRenderer
               data={questions}
@@ -202,7 +202,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               success={userQuestionsSuccess}
               error={userQuestionsError}
               render={(questions) => (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col gap-6 ">
                   {questions.map((question) => (
                     <QuestionCard key={question._id} question={question}
                     showActionBtns={
@@ -231,7 +231,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                       key={answer._id}
                       {...answer}
                       content={answer.content.slice(0, 27)}
-                      containerClasses="card-wrapper rounded-[10px]  px-7 py-9 sm:px-11"
+                      containerClasses="card-wrapper rounded-[10px]   px-7 py-9 sm:px-11"
                       showReadMore
 
                       showActionBtns={

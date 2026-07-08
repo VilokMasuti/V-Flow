@@ -36,10 +36,10 @@ const AnswerCard = ({
   return (
     <article
      id={`answer-${_id}`}
-    className={cn("light-border relative min-w-0 border-b py-10 ", containerClasses)}>
+    className={cn("border-card bg-dark-100! relative min-w-0 border-b py-10 ", containerClasses)}>
 
       {showActionBtns && (
-        <div className="background-light800 flex-center absolute -top-5 -right-2 size-9 rounded-full">
+        <div className=" flex-center absolute -top-3 -right-2 size-9 rounded-full">
           <EditDeleteAction type="Answer" itemId={_id} />
         </div>
       )}
@@ -56,9 +56,9 @@ const AnswerCard = ({
             href={ROUTES.PROFILE(author._id)}
             className="flex min-w-0 flex-col max-sm:ml-1 sm:flex-row sm:items-center"
           >
-            <p className="body-semibold text-dark300_light700 min-w-0 break-words">{author.name ?? "Anonymous"}</p>
+            <p className="body-semibold min-w-0 break-words">{author.name ?? "Anonymous"}</p>
 
-            <p className="small-regular text-light400_light500 mt-0.5 ml-0.5 line-clamp-1">
+            <p className="small-regular  mt-0.5 ml-0.5 line-clamp-1">
               <span className="max-sm:hidden"> • </span>
               answered {getTimeStamp(createdAt)}
             </p>

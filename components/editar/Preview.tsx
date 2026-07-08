@@ -24,7 +24,7 @@ export const Preview = ({ content }: { content: string }) => {
             <Code
               {...props}
               lineNumbers
-              className="shadow-light-200 dark:shadow-dark-200"
+              className=" text-neutral-50"
             />
           ),
         }}

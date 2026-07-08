@@ -14,7 +14,7 @@ const LeftSidebar = async () => {
   const userId = session?.user?.id!;
 
   return (
-    <section className="custom-scrollbar   light-border-2  border-dashed sticky left-0 border-r top-0 flex h-screen flex-col justify-between overflow-y-auto  p-6 pt-36  shadow-2xl max-sm:hidden lg:w-[266px]">
+    <section className="custom-scrollbar border-car    border border-r-amber-50 border-dotted sticky left-0 border-l top-0 flex h-screen flex-col justify-between overflow-y-auto  p-6 pt-36  shadow-2xl max-sm:hidden lg:w-[266px]">
       <div className="flex flex-1 flex-col gap-6">
         <NavLinks userId={userId} />
       </div>

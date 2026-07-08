@@ -13,7 +13,7 @@ interface Props {
 }
 const QuestionCard = ({ question: { _id, title, tags, author, createdAt, upvotes, answers, views } ,showActionBtns=false}: Props) => {
   return (
-    <div className="card-wrapper  card  rounded-md shadow-md r p-9 sm:px-11">
+    <div className=" card-wrapper-hover card  shadow-2xl bg-dark-100 r p-9 sm:px-11 border   rounded-2xl border-card l">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <div className=' flex-1'>
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">

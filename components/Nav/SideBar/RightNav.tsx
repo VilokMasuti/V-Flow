@@ -16,7 +16,7 @@ const RightSidebar = async () => {
   ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
-    <section className="pt-36 custom-scrollbar   light-border-2  border-dashed   shadow-xl sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l p-6   max-xl:hidden">
+    <section className="pt-36 custom-scrollbar   border-card border-l-neutral-50  border-dotted   shadow-xl sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l p-6   max-xl:hidden">
       <div>
         <h3 className="h3-bold text-dark200_light900">Top Questions</h3>
 

@@ -495,7 +495,7 @@
 @utility markdown {
   @apply prose !max-w-full
     prose-p:my-2 prose-ol:my-0 prose-ul:my-0
-    prose-headings:text-[#ededed]
+    prose-headings:text-[##ff7000]
     prose-p:text-[#a1a1a1]
     prose-ul:text-[#a1a1a1]
     prose-ol:text-[#a1a1a1]
