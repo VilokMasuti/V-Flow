@@ -23,7 +23,8 @@ const QuestionCard = ({ question: { _id, title, tags, author, createdAt, upvotes
            variant='arc'
            className=' duration-1000 '
            href={ROUTES.QUESTION(_id)}>
-            <h1 className="sm:h3-semibold  duration-1000 font-weight:400  line-height:1.7  text-dark100_light900 tracking-[-0.01em]  line-clamp-1 flex-1">{title}</h1>
+            <h1 className="sm:h3-semibold  duration-1000 font-weight:400  line-height:1.7  text-dark100_light900 tracking-[-0.01em]  line-clamp-1 flex-1"
+            >{title}</h1>
           </LineHoverLink>
         </div>
           {showActionBtns && <EditDeleteAction type="Question" itemId={_id} />}

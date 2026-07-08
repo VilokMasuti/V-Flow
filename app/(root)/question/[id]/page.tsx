@@ -9,6 +9,7 @@ import { Preview } from "@/components/editar/Preview";
 import AnswerForm from "@/components/froms/AnswerForm";
 import Metric from "@/components/Metric";
 import SaveQuestion from "@/components/questions/SaveQuestion";
+import { Skeleton } from '@/components/ui/skeleton';
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
@@ -26,6 +27,7 @@ const stripMetadataText = (value: string = "") =>
     .trim();
 
 export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
 
@@ -119,20 +121,32 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           </div>
 
           <div className="flex shrink-0 items-center justify-end gap-4">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Votes
-                targetType="question"
-                upvotes={question.upvotes}
-                downvotes={question.downvotes}
-                targetId={question._id}
-                hasVotedPromise={hasVotedPromise}
-              />
-            </Suspense>
+  <Suspense
+    fallback={
+      <div className="flex items-center gap-2">
+        <Skeleton className="size-7 rounded-md" />
+        <Skeleton className="h-4 w-5" />
+        <Skeleton className="size-7 rounded-md" />
+        <Skeleton className="h-4 w-5" />
+      </div>
+    }
+  >
+    <Votes
+      targetType="question"
+      upvotes={question.upvotes}
+      downvotes={question.downvotes}
+      targetId={question._id}
+      hasVotedPromise={hasVotedPromise}
+    />
+  </Suspense>
 
-            <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={question._id} hasSavedQuestionPromise={hasSavedQuestionPromise} />
-            </Suspense>
-          </div>
+  <Suspense fallback={<Skeleton className="size-7 rounded-md" />}>
+    <SaveQuestion
+      questionId={question._id}
+      hasSavedQuestionPromise={hasSavedQuestionPromise}
+    />
+  </Suspense>
+</div>
         </div>
 
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full min-w-0 break-words">{title}</h2>

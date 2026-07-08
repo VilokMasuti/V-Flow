@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 };
 
 const Tags = async ({ searchParams }: SearchParams) => {
+
   const { page, pageSize, query, filter } = await searchParams;
 
   const { success, data, error } = await getTags({

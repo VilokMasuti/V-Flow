@@ -49,6 +49,7 @@ const Home = async ({ searchParams }: SearchParams) => {
   });
 
   const { questions, isNext } = data || {};
+  
 
   return (
     <>

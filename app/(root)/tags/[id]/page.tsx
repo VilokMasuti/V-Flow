@@ -8,7 +8,9 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.actions";
 
 export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+
   const { id } = await params;
+
   const { success, data } = await getTagQuestions({ tagId: id, page: 1, pageSize: 1, query: "" });
 
   if (!success || !data?.tag) {
@@ -17,6 +19,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
       description: "The requested tag could not be found.",
     };
   }
+
 
   const description = `Explore questions tagged with ${data.tag.name} on V-Flow.`;
 
@@ -43,6 +46,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
 }
 
 const Page = async ({ params, searchParams }: RouteParams) => {
+
   const { id } = await params;
   const { page, pageSize, query } = await searchParams;
   const { success, data, error } = await getTagQuestions({
@@ -67,7 +71,7 @@ const Page = async ({ params, searchParams }: RouteParams) => {
           route={ROUTES.TAG(id)}
           imgSrc="/icons/search.svg"
           placeholder="Search questions..."
-          otherClasses="flex-1"
+          otherClasses="flex-1 w-full"
           iconPosition="left"
         />
       </section>
