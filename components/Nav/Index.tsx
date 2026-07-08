@@ -24,7 +24,7 @@ const Navbar = async () => {
 
       <p>Global Search</p>
 
-      <div className="flex-between gap-5">
+      <div className="flex-between gap-5 max-sm:hidden">
         {session?.user?.id && (
           <UserChip
             id={session.user.id}
@@ -34,8 +34,9 @@ const Navbar = async () => {
             expires={session.expires}
           />
         )}
-        <MobileNavigation />
+
       </div>
+       <MobileNavigation />
     </nav>
   );
 };

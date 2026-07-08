@@ -23,10 +23,10 @@ const MobileNavigation = async () => {
       <SheetTrigger asChild>
         <Image
           src="/icons/hamburger.svg"
-          width={36}
-          height={36}
+          width={30}
+          height={30}
           alt="Menu"
-          className="invert-colors sm:hidden"
+          className=" sm:hidden"
         />
       </SheetTrigger>
       <SheetContent
