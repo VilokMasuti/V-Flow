@@ -1,9 +1,10 @@
 import { auth } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
+import GobalSearch from '../search/GobalSearch';
+import { EncryptedText } from '../ui/encrypted-text';
 import UserChip from '../UserChip';
 import MobileNavigation from "./MobileNav";
-
 
 const Navbar = async () => {
   const session = await auth();
@@ -17,12 +18,17 @@ const Navbar = async () => {
           height={23}
           alt="DevFlow Logo"
         />
-        <p className="h2-bold font-space-grotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          Dev<span className="text-primary-500">Flow</span>
-        </p>
+         <EncryptedText
+        text=" DevFlow"
+        encryptedClassName="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-200 to-neutral-900 "
+        revealedClassName="dark:text-white text-black"
+        revealDelayMs={50}
+      />
       </Link>
 
-      <p>Global Search</p>
+      <div className=''>
+        <GobalSearch/>
+      </div>
 
       <div className="flex-between gap-5 max-sm:hidden">
         {session?.user?.id && (

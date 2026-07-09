@@ -1,5 +1,6 @@
 import { groq } from "@ai-sdk/groq";
 import { generateText } from "ai";
+import { jsonrepair } from "jsonrepair";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -37,70 +38,39 @@ const cleanTags = (tags: string[]) =>
     ),
   ].slice(0, 3);
 
-const parseJsonResponse = (text: string) => {
-  // Step 1 — strip markdown code fences if the AI wrapped the JSON anyway
-  let cleaned = text
+const parseJsonResponse = (raw: string): unknown => {
+  // Step 1 — strip markdown code fences the AI wraps around JSON
+  let text = raw
     .trim()
     .replace(/^```(?:json)?\s*/i, "")
     .replace(/\s*```$/i, "")
     .trim();
 
-  // Step 2 — extract just the JSON object, discard any text before/after
-  const firstBrace = cleaned.indexOf("{");
-  const lastBrace = cleaned.lastIndexOf("}");
+  // Step 2 — extract the outermost { ... } object
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
   if (firstBrace !== -1 && lastBrace !== -1) {
-    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+    text = text.slice(firstBrace, lastBrace + 1);
   }
 
-  // Step 3 — try direct parse (happy path: AI followed instructions)
+  // Step 3 — attempt clean parse first (fast path)
   try {
-    return JSON.parse(cleaned);
+    return JSON.parse(text);
   } catch {
-    // Step 4 — AI put real newlines/tabs inside JSON string values
-    // Walk through the string character by character to escape only
-    // content that is inside a JSON string value, safely.
-    let result = "";
-    let inString = false;
-    let escaped = false;
-
-    for (let i = 0; i < cleaned.length; i++) {
-      const ch = cleaned[i];
-
-      if (escaped) {
-        result += ch;
-        escaped = false;
-        continue;
-      }
-
-      if (ch === "\\") {
-        result += ch;
-        escaped = true;
-        continue;
-      }
-
-      if (ch === '"') {
-        inString = !inString;
-        result += ch;
-        continue;
-      }
-
-      if (inString) {
-        // Escape control characters that break JSON parsing
-        if (ch === "\n") {
-          result += "\\n";
-        } else if (ch === "\r") {
-          result += "\\r";
-        } else if (ch === "\t") {
-          result += "\\t";
-        } else {
-          result += ch;
-        }
-      } else {
-        result += ch;
-      }
+    // Step 4 — hand off to jsonrepair which handles:
+    //   • real newlines / tabs inside string values
+    //   • unescaped double-quotes inside string values
+    //   • trailing commas
+    //   • single-quoted strings
+    //   • missing closing braces
+    //   • and ~40 other malformed patterns
+    try {
+      return JSON.parse(jsonrepair(text));
+    } catch (repairError) {
+      console.error("jsonrepair also failed:", repairError);
+      console.error("Raw AI output was:\n", raw);
+      throw new Error("Could not parse AI response as JSON even after repair");
     }
-
-    return JSON.parse(result);
   }
 };
 
@@ -136,13 +106,13 @@ Your job:
 9. Use ONLY ATX-style headings: # H1  ## H2  ### H3
    NEVER use setext-style headings (text underlined with === or ---).
    NEVER bold a heading like **My Heading**.
-   NEVER combine bold and setext like **Title**\\n=====.
 
 CRITICAL JSON RULES — follow these exactly or the response will be rejected:
 - Return ONLY a raw JSON object. Nothing before it. Nothing after it.
 - Do NOT wrap the response in markdown code fences like \`\`\`json.
 - Inside string values, write newlines as \\n — NEVER use real line breaks inside a JSON string.
 - Inside string values, write tabs as \\t — NEVER use real tab characters inside a JSON string.
+- Inside string values, NEVER use unescaped double quotes. Use \\" for any quote character.
 - The entire response must be parseable by JSON.parse() with zero pre-processing.
 
 Return this exact shape:
@@ -156,7 +126,8 @@ Return this exact shape:
         "You are a technical writing expert. Improve developer questions while preserving the user's original intent. Return valid raw JSON only — no markdown, no explanation, no code fences.",
     });
 
-    const object = EnhancedQuestionSchema.parse(parseJsonResponse(text));
+    const parsed = parseJsonResponse(text);
+    const object = EnhancedQuestionSchema.parse(parsed);
 
     return NextResponse.json({
       success: true,
