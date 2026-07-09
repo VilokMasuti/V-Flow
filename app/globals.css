@@ -351,6 +351,10 @@
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+@utility cardBorder {
+  @applyborder border-[#1c1c1c] hover:border-[#2a2a2a] rounded-xl transition-colors duration-150
+}
+
 @utility card-wrapper-hover {
   border-color: #3a3a3a;
   box-shadow:
@@ -490,94 +494,305 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MARKDOWN RENDERING
+
+/* ═══════════════════════════════════════════════════════════════
+   MARKDOWN — DevFlow premium dark
 ═══════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   MARKDOWN PREVIEW
+   ════════════════════════════════════════════════════════════ */
 @utility markdown {
-  @apply prose !max-w-full
-    prose-p:my-2 prose-ol:my-0 prose-ul:my-0
-    prose-headings:text-[##ff7000]
-    prose-p:text-[#a1a1a1]
-    prose-ul:text-[#a1a1a1]
-    prose-ol:text-[#a1a1a1]
-    prose-strong:text-[#ededed]
-    prose-blockquote:text-[#737373]
-    prose-blockquote:border-l-[#2a2a2a];
+  @apply prose prose-invert !max-w-full
+    prose-h1:text-[#ffffff]      prose-h1:font-bold      prose-h1:tracking-tight
+    prose-h2:text-[#f0f0f0]      prose-h2:font-semibold  prose-h2:border-b
+    prose-h2:border-[#1e1e1e]    prose-h2:pb-2
+    prose-h3:text-[#e0e0e0]      prose-h3:font-semibold
+    prose-h4:text-[#d0d0d0]      prose-h4:font-semibold
+    prose-p:text-[#b4b4b4]       prose-p:my-2            prose-p:leading-[1.8]
+    prose-strong:text-[#f0f0f0]
+    prose-em:text-[#c0c0c0]
+    prose-ul:text-[#b4b4b4]      prose-ul:my-2
+    prose-ol:text-[#b4b4b4]      prose-ol:my-2
+    prose-li:my-1
+    prose-blockquote:border-l-[#ff7000]
+    prose-blockquote:text-[#888]
+    prose-blockquote:not-italic
+    /* Disable prose's built-in code/pre styling — we override fully below */
+    prose-code:before:content-none
+    prose-code:after:content-none
+    prose-pre:bg-transparent
+    prose-pre:p-0;
 }
 
+/* ════════════════════════════════════════════════════════════
+   MARKDOWN EDITOR (Lexical rich-text area)
+   ════════════════════════════════════════════════════════════ */
 @utility markdown-editor {
-  @apply prose !max-w-full prose-p:m-0
-    prose-headings:text-[#ededed]
-    prose-p:text-[#a1a1a1]
-    prose-ul:text-[#a1a1a1]
-    prose-ol:text-[#a1a1a1]
-    prose-strong:text-[#ededed]
-    prose-blockquote:text-[#737373];
+  @apply prose prose-invert !max-w-full prose-p:m-0
+    prose-headings:tracking-tight
+    prose-h1:text-[#ffffff]  prose-h1:font-bold
+    prose-h2:text-[#f0f0f0]  prose-h2:font-semibold
+    prose-h3:text-[#e0e0e0]
+    prose-p:text-[#b4b4b4]
+    prose-strong:text-[#f0f0f0]
+    prose-ul:text-[#b4b4b4]
+    prose-ol:text-[#b4b4b4]
+    prose-blockquote:border-l-[#ff7000]
+    prose-blockquote:text-[#888]
+    prose-code:before:content-none
+    prose-code:after:content-none;
 }
 
-.markdown a          { color: #ff7000; }
-.markdown a:hover    { color: #e2995f; }
+/* ════════════════════════════════════════════════════════════
+   HEADINGS
+   (!) prose-invert already colours headings white-ish;
+       these rules lock in exact values and kill Tailwind's
+       default blue "heading anchor link" colour.
+   ════════════════════════════════════════════════════════════ */
+.markdown h1 { color: #ffffff !important; font-weight: 700; letter-spacing: -0.025em; }
+.markdown h2 { color: #f0f0f0 !important; font-weight: 600; border-bottom: 1px solid #1e1e1e; padding-bottom: 8px; }
+.markdown h3 { color: #e0e0e0 !important; font-weight: 600; }
+.markdown h4 { color: #d0d0d0 !important; font-weight: 600; }
 
+/* Kill prose's default blue colour on heading anchor links */
+.markdown :where(h1, h2, h3, h4, h5, h6) a {
+  color: inherit !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LINKS
+   ════════════════════════════════════════════════════════════ */
+.markdown a {
+  color: #ff7000 !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(255, 112, 0, 0.3);
+  transition: color 0.15s, border-color 0.15s;
+}
+.markdown a:hover {
+  color: #ffb347 !important;
+  border-color: rgba(255, 179, 71, 0.45);
+}
+
+/* ════════════════════════════════════════════════════════════
+   OVERFLOW SAFETY
+   ════════════════════════════════════════════════════════════ */
 .markdown,
-.markdown > * { max-width: 100%; min-width: 0; }
-
-.markdown :where(p,li,h1,h2,h3,h4,h5,h6,blockquote) {
+.markdown > * {
+  max-width: 100%;
+  min-width: 0;
+}
+.markdown :where(p, li, h1, h2, h3, h4, h5, h6, blockquote) {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-
-.markdown :where(img,video,iframe,table),
-.markdown-editor :where(img,video,iframe,table) { max-width: 100%; }
-
-.markdown table,
-.markdown-editor table { display: block; overflow-x: auto; }
-
-.markdown a,
-.markdown code,
-.markdown-editor code {
-  overflow-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
-  padding: 2px 5px;
-  color: #ff7000 !important;
-  background-color: rgba(255,112,0,0.08);
-  border-radius: 4px;
+.markdown :where(img, video, iframe, table),
+.markdown-editor :where(img, video, iframe, table) {
+  max-width: 100%;
 }
 
+/* ════════════════════════════════════════════════════════════
+   INLINE CODE
+   Applied to both preview and editor so they match.
+   The prose-code:before/after:content-none above removes
+   the backtick characters prose adds by default.
+   ════════════════════════════════════════════════════════════ */
+.markdown code,
+.markdown-editor code {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 12.5px;
+  padding: 2px 7px;
+  color: #ff9040 !important;
+  background: rgba(255, 112, 0, 0.1) !important;
+  border: 1px solid rgba(255, 112, 0, 0.18) !important;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Reset prose defaults that bleed through */
+  font-weight: inherit;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CODE BLOCK WRAPPER  <pre>
+   Bright.js renders its own <pre>-like element; we also
+   cover the native <pre> in case MDX falls back to it.
+   ════════════════════════════════════════════════════════════ */
 .markdown pre {
   display: grid;
   max-width: 100%;
   width: 100%;
-  overflow-x: auto;
-  background-color: #0a0a0a !important;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  background: #111 !important;
+  border: 1px solid #252525 !important;
+  border-radius: 10px;
+  margin: 16px 0;
+  overflow: hidden;
+  position: relative;
+  /* Kill prose's default pre padding so our code padding wins */
+  padding: 0 !important;
 }
 
+/* Language badge — top-right corner */
+.markdown pre::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 12px;
+  font-size: 10px;
+  color: #ff7000;
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  background: #0f0f0f;
+  border-bottom-left-radius: 8px;
+  border: 1px solid #252525;
+  border-top: none;
+  border-right: none;
+  /* sit above code lines */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Code inside a native <pre> — reset inline-code overrides */
 .markdown pre code {
   width: 100%;
   display: block;
   overflow-x: auto;
-  color: inherit !important;
+  padding: 16px 18px !important;
+  /* Override the inline-code orange — block code should be light */
+  color: #e0e0e0 !important;
   background: transparent !important;
-  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 13px;
+  line-height: 1.7;
+  font-weight: inherit;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
-[data-lexical-editor="true"] {
-  height: 350px !important;
-  overflow-y: auto !important;
-  max-width: 100%;
-}
-
+/* ════════════════════════════════════════════════════════════
+   BRIGHT.JS OVERRIDES
+   Bright renders a <div data-bright-mode="dark|light"> wrapper.
+   We override its base styles and token colours here.
+   ════════════════════════════════════════════════════════════ */
 [data-bright-mode="dark"],
 [data-bright-mode="light"] {
   display: grid !important;
   max-width: 100% !important;
   width: 100% !important;
   overflow-x: auto !important;
+  background: #111 !important;
+  border: 1px solid #252525 !important;
+  border-radius: 10px !important;
+  margin: 16px 0 !important;
+  color: #e0e0e0 !important;
+  /* Remove any padding Bright adds — our token lines handle spacing */
+  padding: 0 !important;
 }
 
+/* Token colours */
+[data-bright-mode] *                      { color: inherit; }
+[data-bright-mode] .keyword,
+[data-bright-mode] [class*="keyword"]     { color: #ff7000 !important;  font-weight: 600; }
+[data-bright-mode] .string,
+[data-bright-mode] [class*="string"]      { color: #86efac !important; }
+[data-bright-mode] .comment,
+[data-bright-mode] [class*="comment"]     { color: #555 !important;    font-style: italic; }
+[data-bright-mode] .number,
+[data-bright-mode] [class*="number"]      { color: #c4b5fd !important; }
+[data-bright-mode] .function,
+[data-bright-mode] [class*="function"]    { color: #7dd3fc !important; }
+[data-bright-mode] .class-name,
+[data-bright-mode] [class*="class"]       { color: #fbbf24 !important; }
+[data-bright-mode] .punctuation           { color: #e0e0e0 !important; }
+[data-bright-mode] .operator,
+[data-bright-mode] [class*="operator"]    { color: #ff7000 !important; }
+[data-bright-mode] .variable,
+[data-bright-mode] [class*="variable"]    { color: #e0e0e0 !important; }
+[data-bright-mode] .parameter,
+[data-bright-mode] [class*="parameter"]   { color: #fca5a5 !important; }
+[data-bright-mode] .type,
+[data-bright-mode] [class*="type"]        { color: #fbbf24 !important; }
+[data-bright-mode] .boolean,
+[data-bright-mode] [class*="boolean"]     { color: #c4b5fd !important; }
 
+/* ════════════════════════════════════════════════════════════
+   BLOCKQUOTE
+   ════════════════════════════════════════════════════════════ */
+.markdown blockquote {
+  border-left: 3px solid #ff7000 !important;
+  background: rgba(255, 112, 0, 0.05);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 18px;
+  margin: 16px 0;
+  font-style: normal !important;
+}
+.markdown blockquote p {
+  color: #888 !important;
+  font-style: italic;
+  margin: 0 !important;
+}
 
+/* ════════════════════════════════════════════════════════════
+   LIST MARKERS
+   ════════════════════════════════════════════════════════════ */
+.markdown ul li::marker,
+.markdown ol li::marker {
+  color: #ff7000;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HORIZONTAL RULE
+   ════════════════════════════════════════════════════════════ */
+.markdown hr {
+  border: none;
+  border-top: 1px solid #1a1a1a;
+  margin: 24px 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TABLE
+   ════════════════════════════════════════════════════════════ */
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+  /* Override prose making table display:block on mobile */
+  display: table;
+}
+.markdown thead th {
+  background: #111;
+  color: #e0e0e0;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #1e1e1e;
+}
+.markdown tbody td {
+  padding: 9px 14px;
+  color: #a0a0a0;
+  border-bottom: 1px solid #141414;
+}
+.markdown tbody tr:last-child td { border-bottom: none; }
+.markdown tbody tr:hover td      { background: rgba(255, 255, 255, 0.02); }
+
+/* ════════════════════════════════════════════════════════════
+   LEXICAL EDITOR
+   ════════════════════════════════════════════════════════════ */
+[data-lexical-editor="true"] {
+  height: 350px !important;
+  overflow-y: auto !important;
+  max-width: 100%;
+  color: #c4c4c4;
+}
 
 ::view-transition-old(.slide-down) {
   animation:
@@ -607,4 +822,44 @@
   to {
     transform: translateY(0);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR SCROLLBAR — premium thin, orange on hover
+═══════════════════════════════════════════════════════════════ */
+.sidebar-scroll {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #1f1f1f transparent;
+  scroll-behavior: smooth;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.sidebar-scroll::-webkit-scrollbar {
+  display: block !important; /* override global none */
+  width: 2px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0; /* top/bottom breathing room */
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 999px;
+  transition: background 300ms ease;
+}
+
+/* On hover of the scroll CONTAINER — thumb turns orange */
+.sidebar-scroll:hover {
+  scrollbar-color: #ff7000 transparent; /* Firefox */
+}
+.sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff7000, #c44d00);
+}
+
+/* Active drag — brighter */
+.sidebar-scroll::-webkit-scrollbar-thumb:active {
+  background: #ff7000;
 }

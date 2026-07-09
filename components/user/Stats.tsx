@@ -16,7 +16,7 @@ interface StatsCardProps {
 }
 
 const StatsCard = ({ imgUrl, value, title, }: StatsCardProps) => (
-  <div className="border-card flex flex-wrap items-center justify-start gap-4 rounded-md border p-6 ">
+  <div className="border-[#1c1c1c] hover:border-[#2a2a2a]  transition-colors duration-150  flex flex-wrap items-center justify-start gap-4 rounded-md border p-6 ">
     <Image src={imgUrl} alt={title} width={40} height={50} />
     <div>
       <p className="paragraph-semibold text-dark200_light900">{value}</p>

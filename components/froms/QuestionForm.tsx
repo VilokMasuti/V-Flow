@@ -274,7 +274,7 @@ const QuestionForm = ({ question, isEdit }: Params) => {
           <CornerButton accentColor="#ff7000" disabled={isPending} type="submit" className="min-h-[46px] px-4 py-3 !text-light-900 w-fit">
             {isPending ? (
               <>
-                <ReloadIcon className="mr-2 size-4 animate-spin" />
+
                 <span>Submitting</span>
               </>
             ) : (

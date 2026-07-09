@@ -14,7 +14,7 @@ const LeftSidebar = async () => {
   const userId = session?.user?.id!;
 
   return (
-    <section className="custom-scrollbar border-car    border border-r-amber-50 border-dotted sticky left-0 border-l top-0 flex h-screen flex-col justify-between overflow-y-auto  p-6 pt-36  shadow-2xl max-sm:hidden lg:w-[266px]">
+    <section className="custom-scrollbar t border-r border-l-2 duration-1000 [border-image:linear-gradient(180deg,transparent,#2a2a2a_20%,#2a2a2a_80%,transparent)_1]  sticky left-0 border-l top-0 flex h-screen flex-col justify-between overflow-y-auto  p-6 pt-36  shadow-2xl max-sm:hidden lg:w-[266px]">
       <div className="flex flex-1 flex-col gap-6">
         <NavLinks userId={userId} />
       </div>
