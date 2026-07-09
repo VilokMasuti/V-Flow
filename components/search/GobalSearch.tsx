@@ -1,7 +1,7 @@
 
 const GobalSearch = () => {
   return (
-    <div>GobalSearch</div>
+    <div className=' '><input type="text" /></div>
   )
 }
 

@@ -1,8 +1,7 @@
 import { auth } from "@/auth";
-import Image from "next/image";
+import Image from 'next/image';
 import Link from "next/link";
 import GobalSearch from '../search/GobalSearch';
-import { EncryptedText } from '../ui/encrypted-text';
 import UserChip from '../UserChip';
 import MobileNavigation from "./MobileNav";
 
@@ -10,25 +9,25 @@ const Navbar = async () => {
   const session = await auth();
 
   return (
-    <nav className="flex-between fixed z-50 w-full gap-5 p-6  shadow-md  bg-transparent   border-b border-[#aa1010]  [border-image:linear-gradient(90deg,transparent,#2a2a2a_20%,#2a2a2a_80%,transparent)_1] sm:px-12">
-      <Link href="/" className="flex items-center gap-1">
-        <Image
-          src="/images/site-logo.svg"
-          width={23}
-          height={23}
-          alt="DevFlow Logo"
-        />
-         <EncryptedText
-        text=" DevFlow"
-        encryptedClassName="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-200 to-neutral-900 "
-        revealedClassName="dark:text-white text-black"
-        revealDelayMs={50}
-      />
-      </Link>
+    <nav className="flex-between  z-50  w-full gap-5 p-6  shadow-md   fixed top-0   left-0 h-20  border-b border-[#aa1010]  [border-image:linear-gradient(90deg,transparent,#2a2a2a_20%,#2a2a2a_80%,transparent)_1] sm:px-12">
+     <Link href="/" className="flex items-center  ">
 
-      <div className=''>
+ <Image
+ width={110}
+ height={110}
+  src="/logo.png"
+  alt="DevFlow Logo"
+  className=" object-contain"
+/>
+
+
+
+
+</Link>
+ <div className='flex-between gap-5 '>
         <GobalSearch/>
       </div>
+
 
       <div className="flex-between gap-5 max-sm:hidden">
         {session?.user?.id && (

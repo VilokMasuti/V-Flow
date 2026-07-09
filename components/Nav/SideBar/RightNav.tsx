@@ -6,8 +6,8 @@ import { getHotQuestions } from "@/lib/actions/question.action";
 
 import TagCard from '@/components/cards/TagCard';
 import DataRenderer from '@/components/ui/DataRenderer';
-import LineHoverLink from '@/components/ui/line-hover-link';
 import { getTopTags } from "@/lib/actions/tag.actions";
+import Link from 'next/link';
 
 const RightSidebar = async () => {
   const [
@@ -16,12 +16,11 @@ const RightSidebar = async () => {
   ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
- <section className="
+    <section className="
       sticky right-0 top-0
       h-screen w-[350px]
-      flex flex-col
-      border-l border-[#1a1a1a]
-      shadow-[-1px_0_0_0_rgba(255,112,0,0.05)]
+      flex flex-col border-r
+      border-l [border-image:linear-gradient(180deg,transparent,#2a2a2a_20%,#2a2a2a_80%,transparent)_1]
       max-xl:hidden
       overflow-hidden
     ">
@@ -40,25 +39,30 @@ const RightSidebar = async () => {
             success={success}
             error={error}
             render={(hotQuestions) => (
-              <div className="flex w-full flex-col gap-7 pb-3">
+              <div className="mt-7 flex w-full flex-col gap-[30px]">
                 {hotQuestions.map(({ _id, title }) => (
-                  <LineHoverLink
-                    variant="scribble"
-                    key={_id}
-                    href={ROUTES.QUESTION(_id)}
-                    className="flex cursor-pointer items-center justify-between gap-4 group"
-                  >
-                    <p className="body-medium text-dark500_light700 font-inter line-clamp-2 min-w-0 flex-1">
-                      {title}
-                    </p>
+                  <div key={_id} className="group relative flex w-full items-center justify-between gap-7">
+
+                    {/* 1. Link wraps ONLY the text so the scribble stays perfectly proportioned */}
+                    <Link
+
+                      href={ROUTES.QUESTION(_id)}
+                      className="after:absolute after:inset-0"
+                    >
+                      <span className="body-medium text-dark500_light700 font-inter line-clamp-2 duration-700">
+                        {title}
+                      </span>
+                    </Link>
+
+                    {/* 2. Chevron sits outside, perfectly right-aligned and safe from wrapping */}
                     <Image
                       src="/icons/chevron-right.svg"
-                      alt=""
-                      width={16}
-                      height={16}
-                      className="shrink-0 opacity-40 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert transition-all"
+                      alt="Chevron"
+                      width={20}
+                      height={20}
+                      className="shrink-0 duration-700 group-hover:brightness-0 group-hover:invert group-hover:filter"
                     />
-                  </LineHoverLink>
+                  </div>
                 ))}
               </div>
             )}
@@ -70,7 +74,7 @@ const RightSidebar = async () => {
       <div className="mx-6 shrink-0 h-px bg-[#1e1e1e]" />
 
       {/* POPULAR TAGS */}
-      <div className="flex flex-col min-h-0 flex-1 px-6 pt-3 pb-6">
+      <div className="flex flex-col min-h-0 flex-1 px-6 pt-10 pb-6">
         <h3 className="h3-bold text-dark200_light900 shrink-0 mb-6">
           Popular Tags
         </h3>
