@@ -133,7 +133,9 @@ export const IncrementViewsSchema = z.object({
   questionId: z.string().min(1, { message: "Question ID is required." }),
 });
 
+
 export const AnswerSchema = z.object({
+  // Keep min(100) for user-written answers
   content: z.string().min(100, { message: "Answer has to have more than 100 characters." }),
 });
 
@@ -150,11 +152,10 @@ export const GetAnswersSchema = PaginatedSearchParamsSchema.extend({
 });
 
 export const AIAnswerSchema = z.object({
-  question: z
-    .string()
-    .min(5, { message: "Question is required." })
-    .max(130, { message: "Question cannot exceed 130 characters." }),
-  content: z.string().min(100, { message: "Answer has to have more than 100 characters." }),
+  //  removed max(130) — question content can be any length
+  //  min lowered — title can be short like "help"
+  question: z.string().min(1, { message: "Question is required." }),
+  content: z.string(), // ← no min — user may not have typed anything yet
 });
 
 export const CreateVoteSchema = z.object({

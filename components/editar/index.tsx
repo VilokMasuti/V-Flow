@@ -44,14 +44,19 @@ interface Props {
   className?: string;
 }
 
-const Editor = ({ value, editorRef, fieldChange, className, ...props }: Props) => {
+const Editor = ({
+  value,
+  editorRef,
+  fieldChange,
+  className,
+  ...props
+}: Props) => {
   const { resolvedTheme } = useTheme();
 
-  const theme = resolvedTheme === "dark" ? [basicDark] : [];
+  const codeMirrorExtensions = resolvedTheme === "dark" ? [basicDark] : [];
 
   return (
     <MDXEditor
-      key={resolvedTheme}
       markdown={value}
       ref={editorRef}
       className={cn(
@@ -69,25 +74,28 @@ const Editor = ({ value, editorRef, fieldChange, className, ...props }: Props) =
         markdownShortcutPlugin(),
         tablePlugin(),
         imagePlugin(),
-        codeBlockPlugin({ defaultCodeBlockLanguage: "" }),
+        //  "txt" not "" — MDXEditor maps "" to "N/A" internally which crashes
+        codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
         codeMirrorPlugin({
           codeBlockLanguages: {
-            css: "css",
-            txt: "txt",
-            sql: "sql",
-            html: "html",
-            saas: "saas",
-            scss: "scss",
-            bash: "bash",
-            json: "json",
-            js: "javascript",
-            ts: "typescript",
-            "": "unspecified",
-            tsx: "TypeScript (React)",
-            jsx: "JavaScript (React)",
+            //  "" kept so existing content with no lang doesn't crash
+            "":   "Unspecified",
+            txt:  "Plain Text",
+            js:   "JavaScript",
+            jsx:  "JavaScript (React)",
+            ts:   "TypeScript",
+            tsx:  "TypeScript (React)",
+            css:  "CSS",
+            scss: "SCSS",
+            sass: "Sass",
+            html: "HTML",
+            json: "JSON",
+            sql:  "SQL",
+            bash: "Bash",
+            md:   "Markdown",
           },
           autoLoadLanguageSupport: true,
-          codeMirrorExtensions: theme,
+          codeMirrorExtensions,
         }),
         diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
         toolbarPlugin({
@@ -103,20 +111,15 @@ const Editor = ({ value, editorRef, fieldChange, className, ...props }: Props) =
                     <>
                       <UndoRedo />
                       <Separator />
-
                       <BoldItalicUnderlineToggles />
                       <Separator />
-
                       <ListsToggle />
                       <Separator />
-
                       <CreateLink />
                       <InsertImage />
                       <Separator />
-
                       <InsertTable />
                       <InsertThematicBreak />
-
                       <InsertCodeBlock />
                     </>
                   ),

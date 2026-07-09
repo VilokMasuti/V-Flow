@@ -11,16 +11,23 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { api } from "@/lib/api";
+import { sanitiseMarkdown } from '@/lib/sanitise';
 import { AnswerSchema } from "@/lib/validations";
-import CornerButton from '../ui/corner-button';
-import CreepyButton from '../ui/creepy-button';
+import CornerButton from "../ui/corner-button";
+import CreepyButton from "../ui/creepy-button";
 
-const Editor = dynamic(() => import("@/components/editar"), {
-  ssr: false,
-});
+
+const Editor = dynamic(() => import("@/components/editar"), { ssr: false });
 
 interface Props {
   questionId: string;
@@ -38,28 +45,34 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
-    defaultValues: {
-      content: "",
-    },
+    defaultValues: { content: "" },
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    startAnsweringTransition(async () => {
-      const result = await createAnswer({
-        questionId,
-        content: values.content,
+    const editorContent = editorRef.current?.getMarkdown() ?? "";
+    const content =
+      editorContent.trim().length >= values.content.trim().length
+        ? editorContent
+        : values.content;
+
+    if (content.trim().length < 100) {
+      form.setError("content", {
+        message: "Answer has to have more than 100 characters.",
       });
+      return;
+    }
+
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({ questionId, content });
 
       if (result.success) {
         form.reset();
-        setEditorVersion((version) => version + 1);
+        editorRef.current?.setMarkdown("");
+        setEditorVersion((v) => v + 1);
         router.refresh();
         toast.success("Success", {
           description: "Your answer has been posted successfully",
         });
-        if (editorRef.current) {
-          editorRef.current.setMarkdown("");
-        }
       } else {
         toast.error("Error", {
           description: result.error?.message ?? "Failed to post your answer",
@@ -67,35 +80,55 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
       }
     });
   };
+
   const generateAIAnswer = async () => {
     if (!session.data) {
       return toast.error("Unauthorized", {
         description: "You need to be logged in to generate an AI answer",
       });
     }
+
     setIsAISubmitting(true);
-    const userAnswer = editorRef.current?.getMarkdown();
 
     try {
-      const { success, data, error } = await api.ai.getAnswer(questionTitle, questionContent, userAnswer);
+      const userAnswer = editorRef.current?.getMarkdown() ?? "";
+
+      const { success, data, error } = await api.ai.getAnswer(
+        questionTitle,
+        questionContent,
+        userAnswer
+      );
+
       if (!success) {
         return toast.error("Error", {
           description: error?.message ?? "Failed to generate AI answer",
         });
       }
 
-      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
-      form.setValue("content", formattedAnswer, {
+      //  Sanitise BEFORE giving to MDXEditor
+      // This fixes setext headings, bold headings, bare code blocks etc.
+      // that would crash MDXEditor with {"type":"code","name":"N/A"}
+      const sanitised = sanitiseMarkdown(
+        data.replace(/<br>/g, " ").trim()
+      );
+
+      // Form value first so it is ready if editor remounts
+      form.setValue("content", sanitised, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
       });
 
+      //  Then push sanitised content into editor
       if (editorRef.current) {
-        editorRef.current.setMarkdown(formattedAnswer);
+        editorRef.current.setMarkdown(sanitised);
       } else {
-        setEditorVersion((version) => version + 1);
+        setEditorVersion((v) => v + 1);
       }
+
+      toast.success("AI Answer Generated", {
+        description: "Review the answer and click Post Answer when ready.",
+      });
     } catch {
       toast.error("Error", {
         description: "Failed to generate AI answer",
@@ -108,7 +141,9 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   return (
     <div className="w-full min-w-0">
       <div className="flex w-full min-w-0 flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
-        <h4 className="paragraph-semibold text-dark400_light800">Write your answer here</h4>
+        <h4 className="paragraph-semibold text-dark400_light800">
+          Write your answer here
+        </h4>
         <CreepyButton
           type="button"
           className="btn light-border-2 text-primary-500 dark:text-primary-500 w-full cursor-pointer justify-center gap-2.5 rounded-md border px-4 py-2.5 shadow-none sm:w-fit"
@@ -121,22 +156,28 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
               Generating...
             </>
           ) : (
-            <>
-
-              Generate AI Answer
-            </>
+            "Generate AI Answer"
           )}
         </CreepyButton>
       </div>
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 flex w-full min-w-0 flex-col gap-10">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="mt-6 flex w-full min-w-0 flex-col gap-10"
+        >
           <FormField
             control={form.control}
             name="content"
             render={({ field }) => (
               <FormItem className="flex w-full min-w-0 flex-col gap-3">
                 <FormControl className="mt-3.5">
-                  <Editor key={editorVersion} value={field.value} editorRef={editorRef} fieldChange={field.onChange} />
+                  <Editor
+                    key={editorVersion}
+                    value={field.value}
+                    editorRef={editorRef}
+                    fieldChange={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,15 +185,13 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
           />
 
           <div className="flex justify-end">
-            <CornerButton    accentColor="#ff7000"   type="submit" className="primary-gradient w-fit" disabled={isAnswering}>
-              {isAnswering ? (
-                <>
-
-                  Posting...
-                </>
-              ) : (
-                "Post Answer"
-              )}
+            <CornerButton
+              accentColor="#ff7000"
+              type="submit"
+              className="primary-gradient w-fit"
+              disabled={isAnswering}
+            >
+              {isAnswering ? "Posting..." : "Post Answer"}
             </CornerButton>
           </div>
         </form>
