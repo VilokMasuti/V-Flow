@@ -63,7 +63,7 @@ export default function UserChip({ id, name, email, image, expires }: Props) {
             <span className="absolute bottom-0 right-0 size-2.5 rounded-full bg-green-500 ring-2 ring-dark-300" />
           </div>
           <div className="min-w-0">
-            <p className="truncate text-[13px] font-semibold text-light-900">
+            <p className="truncate text-[13px] font-semibold  font-cabinet">
               {name}
             </p>
             <p className="truncate text-[11px]  text-lime-50">{email}</p>

@@ -103,6 +103,8 @@
   --font-dm-sans: var(--font-dm-sans);
   --font-inter: var(--font-inter);
   --font-mono:  "Geist Mono", ui-monospace, monospace;
+  --font-satoshi : var(--font-satoshi );
+--font-cabinet: var(--font-clash);
 
   --radius:    0.5rem;
   --radius-sm: calc(var(--radius) - 4px);
@@ -235,6 +237,9 @@
   input, textarea, select {
     color: #ededed;
     background-color: #1a1a1a;
+  }
+  bg-cover {
+    background-image: '/logo.png';
   }
 
   /* Premium interactive element transitions */
@@ -401,7 +406,7 @@
    GRADIENTS
 ═══════════════════════════════════════════════════════════════ */
 @utility primary-gradient {
-  background: linear-gradient(135deg, #ff7000 0%, #e2995f 100%);
+  background: linear-gradient(140deg, #ff7000 0%, #e2995f 200%);
 }
 
 @utility dark-gradient {

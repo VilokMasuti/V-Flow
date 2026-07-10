@@ -49,7 +49,7 @@ const RightSidebar = async () => {
                       href={ROUTES.QUESTION(_id)}
                       className="after:absolute after:inset-0"
                     >
-                      <span className="body-medium text-dark500_light700 font-inter line-clamp-2 duration-700">
+                      <span className="body-medium text-neutral-100 font-inter line-clamp-2 duration-1000">
                         {title}
                       </span>
                     </Link>
@@ -60,7 +60,7 @@ const RightSidebar = async () => {
                       alt="Chevron"
                       width={20}
                       height={20}
-                      className="shrink-0 duration-700 group-hover:brightness-0 group-hover:invert group-hover:filter"
+                      className="shrink-0 duration-1000 group-hover:brightness-100 group-hover:invert group-hover:filter"
                     />
                   </div>
                 ))}

@@ -54,20 +54,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "DevFlow",
   description: "A community-driven platform for asking and answering programming questions.",
-  icons: { icon: "/images/logo.png" },
+  icons: { icon: "images/site-logo.svg" },
   openGraph: {
     title: "DevFlow | Ask & Answer Programming Questions",
     description: "Get help, share knowledge, and collaborate with developers worldwide.",
     url: siteUrl,
     siteName: "DevFlow",
-    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "DevFlow" }],
+    images: [{ url: "images/site-logo.svg", width: 1200, height: 630, alt: "DevFlow" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "DevFlow | Ask & Answer Programming Questions",
     description: "Get help, share knowledge, and collaborate with developers worldwide.",
-    images: ["/images/logo.png"],
+    images: ["images/site-logo.svg"],
   },
   robots: { index: true, follow: true },
 };
