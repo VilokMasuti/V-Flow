@@ -2,15 +2,22 @@ import type { QueryFilter, SortOrder } from "mongoose";
 import { cache } from "react";
 
 import Question, { IQuestion } from "@/database/question.model";
-import Tag, { ITag } from "@/database/tag.model";
+import TagModel from "@/database/tag.model";
 
 import action from "../handlers/actions";
 import handleError from "../handlers/error";
-import dbConnect from '../mongoose';
+import dbConnect from "../mongoose";
 import { GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
+
+type SerializedTag = {
+  _id: string;
+  name: string;
+  questions: number;
+};
+
 export const getTags = async (
   params: PaginatedSearchParams
-): Promise<ActionResponse<{ tags: ITag[]; isNext: boolean }>> => {
+): Promise<ActionResponse<{ tags: SerializedTag[]; isNext: boolean }>> => {
   const validationResult = await action({
     params,
     schema: PaginatedSearchParamsSchema,
@@ -21,10 +28,8 @@ export const getTags = async (
   }
 
   const { page = 1, pageSize = 10, query, filter } = params;
-
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
-
   const filterQuery: Record<string, unknown> = {};
 
   if (query) {
@@ -52,10 +57,10 @@ export const getTags = async (
   }
 
   try {
-    const totalTags = await Tag.countDocuments(filterQuery);
-    const tags = await Tag.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
-
+    const totalTags = await TagModel.countDocuments(filterQuery);
+    const tags = await TagModel.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
     const isNext = totalTags > skip + tags.length;
+
     return {
       success: true,
       data: {
@@ -70,7 +75,7 @@ export const getTags = async (
 
 export const getTagQuestions = cache(async (
   params: GetTagQuestionsParams
-): Promise<ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>> => {
+): Promise<ActionResponse<{ tag: SerializedTag; questions: Question[]; isNext: boolean }>> => {
   const validationResult = await action({
     params,
     schema: GetTagQuestionsSchema,
@@ -81,12 +86,14 @@ export const getTagQuestions = cache(async (
   }
 
   const { tagId, page = 1, pageSize = 10, query } = params;
-
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
+
   try {
-    const tag = await Tag.findById(tagId);
+    const tag = await TagModel.findById(tagId);
+
     if (!tag) throw new Error("Tag not found");
+
     const filterQuery: QueryFilter<IQuestion> = {
       tags: { $in: [tagId] },
     };
@@ -94,6 +101,7 @@ export const getTagQuestions = cache(async (
     if (query) {
       filterQuery.title = { $regex: query, $options: "i" };
     }
+
     const totalQuestions = await Question.countDocuments(filterQuery);
     const questions = await Question.find(filterQuery)
       .select("_id title views answers upvotes downvotes author createdAt")
@@ -119,9 +127,9 @@ export const getTagQuestions = cache(async (
   }
 });
 
-export const getTagById = cache(async (tagId: string): Promise<ActionResponse<ITag>> => {
+export const getTagById = cache(async (tagId: string): Promise<ActionResponse<SerializedTag>> => {
   try {
-    const tag = await Tag.findById(tagId);
+    const tag = await TagModel.findById(tagId);
 
     if (!tag) {
       return handleError(new Error("Tag not found")) as ErrorResponse;
@@ -136,11 +144,11 @@ export const getTagById = cache(async (tagId: string): Promise<ActionResponse<IT
   }
 });
 
-export const getTopTags = async (): Promise<ActionResponse<Tag[]>> => {
+export const getTopTags = async (): Promise<ActionResponse<SerializedTag[]>> => {
   try {
     await dbConnect();
 
-    const tags = await Tag.find().sort({ questions: -1 }).limit(5);
+    const tags = await TagModel.find().sort({ questions: -1 }).limit(5);
 
     return {
       success: true,

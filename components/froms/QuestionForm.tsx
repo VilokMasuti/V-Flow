@@ -12,6 +12,7 @@ import z from "zod";
 
 import ROUTES from "@/constants/routes";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { sanitiseMarkdown } from "@/lib/sanitise";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
@@ -39,7 +40,8 @@ const QuestionForm = ({ question, isEdit }: Params) => {
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
       title: question?.title || "",
-      content: question?.content || "",
+      // Sanitize saved content too, so older AI-generated markdown cannot crash the editor on load.
+      content: sanitiseMarkdown(question?.content || ""),
       tags: question?.tags.map((tag: { name: string }) => tag.name) || [],
     },
   });
@@ -137,18 +139,24 @@ const QuestionForm = ({ question, isEdit }: Params) => {
       }
 
       const enhanced =
-        typeof result.data === "string" ? { title, content: result.data, tags: form.getValues("tags") } : result.data;
+        typeof result.data === "string"
+          ? { title, content: result.data, tags: form.getValues("tags") }
+          : result.data;
 
       if (!enhanced?.title || !enhanced?.content || !Array.isArray(enhanced?.tags)) {
         return toast.error("AI returned an invalid question format");
       }
+
+      // Low-cost models often return headings/code blocks that are valid-ish markdown,
+      // but still not safe for MDXEditor. Normalize it before giving it to the editor.
+      const sanitisedContent = sanitiseMarkdown(enhanced.content);
 
       form.setValue("title", enhanced.title, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
       });
-      form.setValue("content", enhanced.content, {
+      form.setValue("content", sanitisedContent, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
@@ -161,7 +169,7 @@ const QuestionForm = ({ question, isEdit }: Params) => {
       form.clearErrors(["title", "content", "tags"]);
 
       if (editorRef.current) {
-        editorRef.current.setMarkdown(enhanced.content);
+        editorRef.current.setMarkdown(sanitisedContent);
       } else {
         setEditorVersion((version) => version + 1);
       }

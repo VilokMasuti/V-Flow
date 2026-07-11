@@ -52,23 +52,41 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || 
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "DevFlow",
-  description: "A community-driven platform for asking and answering programming questions.",
-  icons: { icon: "images/site-logo.svg" },
+
+  title: {
+    default: "DevFlow | Ask & Answer Questions",
+    template: "%s | DevFlow",
+  },
+  description:
+    "DevFlow is a community-driven platform for asking and answering programming questions. Get expert help, share knowledge, and grow as a developer.",
+
+  icons: { icon: "/images/site-logo.svg" },
+
   openGraph: {
     title: "DevFlow | Ask & Answer Programming Questions",
-    description: "Get help, share knowledge, and collaborate with developers worldwide.",
+    description:
+      "Get expert help, share knowledge, and collaborate with developers worldwide on DevFlow.",
     url: siteUrl,
     siteName: "DevFlow",
-    images: [{ url: "images/site-logo.svg", width: 1200, height: 630, alt: "DevFlow" }],
+    images: [
+      {
+        url: "/logo.png", // ← 1200×630 PNG, not SVG
+        width: 1200,
+        height: 630,
+        alt: "DevFlow – Ask & Answer Programming Questions",
+      },
+    ],
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "DevFlow | Ask & Answer Programming Questions",
-    description: "Get help, share knowledge, and collaborate with developers worldwide.",
-    images: ["images/site-logo.svg"],
+    description:
+      "Get expert help, share knowledge, and collaborate with developers worldwide on DevFlow.",
+    images: ["/logo.png"],
   },
+
   robots: { index: true, follow: true },
 };
 

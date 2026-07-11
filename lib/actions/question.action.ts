@@ -205,9 +205,12 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
 
       await TagQuestion.deleteMany({ tag: { $in: tagIdsToRemove }, question: questionId }, { session });
 
-      question.tags = question.tags.filter(
-        (tag: mongoose.Types.ObjectId) => !tagIdsToRemove.some((id: mongoose.Types.ObjectId) => id.equals(tag._id))
-      );
+      // Populated tags are objects with _id, but freshly pushed tags are plain ObjectIds.
+      question.tags = question.tags.filter((tag: mongoose.Types.ObjectId | ITag) => {
+        const tagId = tag instanceof mongoose.Types.ObjectId ? tag : tag._id;
+
+        return !tagIdsToRemove.some((id: mongoose.Types.ObjectId) => id.equals(tagId));
+      }) as mongoose.Types.ObjectId[];
     }
 
     if (newTagDocuments.length > 0) {

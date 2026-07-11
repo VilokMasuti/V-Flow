@@ -105,6 +105,12 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         });
       }
 
+      if (typeof data !== "string") {
+        return toast.error("Error", {
+          description: "AI returned an invalid answer format",
+        });
+      }
+
       //  Sanitise BEFORE giving to MDXEditor
       // This fixes setext headings, bold headings, bare code blocks etc.
       // that would crash MDXEditor with {"type":"code","name":"N/A"}

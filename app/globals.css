@@ -3,42 +3,40 @@
 
 @plugin "@tailwindcss/typography";
 
-
-
+/* ═══════════════════════════════════════════════════════════════
+   @theme — design tokens (static values, no CSS var references)
+═══════════════════════════════════════════════════════════════ */
 @theme {
   /* ── Brand ── */
   --color-primary-500: #ff7000;
-  --color-primary-100: #1a0f00;   /* dark tinted orange bg for badges */
+  --color-primary-100: #1a0f00;
 
-  /* ── Surface ladder (dark only) ──
-     Each step is ~5% lighter than the previous.
-     This subtle hierarchy creates depth without harsh contrast. */
-  --color-surface-0: #000000;     /* pure black — page bg */
-  --color-surface-1: #0a0a0a;     /* navbar, topbar */
-  --color-surface-2: #111111;     /* sidebar bg */
-  --color-surface-3: #141414;     /* cards, panels */
-  --color-surface-4: #1a1a1a;     /* inputs, dropdowns */
-  --color-surface-5: #222222;     /* hover states */
-  --color-surface-6: #2a2a2a;     /* active/selected */
+  /* ── Surface ladder ── */
+  --color-surface-0: #000000;
+  --color-surface-1: #0a0a0a;
+  --color-surface-2: #111111;
+  --color-surface-3: #141414;
+  --color-surface-4: #1a1a1a;
+  --color-surface-5: #222222;
+  --color-surface-6: #2a2a2a;
 
   /* ── Border ladder ── */
-  --color-border-subtle:  #1f1f1f; /* barely visible — section dividers */
-  --color-border-default: #2a2a2a; /* standard borders */
-  --color-border-strong:  #3a3a3a; /* emphasized borders, focus rings */
+  --color-border-subtle:  #1f1f1f;
+  --color-border-default: #2a2a2a;
+  --color-border-strong:  #3a3a3a;
 
   /* ── Text ladder ── */
-  --color-text-primary:   #ededed; /* headings, primary content */
-  --color-text-secondary: #a1a1a1; /* descriptions, metadata */
-  --color-text-muted:     #666666; /* placeholders, disabled */
-  --color-text-inverted:  #0a0a0a; /* text on orange buttons */
+  --color-text-primary:   #ededed;
+  --color-text-secondary: #a1a1a1;
+  --color-text-muted:     #666666;
+  --color-text-inverted:  #0a0a0a;
 
-  /* ── Keep legacy tokens for backward compat with existing components ── */
+  /* ── Legacy tokens (backward compat) ── */
   --color-dark-100: #000000;
   --color-dark-200: #0a0a0a;
   --color-dark-300: #111111;
   --color-dark-400: #141414;
   --color-dark-500: #1a1a1a;
-
   --color-light-400: #666666;
   --color-light-500: #a1a1a1;
   --color-light-700: #2a2a2a;
@@ -46,11 +44,10 @@
   --color-light-850: #111111;
   --color-light-900: #ededed;
 
-  /* ── Shadows — stronger in dark mode ── */
+  /* ── Shadows ── */
   --shadow-dark-100: 0px 1px 3px rgba(0,0,0,0.6), 0px 4px 12px rgba(0,0,0,0.5);
   --shadow-dark-200: 0px 4px 24px rgba(0,0,0,0.7);
-  --shadow-card:     0px 1px 0px rgba(255,255,255,0.04) inset,
-                     0px 1px 3px rgba(0,0,0,0.5);
+  --shadow-card:     0px 1px 0px rgba(255,255,255,0.04) inset, 0px 1px 3px rgba(0,0,0,0.5);
 
   /* ── Fonts ── */
   --font-inter:   var(--font-inter);
@@ -68,43 +65,43 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   @theme inline — wire tokens to shadcn/Tailwind variables
+   @theme inline — wire tokens to shadcn/Tailwind CSS var bridge
 ═══════════════════════════════════════════════════════════════ */
 @theme inline {
-  --color-background:     var(--background);
-  --color-foreground:     var(--foreground);
-  --color-card:           var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover:        var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary:        var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary:      var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted:          var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent:         var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive:    var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border:         var(--border);
-  --color-input:          var(--input);
-  --color-ring:           var(--ring);
-  --color-sidebar:        var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-destructive-foreground:   var(--destructive-foreground);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-ring:                     var(--ring);
+  --color-sidebar:                  var(--sidebar);
+  --color-sidebar-foreground:       var(--sidebar-foreground);
+  --color-sidebar-primary:          var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent:           var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring:   var(--sidebar-ring);
+  --color-sidebar-border:           var(--sidebar-border);
+  --color-sidebar-ring:             var(--sidebar-ring);
 
-  --font-sans:  var(--font-dm-sans), system-ui, sans-serif;
+  --font-sans:    var(--font-dm-sans), system-ui, sans-serif;
   --font-dm-sans: var(--font-dm-sans);
-  --font-inter: var(--font-inter);
-  --font-mono:  "Geist Mono", ui-monospace, monospace;
-  --font-satoshi : var(--font-satoshi );
---font-cabinet: var(--font-clash);
+  --font-inter:   var(--font-inter);
+  --font-mono:    "Geist Mono", ui-monospace, monospace;
+  --font-satoshi: var(--font-satoshi);
+  --font-cabinet: var(--font-clash);
 
   --radius:    0.5rem;
   --radius-sm: calc(var(--radius) - 4px);
@@ -127,63 +124,53 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CSS VARIABLES — dark only, no :root light mode
+   CSS VARIABLES — dark only
 ═══════════════════════════════════════════════════════════════ */
 :root {
   --radius: 0.5rem;
-    --duration-exit: 150ms;
+  --duration-exit:  150ms;
   --duration-enter: 210ms;
 
-  /* Page and surfaces */
-  --background:    #000000;   /* pure black page */
-  --foreground:    #ededed;   /* near-white text */
+  --background:    #000000;
+  --foreground:    #ededed;
 
-  /* Cards */
-  --card:          #111111;
+  --card:           #111111;
   --card-foreground: #ededed;
 
-  /* Popovers, dropdowns */
-  --popover:       #141414;
+  --popover:         #141414;
   --popover-foreground: #ededed;
 
-  /* Primary — used by shadcn buttons */
-  --primary:       #ededed;
+  --primary:            #ededed;
   --primary-foreground: #000000;
 
-  /* Secondary */
-  --secondary:     #1a1a1a;
+  --secondary:            #1a1a1a;
   --secondary-foreground: #ededed;
 
-  /* Muted */
-  --muted:         #141414;
+  --muted:            #141414;
   --muted-foreground: #737373;
 
-  /* Accent */
-  --accent:        #1a1a1a;
+  --accent:            #1a1a1a;
   --accent-foreground: #ededed;
 
-  /* Destructive */
-  --destructive:   #ef4444;
+  --destructive:            #ef4444;
   --destructive-foreground: #ededed;
 
-  /* Borders and inputs */
-  --border:        #2a2a2a;
-  --input:         #1a1a1a;
-  --ring:          #3a3a3a;
+  --border: #2a2a2a;
+  --input:  #1a1a1a;
+  --ring:   #3a3a3a;
 
-  /* Sidebar */
-  --sidebar:               #0a0a0a;
-  --sidebar-foreground:    #ededed;
-  --sidebar-primary:       #ff7000;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent:        #1a1a1a;
-  --sidebar-accent-foreground: #ededed;
-  --sidebar-border:        #1f1f1f;
-  --sidebar-ring:          #3a3a3a;
+  --sidebar:                     #0a0a0a;
+  --sidebar-foreground:          #ededed;
+  --sidebar-primary:             #ff7000;
+  --sidebar-primary-foreground:  #000000;
+  --sidebar-accent:              #1a1a1a;
+  --sidebar-accent-foreground:   #ededed;
+  --sidebar-border:              #1f1f1f;
+  --sidebar-ring:                #3a3a3a;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   @layer base — global resets
+   @layer base — global resets & element defaults
 ═══════════════════════════════════════════════════════════════ */
 @layer base {
   *, ::after, ::before {
@@ -200,14 +187,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Hide scrollbar globally — sidebar-scroll re-enables its own */
     scrollbar-width: none;
     -ms-overflow-style: none;
-    color-scheme: dark;   /* tells browser this is a dark app */
+    color-scheme: dark;
   }
 
   html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  *::-webkit-scrollbar {
+  body::-webkit-scrollbar {
     display: none;
   }
 
@@ -218,11 +205,10 @@
     letter-spacing: -0.014em;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* Subtle noise texture for premium dark feel */
+    /* Subtle noise texture */
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
   }
 
-  /* Headings — Inter, tight tracking */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-inter), system-ui, sans-serif;
     color: #ededed;
@@ -238,11 +224,8 @@
     color: #ededed;
     background-color: #1a1a1a;
   }
-  bg-cover {
-    background-image: '/logo.png';
-  }
 
-  /* Premium interactive element transitions */
+  /* Smooth transitions on interactive elements */
   a, button, [role="button"],
   input, textarea, select,
   [class*="card"] {
@@ -274,21 +257,21 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   BACKGROUND UTILITIES — dark only, all map to dark surfaces
+   BACKGROUND UTILITIES
 ═══════════════════════════════════════════════════════════════ */
-@utility background-light850_dark100        { background-color: #000000; }
-@utility background-light900_dark200        { background-color: #0a0a0a; }
-@utility background-light900_dark300        { background-color: #111111; }
-@utility background-light800_darkgradient   { @apply dark-gradient; }
-@utility background-light800_dark400        { background-color: #141414 !important; }
-@utility background-light700_dark400        { background-color: #141414; }
-@utility background-light700_dark300        { background-color: #111111; }
-@utility background-light800_dark300        { background-color: #111111 !important; }
-@utility background-light800_dark200        { background-color: #0a0a0a; }
-@utility background-dark400_light900        { background-color: #141414 !important; }
+@utility background-light850_dark100      { background-color: #000000; }
+@utility background-light900_dark200      { background-color: #0a0a0a; }
+@utility background-light900_dark300      { background-color: #111111; }
+@utility background-light800_darkgradient { @apply dark-gradient; }
+@utility background-light800_dark400      { background-color: #141414 !important; }
+@utility background-light700_dark400      { background-color: #141414; }
+@utility background-light700_dark300      { background-color: #111111; }
+@utility background-light800_dark300      { background-color: #111111 !important; }
+@utility background-light800_dark200      { background-color: #0a0a0a; }
+@utility background-dark400_light900      { background-color: #141414 !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   TEXT UTILITIES — all map to dark mode text colors
+   TEXT UTILITIES
 ═══════════════════════════════════════════════════════════════ */
 @utility text-dark100_light900  { color: #ededed !important; }
 @utility text-dark200_light900  { color: #ededed; }
@@ -312,8 +295,7 @@
 
 /* ═══════════════════════════════════════════════════════════════
    TYPOGRAPHY SCALE
-   Inter for headings (sharp, -0.03em tracking)
-   DM Sans for body (readable, -0.014em tracking)
+   Inter → headings  |  DM Sans → body
 ═══════════════════════════════════════════════════════════════ */
 @utility h1-bold        { @apply font-inter text-[36px] leading-[1.15] font-bold tracking-[-0.04em]; }
 @utility h2-bold        { @apply font-inter text-[28px] leading-[1.2] font-bold tracking-[-0.03em]; }
@@ -339,25 +321,23 @@
 /* ═══════════════════════════════════════════════════════════════
    LAYOUT UTILITIES
 ═══════════════════════════════════════════════════════════════ */
-@utility flex-center   { @apply flex items-center justify-center; }
-@utility flex-between  { @apply flex items-center justify-between; }
-@utility flex-start    { @apply flex items-center justify-start; }
+@utility flex-center  { @apply flex items-center justify-center; }
+@utility flex-between { @apply flex items-center justify-between; }
+@utility flex-start   { @apply flex items-center justify-start; }
 
-/* Premium card — the core visual unit */
+/* ── Card ── */
 @utility card-wrapper {
   background-color: #111111;
   border: 1px solid #2a2a2a;
   border-radius: 10px;
-  /* Top highlight — the Linear trick */
   box-shadow:
     0px 1px 0px rgba(255,255,255,0.04) inset,
     0px 1px 3px rgba(0,0,0,0.5),
     0px 4px 16px rgba(0,0,0,0.3);
-  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@utility cardBorder {
-  @applyborder border-[#1c1c1c] hover:border-[#2a2a2a] rounded-xl transition-colors duration-150
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @utility card-wrapper-hover {
@@ -369,6 +349,11 @@
   transform: translateY(-2px);
 }
 
+/* Fixed: was "@applyborder" (typo), now correct */
+@utility card-border {
+  @apply border border-[#1c1c1c] hover:border-[#2a2a2a] rounded-xl transition-colors duration-150;
+}
+
 @utility btn           { background-color: #1a1a1a !important; }
 @utility btn-secondary { background-color: #141414 !important; }
 @utility btn-tertiary  { background-color: #111111 !important; }
@@ -377,26 +362,14 @@
   @apply focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0!;
 }
 
-@utility tab {
-  background-color: #1a1a1a !important;
-  color: #737373 !important;
-}
-@utility tab-active {
-  background-color: #222222 !important;
-  color: #ff7000 !important;
-}
+@utility tab        { background-color: #1a1a1a !important; color: #737373 !important; }
+@utility tab-active { background-color: #222222 !important; color: #ff7000 !important; }
 
 /* ═══════════════════════════════════════════════════════════════
    MISC UTILITIES
 ═══════════════════════════════════════════════════════════════ */
-@utility placeholder {
-  @apply placeholder:text-[#666666];
-}
-
-@utility invert-colors {
-  filter: brightness(0) invert(1);
-}
-
+@utility placeholder       { @apply placeholder:text-[#666666]; }
+@utility invert-colors     { filter: brightness(0) invert(1); }
 @utility shadow-light100_dark100  {
   box-shadow: 0px 1px 3px rgba(0,0,0,0.6), 0px 4px 12px rgba(0,0,0,0.4);
 }
@@ -408,16 +381,12 @@
 @utility primary-gradient {
   background: linear-gradient(140deg, #ff7000 0%, #e2995f 200%);
 }
-
 @utility dark-gradient {
   background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
 }
-
-/* Orange glow — use on hero elements or active states */
 @utility orange-glow {
-  box-shadow: 0 0 20px rgba(255, 112, 0, 0.15), 0 0 40px rgba(255, 112, 0, 0.05);
+  box-shadow: 0 0 20px rgba(255,112,0,0.15), 0 0 40px rgba(255,112,0,0.05);
 }
-
 @utility primary-text-gradient {
   background: linear-gradient(135deg, #ff7000 0%, #e2995f 100%);
   background-clip: text;
@@ -425,10 +394,8 @@
   -webkit-text-fill-color: transparent;
 }
 
-
 /* ═══════════════════════════════════════════════════════════════
-   TAG BADGE — the premium dark version
-   Used inside TagCard compact mode
+   TAG BADGE
 ═══════════════════════════════════════════════════════════════ */
 .tag-badge {
   display: inline-flex;
@@ -446,7 +413,6 @@
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease;
 }
-
 .tag-badge:hover {
   background-color: #222222;
   border-color: #3a3a3a;
@@ -454,12 +420,14 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MISC ONE-OFF CLASSES
+   MISC ONE-OFFS
 ═══════════════════════════════════════════════════════════════ */
+/* Used by active icon highlighting (e.g. sidebar nav) */
 .active-theme {
   filter: invert(53%) sepia(98%) saturate(3332%) hue-rotate(0deg) brightness(104%) contrast(106%) !important;
 }
 
+/* Anchor offset for sticky navbar — keep until hash-nav removed */
 .hash-span {
   margin-top: -140px;
   padding-bottom: 140px;
@@ -467,7 +435,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MDX EDITOR — dark theme
+   MDX EDITOR
 ═══════════════════════════════════════════════════════════════ */
 .mdxeditor-toolbar {
   background-color: #111111 !important;
@@ -477,10 +445,9 @@
   flex-wrap: wrap;
   overflow-x: auto;
 }
-
-.mdxeditor-toolbar button svg              { color: #a1a1a1 !important; }
-.mdxeditor-toolbar button:hover svg        { color: #ededed !important; }
-.mdxeditor-toolbar [role="separator"]      { border-color: #2a2a2a !important; }
+.mdxeditor-toolbar button svg           { color: #a1a1a1 !important; }
+.mdxeditor-toolbar button:hover svg     { color: #ededed !important; }
+.mdxeditor-toolbar [role="separator"]   { border-color: #2a2a2a !important; }
 
 .mdxeditor,
 .mdxeditor-root-contenteditable,
@@ -491,7 +458,6 @@
   background-color: #0a0a0a !important;
   color: #ededed !important;
 }
-
 .mdxeditor [contenteditable="true"] {
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -499,13 +465,8 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-
-/* ═══════════════════════════════════════════════════════════════
-   MARKDOWN — DevFlow premium dark
+   MARKDOWN — preview
 ═══════════════════════════════════════════════════════════════ */
-/* ════════════════════════════════════════════════════════════
-   MARKDOWN PREVIEW
-   ════════════════════════════════════════════════════════════ */
 @utility markdown {
   @apply prose prose-invert !max-w-full
     prose-h1:text-[#ffffff]      prose-h1:font-bold      prose-h1:tracking-tight
@@ -522,16 +483,15 @@
     prose-blockquote:border-l-[#ff7000]
     prose-blockquote:text-[#888]
     prose-blockquote:not-italic
-    /* Disable prose's built-in code/pre styling — we override fully below */
     prose-code:before:content-none
     prose-code:after:content-none
     prose-pre:bg-transparent
     prose-pre:p-0;
 }
 
-/* ════════════════════════════════════════════════════════════
-   MARKDOWN EDITOR (Lexical rich-text area)
-   ════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   MARKDOWN — Lexical rich-text editor
+═══════════════════════════════════════════════════════════════ */
 @utility markdown-editor {
   @apply prose prose-invert !max-w-full prose-p:m-0
     prose-headings:tracking-tight
@@ -548,81 +508,56 @@
     prose-code:after:content-none;
 }
 
-/* ════════════════════════════════════════════════════════════
-   HEADINGS
-   (!) prose-invert already colours headings white-ish;
-       these rules lock in exact values and kill Tailwind's
-       default blue "heading anchor link" colour.
-   ════════════════════════════════════════════════════════════ */
+/* Headings */
 .markdown h1 { color: #ffffff !important; font-weight: 700; letter-spacing: -0.025em; }
 .markdown h2 { color: #f0f0f0 !important; font-weight: 600; border-bottom: 1px solid #1e1e1e; padding-bottom: 8px; }
 .markdown h3 { color: #e0e0e0 !important; font-weight: 600; }
 .markdown h4 { color: #d0d0d0 !important; font-weight: 600; }
 
-/* Kill prose's default blue colour on heading anchor links */
-.markdown :where(h1, h2, h3, h4, h5, h6) a {
+/* Kill prose's default blue on heading anchor links */
+.markdown :where(h1,h2,h3,h4,h5,h6) a {
   color: inherit !important;
   text-decoration: none !important;
   border-bottom: none !important;
 }
 
-/* ════════════════════════════════════════════════════════════
-   LINKS
-   ════════════════════════════════════════════════════════════ */
+/* Links */
 .markdown a {
   color: #ff7000 !important;
   text-decoration: none !important;
-  border-bottom: 1px solid rgba(255, 112, 0, 0.3);
+  border-bottom: 1px solid rgba(255,112,0,0.3);
   transition: color 0.15s, border-color 0.15s;
 }
 .markdown a:hover {
   color: #ffb347 !important;
-  border-color: rgba(255, 179, 71, 0.45);
+  border-color: rgba(255,179,71,0.45);
 }
 
-/* ════════════════════════════════════════════════════════════
-   OVERFLOW SAFETY
-   ════════════════════════════════════════════════════════════ */
-.markdown,
-.markdown > * {
-  max-width: 100%;
-  min-width: 0;
-}
-.markdown :where(p, li, h1, h2, h3, h4, h5, h6, blockquote) {
+/* Overflow safety */
+.markdown, .markdown > * { max-width: 100%; min-width: 0; }
+.markdown :where(p,li,h1,h2,h3,h4,h5,h6,blockquote) {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-.markdown :where(img, video, iframe, table),
-.markdown-editor :where(img, video, iframe, table) {
-  max-width: 100%;
-}
+.markdown :where(img,video,iframe,table),
+.markdown-editor :where(img,video,iframe,table) { max-width: 100%; }
 
-/* ════════════════════════════════════════════════════════════
-   INLINE CODE
-   Applied to both preview and editor so they match.
-   The prose-code:before/after:content-none above removes
-   the backtick characters prose adds by default.
-   ════════════════════════════════════════════════════════════ */
+/* Inline code */
 .markdown code,
 .markdown-editor code {
   font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   font-size: 12.5px;
   padding: 2px 7px;
   color: #ff9040 !important;
-  background: rgba(255, 112, 0, 0.1) !important;
-  border: 1px solid rgba(255, 112, 0, 0.18) !important;
+  background: rgba(255,112,0,0.1) !important;
+  border: 1px solid rgba(255,112,0,0.18) !important;
   border-radius: 5px;
   overflow-wrap: break-word;
   word-break: break-word;
-  /* Reset prose defaults that bleed through */
   font-weight: inherit;
 }
 
-/* ════════════════════════════════════════════════════════════
-   CODE BLOCK WRAPPER  <pre>
-   Bright.js renders its own <pre>-like element; we also
-   cover the native <pre> in case MDX falls back to it.
-   ════════════════════════════════════════════════════════════ */
+/* Code block <pre> */
 .markdown pre {
   display: grid;
   max-width: 100%;
@@ -633,16 +568,14 @@
   margin: 16px 0;
   overflow: hidden;
   position: relative;
-  /* Kill prose's default pre padding so our code padding wins */
   padding: 0 !important;
 }
 
-/* Language badge — top-right corner */
+/* Language badge */
 .markdown pre::before {
   content: attr(data-language);
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0; right: 0;
   padding: 4px 12px;
   font-size: 10px;
   color: #ff7000;
@@ -655,18 +588,16 @@
   border: 1px solid #252525;
   border-top: none;
   border-right: none;
-  /* sit above code lines */
   z-index: 1;
   pointer-events: none;
 }
 
-/* Code inside a native <pre> — reset inline-code overrides */
+/* Code inside <pre> */
 .markdown pre code {
   width: 100%;
   display: block;
   overflow-x: auto;
   padding: 16px 18px !important;
-  /* Override the inline-code orange — block code should be light */
   color: #e0e0e0 !important;
   background: transparent !important;
   border: none !important;
@@ -678,89 +609,25 @@
   overflow-wrap: normal;
 }
 
-/* ════════════════════════════════════════════════════════════
-   BRIGHT.JS OVERRIDES
-   Bright renders a <div data-bright-mode="dark|light"> wrapper.
-   We override its base styles and token colours here.
-   ════════════════════════════════════════════════════════════ */
-[data-bright-mode="dark"],
-[data-bright-mode="light"] {
-  display: grid !important;
-  max-width: 100% !important;
-  width: 100% !important;
-  overflow-x: auto !important;
-  background: #111 !important;
-  border: 1px solid #252525 !important;
-  border-radius: 10px !important;
-  margin: 16px 0 !important;
-  color: #e0e0e0 !important;
-  /* Remove any padding Bright adds — our token lines handle spacing */
-  padding: 0 !important;
-}
-
-/* Token colours */
-[data-bright-mode] *                      { color: inherit; }
-[data-bright-mode] .keyword,
-[data-bright-mode] [class*="keyword"]     { color: #ff7000 !important;  font-weight: 600; }
-[data-bright-mode] .string,
-[data-bright-mode] [class*="string"]      { color: #86efac !important; }
-[data-bright-mode] .comment,
-[data-bright-mode] [class*="comment"]     { color: #555 !important;    font-style: italic; }
-[data-bright-mode] .number,
-[data-bright-mode] [class*="number"]      { color: #c4b5fd !important; }
-[data-bright-mode] .function,
-[data-bright-mode] [class*="function"]    { color: #7dd3fc !important; }
-[data-bright-mode] .class-name,
-[data-bright-mode] [class*="class"]       { color: #fbbf24 !important; }
-[data-bright-mode] .punctuation           { color: #e0e0e0 !important; }
-[data-bright-mode] .operator,
-[data-bright-mode] [class*="operator"]    { color: #ff7000 !important; }
-[data-bright-mode] .variable,
-[data-bright-mode] [class*="variable"]    { color: #e0e0e0 !important; }
-[data-bright-mode] .parameter,
-[data-bright-mode] [class*="parameter"]   { color: #fca5a5 !important; }
-[data-bright-mode] .type,
-[data-bright-mode] [class*="type"]        { color: #fbbf24 !important; }
-[data-bright-mode] .boolean,
-[data-bright-mode] [class*="boolean"]     { color: #c4b5fd !important; }
-
-/* ════════════════════════════════════════════════════════════
-   BLOCKQUOTE
-   ════════════════════════════════════════════════════════════ */
+/* Blockquote */
 .markdown blockquote {
   border-left: 3px solid #ff7000 !important;
-  background: rgba(255, 112, 0, 0.05);
+  background: rgba(255,112,0,0.05);
   border-radius: 0 8px 8px 0;
   padding: 12px 18px;
   margin: 16px 0;
   font-style: normal !important;
 }
-.markdown blockquote p {
-  color: #888 !important;
-  font-style: italic;
-  margin: 0 !important;
-}
+.markdown blockquote p { color: #888 !important; font-style: italic; margin: 0 !important; }
 
-/* ════════════════════════════════════════════════════════════
-   LIST MARKERS
-   ════════════════════════════════════════════════════════════ */
+/* List markers */
 .markdown ul li::marker,
-.markdown ol li::marker {
-  color: #ff7000;
-}
+.markdown ol li::marker { color: #ff7000; }
 
-/* ════════════════════════════════════════════════════════════
-   HORIZONTAL RULE
-   ════════════════════════════════════════════════════════════ */
-.markdown hr {
-  border: none;
-  border-top: 1px solid #1a1a1a;
-  margin: 24px 0;
-}
+/* HR */
+.markdown hr { border: none; border-top: 1px solid #1a1a1a; margin: 24px 0; }
 
-/* ════════════════════════════════════════════════════════════
-   TABLE
-   ════════════════════════════════════════════════════════════ */
+/* Table */
 .markdown table {
   width: 100%;
   border-collapse: collapse;
@@ -768,7 +635,6 @@
   border-radius: 8px;
   overflow: hidden;
   font-size: 13px;
-  /* Override prose making table display:block on mobile */
   display: table;
 }
 .markdown thead th {
@@ -781,17 +647,11 @@
   letter-spacing: 0.05em;
   border-bottom: 1px solid #1e1e1e;
 }
-.markdown tbody td {
-  padding: 9px 14px;
-  color: #a0a0a0;
-  border-bottom: 1px solid #141414;
-}
+.markdown tbody td { padding: 9px 14px; color: #a0a0a0; border-bottom: 1px solid #141414; }
 .markdown tbody tr:last-child td { border-bottom: none; }
-.markdown tbody tr:hover td      { background: rgba(255, 255, 255, 0.02); }
+.markdown tbody tr:hover td { background: rgba(255,255,255,0.02); }
 
-/* ════════════════════════════════════════════════════════════
-   LEXICAL EDITOR
-   ════════════════════════════════════════════════════════════ */
+/* Lexical editor */
 [data-lexical-editor="true"] {
   height: 350px !important;
   overflow-y: auto !important;
@@ -799,25 +659,62 @@
   color: #c4c4c4;
 }
 
-/* ════════════════════════════════════════════════════════════
-   BRIGHT.JS — override inline style tokens
-   Bright injects style="color:#xxx" directly on spans.
+/* ═══════════════════════════════════════════════════════════════
+   BRIGHT.JS — syntax highlighting overrides
+   Bright injects inline style="color:#xxx" on spans.
    Attribute selectors beat inline styles in specificity.
-   ════════════════════════════════════════════════════════════ */
-
-/* Base: all code text visible */
-[data-bright-mode] {
-  color: #e0e0e0 !important;
+═══════════════════════════════════════════════════════════════ */
+[data-bright-mode="dark"],
+[data-bright-mode="light"] {
+  display: grid !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: auto !important;
   background: #111 !important;
+  border: 1px solid #252525 !important;
+  border-radius: 10px !important;
+  margin: 16px 0 !important;
+  color: #e0e0e0 !important;
+  padding: 0 !important;
 }
+
+[data-bright-mode] * { color: inherit; }
 [data-bright-mode] span { opacity: 1 !important; }
+
+/* Class-based token colours */
+[data-bright-mode] .keyword,
+[data-bright-mode] [class*="keyword"]  { color: #ff7000 !important; font-weight: 600; }
+[data-bright-mode] .string,
+[data-bright-mode] [class*="string"]   { color: #86efac !important; }
+[data-bright-mode] .comment,
+[data-bright-mode] [class*="comment"]  { color: #555 !important; font-style: italic; }
+[data-bright-mode] .number,
+[data-bright-mode] [class*="number"]   { color: #c4b5fd !important; }
+[data-bright-mode] .function,
+[data-bright-mode] [class*="function"] { color: #7dd3fc !important; }
+[data-bright-mode] .class-name,
+[data-bright-mode] [class*="class"]    { color: #fbbf24 !important; }
+[data-bright-mode] .punctuation        { color: #e0e0e0 !important; }
+[data-bright-mode] .operator,
+[data-bright-mode] [class*="operator"] { color: #ff7000 !important; }
+[data-bright-mode] .variable,
+[data-bright-mode] [class*="variable"] { color: #e0e0e0 !important; }
+[data-bright-mode] .parameter,
+[data-bright-mode] [class*="parameter"]{ color: #fca5a5 !important; }
+[data-bright-mode] .type,
+[data-bright-mode] [class*="type"]     { color: #fbbf24 !important; }
+[data-bright-mode] .boolean,
+[data-bright-mode] [class*="boolean"]  { color: #c4b5fd !important; }
+
+/* Inline-style token overrides (attribute selectors) */
+[data-bright-mode] { color: #e0e0e0 !important; background: #111 !important; }
 
 /* Orange — keywords, operators */
 [data-bright-mode] span[style*="#ff7b72"],
 [data-bright-mode] span[style*="#f47067"],
 [data-bright-mode] span[style*="#cf222e"],
 [data-bright-mode] span[style*="#d73a49"],
-[data-bright-mode] span[style*="#e05252"] { color: #ff7000 !important; font-weight: 600; }
+[data-bright-mode] span[style*="#e05252"]  { color: #ff7000 !important; font-weight: 600; }
 
 /* Green — strings */
 [data-bright-mode] span[style*="#a5d6ff"],
@@ -825,40 +722,36 @@
 [data-bright-mode] span[style*="#0a3069"],
 [data-bright-mode] span[style*="#032f62"],
 [data-bright-mode] span[style*="#22863a"],
-[data-bright-mode] span[style*="#2da44e"] { color: #86efac !important; }
+[data-bright-mode] span[style*="#2da44e"]  { color: #86efac !important; }
 
 /* Blue — functions, methods */
 [data-bright-mode] span[style*="#d2a8ff"],
 [data-bright-mode] span[style*="#8250df"],
 [data-bright-mode] span[style*="#6f42c1"],
-[data-bright-mode] span[style*="#005cc5"] { color: #7dd3fc !important; }
+[data-bright-mode] span[style*="#005cc5"]  { color: #7dd3fc !important; }
 
 /* Yellow — class names, types */
 [data-bright-mode] span[style*="#ffa657"],
 [data-bright-mode] span[style*="#e36209"],
-[data-bright-mode] span[style*="#953800"] { color: #fbbf24 !important; }
+[data-bright-mode] span[style*="#953800"]  { color: #fbbf24 !important; }
 
 /* Purple — numbers, booleans */
 [data-bright-mode] span[style*="#79c0ff"],
-[data-bright-mode] span[style*="#0550ae"] { color: #c4b5fd !important; }
+[data-bright-mode] span[style*="#0550ae"]  { color: #c4b5fd !important; }
 
 /* Muted — comments */
 [data-bright-mode] span[style*="#6e7781"],
 [data-bright-mode] span[style*="#8b949e"],
 [data-bright-mode] span[style*="#6a737d"],
-[data-bright-mode] span[style*="#959da5"] {
-  color: #4a4a4a !important;
-  font-style: italic;
-}
+[data-bright-mode] span[style*="#959da5"]  { color: #4a4a4a !important; font-style: italic; }
 
-/* White — plain text, punctuation, variables */
+/* White — plain text, punctuation */
 [data-bright-mode] span[style*="#e6edf3"],
 [data-bright-mode] span[style*="#24292e"],
-[data-bright-mode] span[style*="#24292f"] { color: #e0e0e0 !important; }
+[data-bright-mode] span[style*="#24292f"]  { color: #e0e0e0 !important; }
 
 /* Salmon — parameters */
-[data-bright-mode] span[style*="#fca5a5"],
-[data-bright-mode] span[style*="#e36209"] { color: #fca5a5 !important; }
+[data-bright-mode] span[style*="#fca5a5"]  { color: #fca5a5 !important; }
 
 /* Line numbers */
 [data-bright-mode] [data-line-number],
@@ -872,71 +765,41 @@
   text-align: right;
 }
 
-/* ════════════════════════════════════════════════════════════
-   SIDEBAR SCROLLBAR
-   ════════════════════════════════════════════════════════════ */
-.sidebar-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #2a2a2a transparent;
-  scroll-behavior: smooth;
-}
-.sidebar-scroll::-webkit-scrollbar {
-  display: block !important;
-  width: 2px !important;
-}
-.sidebar-scroll::-webkit-scrollbar-track {
-  background: transparent;
-  margin-block: 4px;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border-radius: 999px;
-}
-.sidebar-scroll:hover {
-  scrollbar-color: rgba(255, 112, 0, 0.6) transparent;
-}
-.sidebar-scroll:hover::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #ff7000 0%, #c44d00 100%);
-}
-.sidebar-scroll::-webkit-scrollbar-thumb:active {
-  background: #ff7000;
-}
 /* ═══════════════════════════════════════════════════════════════
-   SIDEBAR SCROLLBAR — premium thin, orange on hover
+   SIDEBAR SCROLLBAR
+   Always visible (thin, dark) → orange gradient on hover.
+   Apply class="sidebar-scroll" to any scrollable sidebar section.
 ═══════════════════════════════════════════════════════════════ */
 .sidebar-scroll {
+  overflow-y: auto;
+  scroll-behavior: smooth;
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: #1f1f1f transparent;
-  scroll-behavior: smooth;
+  scrollbar-color: #2a2a2a transparent;
 }
 
-/* Webkit (Chrome, Safari, Edge) */
+/* Webkit */
 .sidebar-scroll::-webkit-scrollbar {
-  display: block !important; /* override global none */
-  width: 2px;
+  display: block !important; /* override global html::-webkit-scrollbar: none */
+  width: 3px;
 }
-
 .sidebar-scroll::-webkit-scrollbar-track {
   background: transparent;
-  margin: 8px 0; /* top/bottom breathing room */
+  margin-block: 6px;
 }
-
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: #2a2a2a;
   border-radius: 999px;
   transition: background 300ms ease;
 }
 
-/* On hover of the scroll CONTAINER — thumb turns orange */
+/* Hover → orange gradient */
 .sidebar-scroll:hover {
   scrollbar-color: #ff7000 transparent; /* Firefox */
 }
 .sidebar-scroll:hover::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff7000, #c44d00);
 }
-
-/* Active drag — brighter */
 .sidebar-scroll::-webkit-scrollbar-thumb:active {
   background: #ff7000;
 }

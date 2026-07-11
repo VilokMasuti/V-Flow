@@ -115,3 +115,13 @@ interface UpdateProfileParams{
   password?:string
 
 }
+interface GlobalSearchParams {
+  query: string;
+  type: string | null;
+}
+
+interface GlobalSearchedItem {
+  id: string;
+  type: "question" | "answer" | "user" | "tag";
+  title: string;
+}

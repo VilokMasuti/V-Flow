@@ -24,9 +24,9 @@ const Navbar = async () => {
 
 
 </Link>
- <div className='flex-between gap-5 '>
+
         <GobalSearch/>
-      </div>
+
 
 
       <div className="flex-between gap-5 max-sm:hidden">
