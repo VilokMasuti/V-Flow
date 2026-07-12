@@ -48,32 +48,38 @@ const cabinet = localFont({
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXTAUTH_URL ||
+  "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "DevFlow | Ask & Answer Questions",
+    default: "DevFlow – Ask Questions, Get Answers",
     template: "%s | DevFlow",
   },
-  description:
-    "DevFlow is a community-driven platform for asking and answering programming questions. Get expert help, share knowledge, and grow as a developer.",
 
-  icons: { icon: "/images/site-logo.svg" },
+  description:
+    "DevFlow is a developer community where you can ask programming questions, share knowledge, get expert answers, and collaborate with developers worldwide.",
+
+  icons: {
+    icon:"/logo.png"
+  },
 
   openGraph: {
-    title: "DevFlow | Ask & Answer Programming Questions",
+    title: "DevFlow – Ask Questions, Get Answers, Grow as a Developer",
     description:
-      "Get expert help, share knowledge, and collaborate with developers worldwide on DevFlow.",
+      "Join DevFlow to ask programming questions, get expert answers, and collaborate with developers around the world.",
     url: siteUrl,
     siteName: "DevFlow",
     images: [
       {
-        url: "/logo.png", // ← 1200×630 PNG, not SVG
+        url: "/og-image.png", // MUST be 1200x630
         width: 1200,
         height: 630,
-        alt: "DevFlow – Ask & Answer Programming Questions",
+        alt: "DevFlow – Programming Q&A Community",
       },
     ],
     type: "website",
@@ -81,15 +87,17 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "DevFlow | Ask & Answer Programming Questions",
+    title: "DevFlow – Programming Q&A Community",
     description:
-      "Get expert help, share knowledge, and collaborate with developers worldwide on DevFlow.",
-    images: ["/logo.png"],
+      "Ask coding questions, share knowledge, and grow with the DevFlow developer community.",
+    images: ["/og-image.png"],
   },
 
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
-
 
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
