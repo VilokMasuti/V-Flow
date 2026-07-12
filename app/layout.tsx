@@ -48,6 +48,8 @@ const cabinet = localFont({
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
+// ─── Metadata ─────────────────────────────────────────────────────────────────
+
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.NEXTAUTH_URL ||
@@ -57,39 +59,40 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "DevFlow – Ask Questions, Get Answers",
+    default: "DevFlow – Ask Questions, Get Answers, Grow as a Developer",
     template: "%s | DevFlow",
   },
 
   description:
-    "DevFlow is a developer community where you can ask programming questions, share knowledge, get expert answers, and collaborate with developers worldwide.",
+    "DevFlow is a developer Q&A community where you ask programming questions, get expert answers powered by AI, and collaborate with developers worldwide. Join now.",
 
   icons: {
-    icon:"/logo.png"
+    icon: "images/site-logo.svg",
   },
 
   openGraph: {
     title: "DevFlow – Ask Questions, Get Answers, Grow as a Developer",
     description:
-      "Join DevFlow to ask programming questions, get expert answers, and collaborate with developers around the world.",
+      "DevFlow is a developer Q&A community where you ask programming questions, get expert answers powered by AI, and collaborate with developers worldwide. Join now.",
     url: siteUrl,
-    siteName: "DevFlow",
+    siteName: "DevFlow",                // ← fixes the "site name missing" warning
     images: [
       {
-        url: "/og-image.png", // MUST be 1200x630
+        url: "/og-image.png",           // drop this file into /public/og-image.png
         width: 1200,
         height: 630,
         alt: "DevFlow – Programming Q&A Community",
       },
     ],
     type: "website",
+    locale: "en_US",
   },
 
   twitter: {
     card: "summary_large_image",
     title: "DevFlow – Programming Q&A Community",
     description:
-      "Ask coding questions, share knowledge, and grow with the DevFlow developer community.",
+      "DevFlow is a developer Q&A community where you ask programming questions, get expert answers powered by AI, and collaborate with developers worldwide. Join now.",
     images: ["/og-image.png"],
   },
 
@@ -98,7 +101,6 @@ export const metadata: Metadata = {
     follow: true,
   },
 };
-
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {

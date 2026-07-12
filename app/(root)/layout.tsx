@@ -1,7 +1,22 @@
 import Navbar from "@/components/Nav/Index";
+
 import LeftSidebar from "@/components/Nav/SideBar/LeftNav";
 import RightSidebar from "@/components/Nav/SideBar/RightNav";
+import { Metadata } from 'next';
 import { ReactNode } from "react";
+
+export const metadata: Metadata = {
+  title: "All Questions",
+  description:
+    "Browse and search all programming questions on DevFlow. Find expert answers on React, TypeScript, Node.js, and more.",
+  openGraph: {
+    title: "All Questions | DevFlow",
+    description:
+      "Browse and search all programming questions on DevFlow. Find expert answers on React, TypeScript, Node.js, and more.",
+    siteName: "DevFlow",   // ← MUST repeat this in every child openGraph block
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+};
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
