@@ -29,35 +29,62 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
   const { id } = await params;
   const { success, data } = await getUser({ userId: id });
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXTAUTH_URL ||
+    "http://localhost:3000";
+
   if (!success || !data?.user) {
     return {
+      metadataBase: new URL(siteUrl),
       title: "Profile not found | DevFlow",
       description: "The requested profile could not be found.",
     };
   }
 
-  const description = data.user.bio
-    ? data.user.bio.slice(0, 160)
-    : `View ${data.user.name}'s profile and activity on DevFlow.`;
+  const user = data.user;
+
+  const description = user.bio
+    ? user.bio.slice(0, 160)
+    : `View ${user.name}'s profile and activity on DevFlow. Connect and collaborate with ${user.name}.`;
+
+  const imageUrl = user.image
+    ? user.image.startsWith("http")
+      ? user.image
+      : `${siteUrl}${user.image}`
+    : `${siteUrl}/og-image.png`;
 
   return {
-    title: `${data.user.name} | DevFlow`,
+    metadataBase: new URL(siteUrl), //  VERY IMPORTANT
+
+    title: `${user.name} | DevFlow`,
     description,
+
     alternates: {
-      canonical: ROUTES.PROFILE(id),
+      canonical: `${siteUrl}${ROUTES.PROFILE(id)}`, //  absolute
     },
+
     openGraph: {
-      title: `${data.user.name} | DevFlow`,
+      title: `${user.name} | DevFlow`,
       description,
       type: "profile",
-      url: ROUTES.PROFILE(id),
-      images: [{ url: data.user.image || "/images/logo.png", width: 400, height: 400, alt: data.user.name }],
+      url: `${siteUrl}${ROUTES.PROFILE(id)}`, //  absolute
+      siteName: "DevFlow", //  fixes missing site name
+      images: [
+        {
+          url: imageUrl, //  absolute image
+          width: 1200,
+          height: 630,
+          alt: user.name,
+        },
+      ],
     },
+
     twitter: {
       card: "summary_large_image",
-      title: `${data.user.name} | DevFlow`,
+      title: `${user.name} | DevFlow`,
       description,
-      images: [data.user.image || "/images/logo.png"],
+      images: [imageUrl], // absolute
     },
   };
 }

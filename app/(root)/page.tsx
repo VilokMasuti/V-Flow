@@ -24,7 +24,7 @@ interface SearchParams {
 }
 
 export const metadata: Metadata = {
-  title: "All Questions | D-Flow",
+  title: "All Question ",
   description: "Browse the latest programming questions and answers on V-Flow.",
   openGraph: {
     title: "All Questions | Dev-Flow",
