@@ -12,19 +12,20 @@ import { EMPTY_USERS } from '@/constants/states';
 import { getUsers } from '@/lib/actions/user.action';
 
 export const metadata: Metadata = {
-  title: "Community | V-Flow",
-  description: "Discover developers and community members on V-Flow.",
+  title: "Community |DevFlow",
+  description: "Discover developers and community members on DevFlow.",
   openGraph: {
-    title: "Community | V-Flow",
-    description: "Discover developers and community members on V-Flow.",
+    title: "Community | DevFlow",
+    description: "Discover developers and community members on DevFlow.",
     type: "website",
-    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "DevFlow" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Community | V-Flow",
-    description: "Discover developers and community members on V-Flow.",
-    images: ["/images/logo.png"],
+    title: "Community | DevFlow",
+    description: "Discover developers and community members on DevFlow.",
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }]
   },
 };
 

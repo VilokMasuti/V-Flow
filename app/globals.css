@@ -238,22 +238,7 @@
       transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* View transition animations */
-  ::view-transition-old(root) {
-    animation: 180ms ease-out both fade-and-slide-out;
-  }
-  ::view-transition-new(root) {
-    animation: 180ms ease-out both fade-and-slide-in;
-  }
 
-  @keyframes fade-and-slide-out {
-    from { opacity: 1; transform: translateY(0); }
-    to   { opacity: 0; transform: translateY(-4px); }
-  }
-  @keyframes fade-and-slide-in {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════

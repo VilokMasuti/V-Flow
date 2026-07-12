@@ -5,19 +5,21 @@ import { auth } from "@/auth";
 import QuestionForm from "@/components/froms/QuestionForm";
 
 export const metadata: Metadata = {
-  title: "Ask a Question | V-Flow",
+  title: "Ask a Question | DevFlow",
   description: "Post a new programming question and get help from the community.",
   openGraph: {
-    title: "Ask a Question | V-Flow",
+    title: "Ask a Question | DevFlow",
     description: "Post a new programming question and get help from the community.",
     type: "website",
-    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+ siteName: "DevFlow",   // ← MUST repeat this in every child openGraph block
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ask a Question | V-Flow",
+    title: "Ask a Question | DevFlow",
     description: "Post a new programming question and get help from the community.",
-    images: ["/images/logo.png"],
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
 

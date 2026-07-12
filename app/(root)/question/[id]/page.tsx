@@ -33,27 +33,29 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
 
   if (!success || !question) {
     return {
-      title: "Question not found | V-Flow",
+      title: "Question not found |DevFlow",
       description: "The requested question could not be found.",
       openGraph: {
-        title: "Question not found | V-Flow",
+        title: "Question not found |DevFlow",
         description: "The requested question could not be found.",
         type: "website",
-        images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+     siteName: "DevFlow",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
       },
       twitter: {
         card: "summary_large_image",
-        title: "Question not found | V-Flow",
+        title: "Question not found |DevFlow",
         description: "The requested question could not be found.",
-        images: ["/images/logo.png"],
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
       },
     };
   }
 
-  const description = stripMetadataText(question.content).slice(0, 160) || "Explore this question on V-Flow.";
+  const description = stripMetadataText(question.content).slice(0, 160) || "Explore this question on DevFlow.";
 
   return {
-    title: `${question.title} | V-Flow`,
+    title: `${question.title} |DevFlow`,
     description,
     alternates: {
       canonical: `/question/${id}`,
@@ -63,13 +65,15 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
       description,
       type: "article",
       url: `/question/${id}`,
-      images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+       siteName: "DevFlow",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
       title: question.title,
       description,
-      images: ["/images/logo.png"],
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     },
   };
 }

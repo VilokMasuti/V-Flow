@@ -15,26 +15,30 @@ import { HomePageFilters } from '@/constants/Filter';
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
+
+
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 export const metadata: Metadata = {
-  title: "All Questions | V-Flow",
+  title: "All Questions | D-Flow",
   description: "Browse the latest programming questions and answers on V-Flow.",
   openGraph: {
-    title: "All Questions | V-Flow",
+    title: "All Questions | Dev-Flow",
     description: "Browse the latest programming questions and answers on V-Flow.",
     type: "website",
-    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+   siteName: "DevFlow",   // ← MUST repeat this in every child openGraph block
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "All Questions | V-Flow",
+    title: "All Questions | D-Flow",
     description: "Browse the latest programming questions and answers on V-Flow.",
-    images: ["/images/logo.png"],
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
 

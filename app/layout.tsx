@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import { ViewTransitions } from "next-view-transitions";
+
 import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
@@ -107,7 +107,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
   return (
-        <ViewTransitions>
+
 <html
       lang="en"
       suppressHydrationWarning
@@ -151,7 +151,6 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       </body>
     </html>
 
-        </ViewTransitions>
 
   );
 };

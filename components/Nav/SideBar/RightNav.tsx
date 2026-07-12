@@ -1,11 +1,12 @@
-import ROUTES from "@/constants/routes";
-import Image from "next/image";
-import Link from "next/link";
+import TagCard from '@/components/cards/TagCard';
+import DataRenderer from '@/components/ui/DataRenderer';
+import ROUTES from '@/constants/routes';
+import { getHotQuestions } from '@/lib/actions/question.action';
+import { getTopTags } from '@/lib/actions/tag.actions';
 
-import TagCard from "@/components/cards/TagCard";
-import DataRenderer from "@/components/ui/DataRenderer";
-import { getHotQuestions } from "@/lib/actions/question.action";
-import { getTopTags } from "@/lib/actions/tag.actions";
+
+import Image from 'next/image';
+import Link from 'next/link';
 
 const RightSidebar = async () => {
   const [
@@ -29,7 +30,8 @@ const RightSidebar = async () => {
       <div className="h-36 shrink-0" />
 
       {/* ── TOP QUESTIONS ── */}
-      <div className="flex flex-col min-h-0 flex-1 px-6 pb-3">
+      <div className="flex flex-col min-h-0 flex-[3] px-6 pb-3">
+        {/*                         ^^^^^^ was: flex-3 (invalid) */}
         <h3 className="h2-bold text-dark200_light900 shrink-0 mb-4">
           Top Questions
         </h3>
@@ -47,14 +49,12 @@ const RightSidebar = async () => {
                     key={_id}
                     className="group relative flex w-full items-start justify-between gap-4"
                   >
-                    {/* Full-row click target via after:absolute after:inset-0 */}
                     <Link href={ROUTES.QUESTION(_id)} className="after:absolute after:inset-0">
-                      <span className="body-medium text-neutral-100  font-inter font-semibold line-clamp-2 transition-colors duration-700 group-hover:text-primary-500">
+                      <span className="body-medium text-neutral-100 font-inter font-semibold line-clamp-2 transition-colors duration-700 group-hover:text-primary-500">
                         {title}
                       </span>
                     </Link>
 
-                    {/* Chevron — turns orange on row hover via CSS filter */}
                     <Image
                       src="/icons/chevron-right.svg"
                       alt=""
@@ -79,7 +79,8 @@ const RightSidebar = async () => {
       <div className="mx-6 shrink-0 h-px bg-[#1e1e1e]" />
 
       {/* ── POPULAR TAGS ── */}
-      <div className="flex flex-col min-h-0 flex-1 px-6 pt-8 pb-6">
+      <div className="flex flex-col min-h-0 flex-[2] px-6 pt-8 pb-6">
+        {/*                         ^^^^^^ was: flex-2 (invalid) */}
         <h3 className="h3-bold text-dark200_light900 shrink-0 mb-4">
           Popular Tags
         </h3>
@@ -111,4 +112,4 @@ const RightSidebar = async () => {
   );
 };
 
-export default RightSidebar;
+export default RightSidebar

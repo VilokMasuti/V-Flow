@@ -31,23 +31,23 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
 
   if (!success || !data?.user) {
     return {
-      title: "Profile not found | V-Flow",
+      title: "Profile not found | DevFlow",
       description: "The requested profile could not be found.",
     };
   }
 
   const description = data.user.bio
     ? data.user.bio.slice(0, 160)
-    : `View ${data.user.name}'s profile and activity on V-Flow.`;
+    : `View ${data.user.name}'s profile and activity on DevFlow.`;
 
   return {
-    title: `${data.user.name} | V-Flow`,
+    title: `${data.user.name} | DevFlow`,
     description,
     alternates: {
       canonical: ROUTES.PROFILE(id),
     },
     openGraph: {
-      title: `${data.user.name} | V-Flow`,
+      title: `${data.user.name} | DevFlow`,
       description,
       type: "profile",
       url: ROUTES.PROFILE(id),
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: RouteParams): Promise<Metadat
     },
     twitter: {
       card: "summary_large_image",
-      title: `${data.user.name} | V-Flow`,
+      title: `${data.user.name} | DevFlow`,
       description,
       images: [data.user.image || "/images/logo.png"],
     },

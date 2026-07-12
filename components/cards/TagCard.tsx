@@ -58,7 +58,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
         <LineHoverLink
           href={ROUTES.TAG(_id)}
           variant="scribble"
-          style={{ viewTransitionName: `tag-card-${_id}` }}
+
           className="subtle-medium flex flex-row gap-2 rounded-md border-none bg-[#1a1a1a] px-4 py-2 uppercase font-inter text-neutral-100 shadow-md leading-2.5 tracking-[0.03em]"
         >
           {Content}
@@ -70,7 +70,7 @@ const TagCard = ({ _id, name, questions, showCount, compact, remove, isButton, h
   }
 
   return (
-    <Link href={ROUTES.TAG(_id)} style={{ viewTransitionName: `tag-card-${_id}` }} className="shadow-light100_darknone">
+    <Link href={ROUTES.TAG(_id)} className="shadow-light100_darknone">
       <article className="background-light900_dark200 light-border flex w-full flex-col rounded-2xl border px-8 py-10 sm:w-[260px]">
         <div className="flex items-center justify-between gap-3">
           <div className="background-light800_dark400 w-fit rounded-sm px-5 py-1.5">

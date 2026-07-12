@@ -15,19 +15,21 @@ interface SearchParams {
 }
 
 export const metadata: Metadata = {
-  title: "Tags | V-Flow",
-  description: "Explore topics and categories across the V-Flow community.",
+  title: "Tags | DevFlow",
+  description: "Explore topics and categories across the community.",
   openGraph: {
-    title: "Tags | V-Flow",
-    description: "Explore topics and categories across the V-Flow community.",
+    title: "Tags | DevFlow",
+    description: "Explore topics and categories across the community.",
     type: "website",
-    images: [{ url: "/images/logo.png", width: 1200, height: 630, alt: "V-Flow" }],
+  siteName: "DevFlow",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tags | V-Flow",
-    description: "Explore topics and categories across the V-Flow community.",
-    images: ["/images/logo.png"],
+    title: "Tags | DevFlow",
+    description: "Explore topics and categories across the community.",
+
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
 

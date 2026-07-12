@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "All Questions | DevFlow",
     description:
       "Browse and search all programming questions on DevFlow. Find expert answers on React, TypeScript, Node.js, and more.",
-    siteName: "DevFlow",   // ← MUST repeat this in every child openGraph block
+    siteName: "DevFlow",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
   },
 };
