@@ -77,27 +77,27 @@ This project also explores advanced rendering and performance strategies includi
 
 ### Home Page
 <p align="center">
-  <img src="./public/screenshots/home.png" alt="Home Page" width="100%" />
+  <img src="./public/home.png" alt="Home Page" width="100%" />
 </p>
 
 ### Question Details
 <p align="center">
-  <img src="./public/screenshots/question-details.png" alt="Question Details" width="100%" />
+  <img src="./public//question-details.png" alt="Question Details" width="100%" />
 </p>
 
 ### Ask Question
 <p align="center">
-  <img src="./public/screenshots/ask-question.png" alt="Ask Question" width="100%" />
+  <img src="./public/ask-question.png" alt="Ask Question" width="100%" />
 </p>
 
 ### User Profile
 <p align="center">
-  <img src="./public/screenshots/profile.png" alt="Profile Page" width="100%" />
+  <img src="./public/profile.png" alt="Profile Page" width="100%" />
 </p>
 
 ### Collections / Saved Questions
 <p align="center">
-  <img src="./public/screenshots/collections.png" alt="Collections Page" width="100%" />
+  <img src="./public/collections.png" alt="Collections Page" width="100%" />
 </p>
 
 ---
@@ -219,64 +219,330 @@ This project focuses heavily on clean architecture and modern full-stack pattern
 ## Folder Structure
 
 ```txt
-.
-├── app
-│   ├── api
-│   │   ├── ai
-│   │   │   ├── answer
-│   │   │   │   └── route.ts
-│   │   │   └── enhance-question
-│   │   │       └── route.ts
-│   │   ├── auth
-│   │   └── ...
-│   ├── profile
-│   │   └── [id]
-│   │       └── page.tsx
-│   ├── questions
-│   ├── tags
-│   ├── jobs
-│   ├── collection
-│   ├── community
-│   ├── layout.tsx
-│   └── globals.css
-│
-├── components
-│   ├── cards
-│   ├── lens
-│   ├── ui
-│   ├── user
-│   └── ...
-│
-├── constants
-│   ├── routes.ts
-│   ├── states.ts
-│   └── ...
-│
-├── lib
-│   ├── actions
-│   ├── handlers
-│   ├── logger.ts
-│   ├── markdownSafety.ts
-│   ├── sanitise.ts
-│   ├── validations.ts
-│   └── ...
-│
-├── public
-│   ├── logo.png
-│   ├── og-image.png
-│   ├── screenshots
-│   │   ├── home.png
-│   │   ├── question-details.png
-│   │   ├── ask-question.png
-│   │   ├── profile.png
-│   │   └── collections.png
-│   └── ...
-│
-├── auth.ts
-├── middleware.ts
-├── next.config.ts
-├── package.json
-└── README.md
+
+├── 📁 app
+│   ├── 📁 (auth)
+│   │   ├── 📁 sign-in
+│   │   │   └── 📄 page.tsx
+│   │   ├── 📁 sign-up
+│   │   │   └── 📄 page.tsx
+│   │   └── 📄 layout.tsx
+│   ├── 📁 (root)
+│   │   ├── 📁 ask-question
+│   │   │   ├── 📄 loading.tsx
+│   │   │   └── 📄 page.tsx
+│   │   ├── 📁 collection
+│   │   │   ├── 📄 error.tsx
+│   │   │   ├── 📄 loading.tsx
+│   │   │   └── 📄 page.tsx
+│   │   ├── 📁 community
+│   │   │   ├── 📄 error.tsx
+│   │   │   ├── 📄 loading.tsx
+│   │   │   └── 📄 page.tsx
+│   │   ├── 📁 profile
+│   │   │   ├── 📁 [id]
+│   │   │   │   ├── 📄 loading.tsx
+│   │   │   │   └── 📄 page.tsx
+│   │   │   └── 📁 edit
+│   │   │       └── 📄 page.tsx
+│   │   ├── 📁 question
+│   │   │   ├── 📁 [id]
+│   │   │   │   ├── 📁 edit
+│   │   │   │   │   └── 📄 page.tsx
+│   │   │   │   ├── 📄 loading.tsx
+│   │   │   │   └── 📄 page.tsx
+│   │   │   └── 📄 view.tsx
+│   │   ├── 📁 tags
+│   │   │   ├── 📁 [id]
+│   │   │   │   ├── 📄 loading.tsx
+│   │   │   │   └── 📄 page.tsx
+│   │   │   ├── 📄 error.tsx
+│   │   │   ├── 📄 loading.tsx
+│   │   │   └── 📄 page.tsx
+│   │   ├── 📄 error.tsx
+│   │   ├── 📄 layout.tsx
+│   │   ├── 📄 loading.tsx
+│   │   └── 📄 page.tsx
+│   ├── 📁 api
+│   │   ├── 📁 accounts
+│   │   │   ├── 📁 [id]
+│   │   │   │   └── 📄 route.ts
+│   │   │   ├── 📁 provider
+│   │   │   │   └── 📄 route.ts
+│   │   │   └── 📄 routes.ts
+│   │   ├── 📁 ai
+│   │   │   ├── 📁 answers
+│   │   │   │   └── 📄 route.ts
+│   │   │   └── 📁 question
+│   │   │       └── 📄 route.ts
+│   │   ├── 📁 auth
+│   │   │   ├── 📁 [...nextauth]
+│   │   │   │   └── 📄 route.ts
+│   │   │   └── 📁 signin-with-oauth
+│   │   │       └── 📄 route.ts
+│   │   └── 📁 users
+│   │       ├── 📁 [id]
+│   │       │   └── 📄 route.ts
+│   │       ├── 📁 email
+│   │       │   └── 📄 route.ts
+│   │       └── 📄 route.ts
+│   ├── 📁 fonts
+│   │   ├── 📄 CabinetGrotesk-Variable.ttf
+│   │   ├── 📄 ClashDisplay-Variable.ttf
+│   │   ├── 📄 InterVF.ttf
+│   │   ├── 📄 Satoshi-Variable.ttf
+│   │   ├── 📄 Satoshi-VariableItalic.ttf
+│   │   └── 📄 SpaceGroteskVF.ttf
+│   ├── 📄 favicon.ico
+│   ├── 🎨 globals.css
+│   └── 📄 layout.tsx
+├── 📁 components
+│   ├── 📁 Nav
+│   │   ├── 📁 SideBar
+│   │   │   ├── 📄 LeftNav.tsx
+│   │   │   └── 📄 RightNav.tsx
+│   │   ├── 📄 Index.tsx
+│   │   ├── 📄 MobileNav.tsx
+│   │   ├── 📄 NavLinks.tsx
+│   │   └── 📄 Theme.tsx
+│   ├── 📁 answers
+│   │   └── 📄 AllAnswers.tsx
+│   ├── 📁 auth
+│   │   ├── 📄 AuthForm.tsx
+│   │   └── 📄 SocialAuthForm.tsx
+│   ├── 📁 cards
+│   │   ├── 📄 AnswerCard.tsx
+│   │   ├── 📄 QuestionCard.tsx
+│   │   ├── 📄 TagCard.tsx
+│   │   └── 📄 UserCard.tsx
+│   ├── 📁 editar
+│   │   ├── 📄 Preview.tsx
+│   │   ├── 🎨 dark-editor.css
+│   │   ├── 📄 index.tsx
+│   │   └── 📄 question.mdx
+│   ├── 📁 error
+│   │   └── 📄 RouteError.tsx
+│   ├── 📁 filters
+│   │   ├── 📄 CommonFilter.tsx
+│   │   ├── 📄 GlobalFilter.tsx
+│   │   └── 📄 HomeFilters.tsx
+│   ├── 📁 froms
+│   │   ├── 📄 AnswerForm.tsx
+│   │   ├── 📄 ProfileForm.tsx
+│   │   └── 📄 QuestionForm.tsx
+│   ├── 📁 lens
+│   │   └── 📄 LenisProvider.jsx
+│   ├── 📁 loaders
+│   │   └── 📄 PageSkeleton.tsx
+│   ├── 📁 questions
+│   │   └── 📄 SaveQuestion.tsx
+│   ├── 📁 search
+│   │   ├── 📄 GlobalResult.tsx
+│   │   ├── 📄 GobalSearch.tsx
+│   │   └── 📄 LocalSearch.tsx
+│   ├── 📁 ui
+│   │   ├── 📄 DataRenderer.tsx
+│   │   ├── 📄 accordion.tsx
+│   │   ├── 📄 alert-dialog.tsx
+│   │   ├── 📄 alert.tsx
+│   │   ├── 📄 animated-button.tsx
+│   │   ├── 📄 aspect-ratio.tsx
+│   │   ├── 📄 avatar.tsx
+│   │   ├── 📄 badge.tsx
+│   │   ├── 📄 breadcrumb.tsx
+│   │   ├── 📄 button-group.tsx
+│   │   ├── 📄 button.tsx
+│   │   ├── 📄 calendar.tsx
+│   │   ├── 📄 card.tsx
+│   │   ├── 📄 carousel.tsx
+│   │   ├── 📄 chart.tsx
+│   │   ├── 📄 checkbox.tsx
+│   │   ├── 📄 collapsible.tsx
+│   │   ├── 📄 command.tsx
+│   │   ├── 📄 context-menu.tsx
+│   │   ├── 📄 corner-button.tsx
+│   │   ├── 📄 creepy-button.tsx
+│   │   ├── 📄 dialog.tsx
+│   │   ├── 📄 drawer.tsx
+│   │   ├── 📄 dropdown-menu.tsx
+│   │   ├── 📄 empty.tsx
+│   │   ├── 📄 encrypted-text.tsx
+│   │   ├── 📄 field.tsx
+│   │   ├── 📄 flip-fade-text.tsx
+│   │   ├── 📄 form.tsx
+│   │   ├── 📄 hover-card.tsx
+│   │   ├── 📄 input-group.tsx
+│   │   ├── 📄 input-otp.tsx
+│   │   ├── 📄 input.tsx
+│   │   ├── 📄 item.tsx
+│   │   ├── 📄 kbd.tsx
+│   │   ├── 📄 kinetic-text-loader.tsx
+│   │   ├── 📄 label.tsx
+│   │   ├── 📄 line-hover-link.tsx
+│   │   ├── 📄 menubar.tsx
+│   │   ├── 📄 navigation-menu.tsx
+│   │   ├── 📄 pagination.tsx
+│   │   ├── 📄 pop-button.tsx
+│   │   ├── 📄 popover.tsx
+│   │   ├── 📄 progress.tsx
+│   │   ├── 📄 radio-group.tsx
+│   │   ├── 📄 resizable.tsx
+│   │   ├── 📄 scroll-area.tsx
+│   │   ├── 📄 select.tsx
+│   │   ├── 📄 separator.tsx
+│   │   ├── 📄 sheet.tsx
+│   │   ├── 📄 sidebar.tsx
+│   │   ├── 📄 skeleton.tsx
+│   │   ├── 📄 slider.tsx
+│   │   ├── 📄 sonner.tsx
+│   │   ├── 📄 spinner.tsx
+│   │   ├── 📄 switch.tsx
+│   │   ├── 📄 table.tsx
+│   │   ├── 📄 tabs.tsx
+│   │   ├── 📄 textarea.tsx
+│   │   ├── 📄 toggle-group.tsx
+│   │   ├── 📄 toggle.tsx
+│   │   └── 📄 tooltip.tsx
+│   ├── 📁 user
+│   │   ├── 📄 EditDeleteAction.tsx
+│   │   ├── 📄 ProfileLink.tsx
+│   │   └── 📄 Stats.tsx
+│   ├── 📁 votes
+│   │   └── 📄 Votes.tsx
+│   ├── 📄 Metric.tsx
+│   ├── 📄 Pagination.tsx
+│   ├── 📄 UserAvatar.tsx
+│   └── 📄 UserChip.tsx
+├── 📁 constants
+│   ├── 📄 Filter.ts
+│   ├── 📄 index.ts
+│   ├── 📄 interactions.ts
+│   ├── 📄 routes.ts
+│   ├── 📄 states.ts
+│   └── 📄 techMap.tsx
+├── 📁 database
+│   ├── 📄 account.model.ts
+│   ├── 📄 answer.model.ts
+│   ├── 📄 collection.model.ts
+│   ├── 📄 interaction.model.ts
+│   ├── 📄 question.model.ts
+│   ├── 📄 tag-question.model.ts
+│   ├── 📄 tag.model.ts
+│   ├── 📄 user.model.ts
+│   └── 📄 vote.model.ts
+├── 📁 hooks
+│   └── 📄 use-mobile.ts
+├── 📁 lib
+│   ├── 📁 actions
+│   │   ├── 📄 answer.action.ts
+│   │   ├── 📄 auth.actions.ts
+│   │   ├── 📄 collection.action.ts
+│   │   ├── 📄 general.action.ts
+│   │   ├── 📄 interaction.ts
+│   │   ├── 📄 question.action.ts
+│   │   ├── 📄 tag.actions.ts
+│   │   ├── 📄 user.action.ts
+│   │   └── 📄 vote.action.ts
+│   ├── 📁 handlers
+│   │   ├── 📄 actions.ts
+│   │   ├── 📄 error.ts
+│   │   └── 📄 fetch.ts
+│   ├── 📄 api.ts
+│   ├── 📄 http-errors.ts
+│   ├── 📄 logger.ts
+│   ├── 📄 markdownSafety.ts
+│   ├── 📄 mongoose.ts
+│   ├── 📄 sanitise.ts
+│   ├── 📄 url.ts
+│   ├── 📄 utils.ts
+│   └── 📄 validations.ts
+├── 📁 public
+│   ├── 📁 icons
+│   │   ├── 🖼️ account.svg
+│   │   ├── 🖼️ arrow-left.svg
+│   │   ├── 🖼️ arrow-right.svg
+│   │   ├── 🖼️ arrow-up-right.svg
+│   │   ├── 🖼️ au.svg
+│   │   ├── 🖼️ avatar.svg
+│   │   ├── 🖼️ bronze-medal.svg
+│   │   ├── 🖼️ calendar.svg
+│   │   ├── 🖼️ carbon-location.svg
+│   │   ├── 🖼️ chevron-down.svg
+│   │   ├── 🖼️ chevron-right.svg
+│   │   ├── 🖼️ clock-2.svg
+│   │   ├── 🖼️ clock.svg
+│   │   ├── 🖼️ close.svg
+│   │   ├── 🖼️ computer.svg
+│   │   ├── 🖼️ currency-dollar-circle.svg
+│   │   ├── 🖼️ downvote.svg
+│   │   ├── 🖼️ downvoted.svg
+│   │   ├── 🖼️ edit.svg
+│   │   ├── 🖼️ eye.svg
+│   │   ├── 🖼️ github.svg
+│   │   ├── 🖼️ gold-medal.svg
+│   │   ├── 🖼️ google.svg
+│   │   ├── 🖼️ hamburger.svg
+│   │   ├── 🖼️ home.svg
+│   │   ├── 🖼️ job-search.svg
+│   │   ├── 🖼️ like.svg
+│   │   ├── 🖼️ link.svg
+│   │   ├── 🖼️ location.svg
+│   │   ├── 🖼️ message.svg
+│   │   ├── 🖼️ mingcute-down-line.svg
+│   │   ├── 🖼️ moon.svg
+│   │   ├── 🖼️ question.svg
+│   │   ├── 🖼️ search.svg
+│   │   ├── 🖼️ sign-up.svg
+│   │   ├── 🖼️ silver-medal.svg
+│   │   ├── 🖼️ star-filled.svg
+│   │   ├── 🖼️ star-red.svg
+│   │   ├── 🖼️ star.svg
+│   │   ├── 🖼️ stars.svg
+│   │   ├── 🖼️ suitcase.svg
+│   │   ├── 🖼️ sun.svg
+│   │   ├── 🖼️ tag.svg
+│   │   ├── 🖼️ trash.svg
+│   │   ├── 🖼️ upvote.svg
+│   │   ├── 🖼️ upvoted.svg
+│   │   ├── 🖼️ user.svg
+│   │   └── 🖼️ users.svg
+│   ├── 📁 images
+│   │   ├── 🖼️ auth-dark.png
+│   │   ├── 🖼️ auth-light.png
+│   │   ├── 🖼️ dark-error.png
+│   │   ├── 🖼️ dark-illustration.png
+│   │   ├── 🖼️ default-logo.svg
+│   │   ├── 🖼️ light-error.png
+│   │   ├── 🖼️ light-illustration.png
+│   │   ├── 🖼️ logo-dark.svg
+│   │   ├── 🖼️ logo-light.svg
+│   │   ├── 🖼️ logo.png
+│   │   └── 🖼️ site-logo.svg
+│   ├── 🖼️ ask-question.png
+│   ├── 🖼️ collections.png
+│   ├── 🖼️ homepage.png
+│   ├── 🖼️ logo.png
+│   ├── 🖼️ og-image.png
+│   ├── 🖼️ profile.png
+│   └── 🖼️ question-details.png
+├── 📁 types
+│   ├── 📄 action.d.ts
+│   ├── 📄 bcryptjs.d.ts
+│   └── 📄 global.d.ts
+├── ⚙️ .gitignore
+├── ⚙️ .prettierignore
+├── ⚙️ .prettierrc
+├── 📝 README.md
+├── 📄 auth.ts
+├── ⚙️ components.json
+├── 📄 eslint.config.mjs
+├── 📄 next.config.ts
+├── ⚙️ package-lock.json
+├── ⚙️ package.json
+├── 📄 postcss.config.mjs
+├── 📄 proxy.ts
+└── ⚙️ tsconfig.json
+
 ```
 
 ---
